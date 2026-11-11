@@ -1,10 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import Stamp from '../components/Stamp.astro';
-import { getArticles, getVideos, getProducts } from '../lib/content';
+import { getArticles, getVideos, getProducts, getBooks } from '../lib/content';
 import { SITE } from '../site.config';
 
-const [articles, videos, products] = await Promise.all([getArticles(), getVideos(), getProducts()]);
+const [articles, videos, products, books] = await Promise.all([getArticles(), getVideos(), getProducts(), getBooks()]);
+const bk = books[0];
 const a0 = articles[0], v0 = videos[0];
 const b0 = products.find((p) => p.data.status === 'building') ?? products[0];
 const hill = SITE.hill;
@@ -29,6 +30,7 @@ const hill = SITE.hill;
         Lately I’m building <a href="/building">{b0?.data.title}</a>.{' '}
         {a0 && <>Newest essay: <a href={`/articles/${a0.id}`}>{a0.data.title}</a>.</>}
         {v0 && <> Newest video: <a href={`/videos/${v0.id}`}>{v0.data.title}</a>.</>}
+        {bk && <> Last book I loved: <a href={`/books#${bk.id}`}><i>{bk.data.title}</i></a>.</>}
       </p>
     </div>
 

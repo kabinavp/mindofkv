@@ -1,0 +1,24 @@
+---
+// Real cover from a local image or Open Library (by ISBN). If it can't load, a typeset cover takes its place.
+import { hash } from '../lib/hash';
+interface Props { title: string; author: string; isbn?: string; cover?: string; }
+const { title, author, isbn, cover } = Astro.props;
+const src = cover ?? (isbn ? `https://covers.openlibrary.org/b/isbn/${isbn.replace(/-/g, '')}-L.jpg?default=false` : undefined);
+const tones = [['#2f4a3a', '#e9e2c9'], ['#7a3b2a', '#f3e6d0'], ['#2c3a55', '#e7e3d6'], ['#6b5a2e', '#f4ecd4'], ['#3d3a36', '#ece7da']];
+const [bg, fg] = tones[hash(title) % tones.length];
+---
+<div class="cover" style={`--bg:${bg};--fg:${fg}`}>
+  <div class="fallback" aria-hidden={src ? 'true' : undefined}>
+    <span class="ft">{title}</span><span class="fa">{author}</span>
+  </div>
+  {src && <img src={src} alt={`Cover of ${title} by ${author}`} loading="lazy" onerror="this.remove()" />}
+</div>
+<style>
+  .cover { position: relative; width: 100%; aspect-ratio: 2 / 3; border-radius: 2px 4px 4px 2px; overflow: hidden;
+    box-shadow: 0 1px 1px rgba(0,0,0,.08), 0 8px 18px -8px rgba(40,35,20,.45), inset 3px 0 0 rgba(0,0,0,.12); background: var(--bg); }
+  .cover::after { content: ''; position: absolute; inset: 0 auto 0 0; width: 6px; background: linear-gradient(90deg, rgba(255,255,255,.18), rgba(0,0,0,.08)); pointer-events: none; }
+  img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .fallback { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 14% 12% 12% 16%; color: var(--fg); }
+  .ft { font: italic 400 clamp(14px, 1.3vw, 17px)/1.15 var(--serif); }
+  .fa { font: 500 9.5px/1.3 var(--sans); letter-spacing: .08em; text-transform: uppercase; opacity: .8; }
+</style>

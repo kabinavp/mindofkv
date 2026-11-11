@@ -43,6 +43,22 @@ draft: false
 
 **Series:** `src/content/series/my-series.md` with `title`, `description`, `status` (ongoing/complete/planned), `hue` (0–360 cover colour) and `order`. Articles and videos join a series via their `series:` field.
 
+**Book:** `src/content/books/my-book.md` → listed on `/books`
+```yaml
+---
+title: The Mom Test
+author: Rob Fitzpatrick
+isbn: "9781492180746"   # used to fetch the cover and build the Amazon link
+finished: 2026-10-05
+rating: 5               # optional, 1–5
+favourite: true         # optional
+# cover: /books/mom-test.jpg   # optional local image in public/books/
+# link: https://bookshop.org/... # optional, replaces the Amazon link
+---
+One paragraph review goes here.
+```
+To earn from Amazon links, put your Associates tracking ID in `SITE.amazon.tag` (`src/site.config.ts`). The required disclosure line appears automatically once a tag is set.
+
 **Product:** `src/content/products/my-app.md` with `title`, `tagline`, `status` (live/building/idea/retired), `started`, `url`, `stack`, `metric` and `order`.
 
 > All current content is placeholder content. Replace or delete it.

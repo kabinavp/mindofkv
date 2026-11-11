@@ -1,0 +1,61 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import BookCover from '../components/BookCover.astro';
+import { getBooks, isbn10 } from '../lib/content';
+import { SITE } from '../site.config';
+
+const books = await getBooks();
+const { domain, tag } = SITE.amazon;
+const buy = (b: (typeof books)[number]) => {
+  if (b.data.link) return { href: b.data.link, label: new URL(b.data.link).hostname.replace(/^www\./, '') };
+  const id = b.data.isbn && isbn10(b.data.isbn);
+  const q = tag ? `?tag=${encodeURIComponent(tag)}` : '';
+  const href = id ? `https://www.${domain}/dp/${id}${q}` : `https://www.${domain}/s?k=${encodeURIComponent(`${b.data.title} ${b.data.author}`)}${tag ? `&tag=${encodeURIComponent(tag)}` : ''}`;
+  return { href, label: 'Amazon' };
+};
+const rendered = await Promise.all(books.map(async (b) => ({ b, Content: (await render(b)).Content, link: buy(b) })));
+const stars = (n?: number) => (n ? '★'.repeat(n) + '☆'.repeat(5 - n) : '');
+---
+<Base title="Books" description="Books I’ve read, with a short review of each.">
+  <div class="page">
+    <h1 class="title">Books</h1>
+    <p>What I’ve been reading, newest first, with a paragraph on each. The ones marked as favourites are the books I recommend most often.</p>
+    <ul class="books">
+      {rendered.map(({ b, Content, link }) => (
+        <li class="book" id={b.id}>
+          <a href={link.href} target="_blank" rel={tag ? 'sponsored noopener' : 'noopener'} class="cv" tabindex="-1" aria-hidden="true">
+            <BookCover title={b.data.title} author={b.data.author} isbn={b.data.isbn} cover={b.data.cover} />
+          </a>
+          <div class="body">
+            <h2>{b.data.title}{b.data.favourite && <span class="chip fav">Favourite</span>}</h2>
+            <p class="by">{b.data.author}</p>
+            <div class="review"><Content /></div>
+            <p class="meta foot">
+              {b.data.rating && <span class="stars" aria-label={`${b.data.rating} out of 5`}>{stars(b.data.rating)}</span>}
+              <span>Finished {b.data.finished.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</span>
+              <a href={link.href} target="_blank" rel={tag ? 'sponsored noopener' : 'noopener'} class="u buy">Get it on {link.label} ↗</a>
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
+    {tag && <p class="meta disclosure">As an Amazon Associate I earn from qualifying purchases. It costs you nothing extra.</p>}
+  </div>
+</Base>
+<style>
+  .books { list-style: none; padding: 0; margin: 56px 0 0; max-width: 680px; display: grid; gap: 56px; }
+  .book { display: grid; grid-template-columns: 112px 1fr; gap: 28px; align-items: start; }
+  .cv { display: block; transition: transform .35s cubic-bezier(.2,.8,.2,1.3); }
+  .cv:hover { transform: rotate(-1.5deg) translateY(-3px); }
+  h2 { margin: 0; font: italic 400 1.35rem/1.25 var(--serif); color: var(--ink); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .fav { font-style: normal; } .fav::before { background: #d9822b; }
+  .by { font: 400 13px var(--sans); color: var(--ink-3); margin-top: 3px !important; }
+  .review { margin-top: 12px; color: #47463f; }
+  .review :global(p + p) { margin-top: .8em; }
+  .foot { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; margin-top: 12px !important; }
+  .stars { color: #b58a2a; letter-spacing: 1px; }
+  .buy { font: 500 12.5px var(--sans); }
+  .disclosure { margin-top: 64px !important; max-width: 600px; }
+  @media (max-width: 560px) { .book { grid-template-columns: 84px 1fr; gap: 18px; } }
+</style>

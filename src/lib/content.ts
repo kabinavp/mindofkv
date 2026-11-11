@@ -41,3 +41,17 @@ export async function getAllTopics() {
 export const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 export const fmtDate = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 export const readingTime = (body = '') => Math.max(1, Math.round(body.split(/\s+/).length / 230));
+
+export const getBooks = async () =>
+  (await getCollection('books')).sort((a, b) => b.data.finished.valueOf() - a.data.finished.valueOf());
+
+// ISBN-13 (978…) → ISBN-10, which Amazon uses as the product ID for most books.
+export function isbn10(isbn: string) {
+  const d = isbn.replace(/[^0-9X]/gi, '');
+  if (d.length === 10) return d.toUpperCase();
+  if (d.length !== 13 || !d.startsWith('978')) return null;
+  const core = d.slice(3, 12);
+  const sum = core.split('').reduce((s, c, i) => s + Number(c) * (10 - i), 0);
+  const check = (11 - (sum % 11)) % 11;
+  return core + (check === 10 ? 'X' : String(check));
+}

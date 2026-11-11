@@ -26,6 +26,13 @@ export const SITE = {
     lon: null as number | null,
   },
 
+  // Book links. Put your Amazon Associates tracking ID in `tag` (e.g. "mindofkv-21") to earn on purchases.
+  // Use the store for your audience: amazon.in, amazon.com, amazon.co.uk… Each country is a separate Associates account.
+  amazon: {
+    domain: 'amazon.in',
+    tag: '',
+  },
+
   socials: [
     { label: 'YouTube', href: 'https://youtube.com/@mindofkv' },
     { label: 'X', href: 'https://x.com/mindofkv' },
@@ -37,6 +44,7 @@ export const SITE = {
     { label: 'Writing', href: '/articles' },
     { label: 'Videos', href: '/videos' },
     { label: 'Series', href: '/series' },
+    { label: 'Books', href: '/books' },
     { label: 'Building', href: '/building' },
     { label: 'About', href: '/about' },
   ],

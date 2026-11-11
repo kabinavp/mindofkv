@@ -64,4 +64,19 @@ const products = defineCollection({
   }),
 });
 
-export const collections = { articles, videos, series, products };
+const books = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/books' }),
+  schema: z.object({
+    title: z.string(),
+    author: z.string(),
+    isbn: z.string().optional(), // ISBN-13 or ISBN-10: used for the cover and the Amazon link
+    cover: z.string().optional(), // optional local image, e.g. /books/the-mom-test.jpg (overrides the ISBN cover)
+    finished: z.coerce.date(),
+    rating: z.number().min(1).max(5).optional(),
+    link: z.string().url().optional(), // any other store link; overrides the Amazon link
+    topics: z.array(z.string()).default([]),
+    favourite: z.boolean().default(false),
+  }),
+});
+
+export const collections = { articles, videos, series, products, books };
