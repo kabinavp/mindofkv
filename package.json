@@ -19,5 +19,8 @@
     "astro": "^7.4.10",
     "node-html-parser": "^6.1.13",
     "satori": "^0.12.2"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
