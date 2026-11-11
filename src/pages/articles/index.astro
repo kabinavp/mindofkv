@@ -1,22 +1,44 @@
 ---
 import Base from '../../layouts/Base.astro';
-import EntryList from '../../components/EntryList.astro';
-import { getArticles, getAllTopics } from '../../lib/content';
-const articles = await getArticles();
-const topics = await getAllTopics();
-const years = [...new Set(articles.map((a) => a.data.date.getFullYear()))].sort((a, b) => b - a);
+import { getArticles, fmtDate } from '../../lib/content';
+import { getPosts } from '../../lib/substack';
+import { SITE } from '../../site.config';
+
+// Substack posts plus any essays written directly on this site, newest first.
+const posts = [
+  ...(await getPosts()).map((p) => ({ title: p.title, subtitle: p.subtitle, date: p.date, href: p.url, external: true })),
+  ...(await getArticles()).map((a) => ({ title: a.data.title, subtitle: a.data.description, date: a.data.date, href: `/articles/${a.id}`, external: false })),
+].sort((a, b) => b.date.valueOf() - a.date.valueOf());
+const years = [...new Set(posts.map((p) => p.date.getFullYear()))].sort((a, b) => b - a);
 ---
-<Base title="Writing" description="Essays and notes on ideas I can’t stop thinking about.">
+<Base title="Writing" description="Essays on product, leadership, teams and the ideas I can’t stop thinking about.">
   <div class="page">
     <h1 class="title">Writing</h1>
-    <p>Essays and notes on ideas I can’t stop thinking about. Some are polished, some are me thinking out loud.</p>
-    <p class="meta topics">Topics: {topics.map((t, i) => <>{i > 0 && ', '}<a href={`/topics/${t.slug}`} class="u">{t.name}</a></>)}</p>
+    <p>Essays on product, leadership, teams, and whatever else I can’t stop thinking about. They’re published on <a href={SITE.substack.url} class="u" target="_blank" rel="noopener">Substack</a>, where you can also subscribe.</p>
     {years.map((y) => (
       <section>
         <h2 class="sub-h">{y}</h2>
-        <EntryList rows={articles.filter((a) => a.data.date.getFullYear() === y).map((a) => ({ title: a.data.title, href: `/articles/${a.id}`, date: a.data.date }))} />
+        <ul class="posts">
+          {posts.filter((p) => p.date.getFullYear() === y).map((p) => (
+            <li>
+              <a href={p.href} target={p.external ? '_blank' : undefined} rel={p.external ? 'noopener' : undefined}>
+                <span class="t">{p.title}{p.external && <span class="ext" aria-label="opens on Substack"> ↗</span>}</span>
+                {p.subtitle && <span class="s">{p.subtitle}</span>}
+                <span class="meta">{fmtDate(p.date)}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
       </section>
     ))}
   </div>
 </Base>
-<style>.topics { margin-top: 18px !important; font-size: 13px; } .topics .u { color: var(--ink-2); }</style>
+<style>
+  .posts { list-style: none; margin: 0; padding: 0; max-width: 600px; display: grid; gap: 22px; }
+  .posts a { display: grid; gap: 1px; }
+  .t { font-size: 19px; color: var(--ink); line-height: 1.35; transition: color .2s; }
+  .ext { font: 400 12px var(--sans); color: var(--ink-3); }
+  .s { font-style: italic; color: var(--ink-2); line-height: 1.45; }
+  .posts .meta { margin-top: 3px; }
+  .posts a:hover .t { color: var(--ink-2); }
+</style>

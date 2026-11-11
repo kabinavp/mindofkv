@@ -8,12 +8,15 @@ export const SITE = {
   description:
     'Essays, videos, books and experiments from KV, following curiosity wherever it goes.',
 
-  // Newsletter. Point `action` at your provider's form endpoint
-  // (Buttondown, Kit/ConvertKit, Beehiiv, Substack…). Field name is usually "email".
+  // Writing and the newsletter both live on Substack.
+  substack: {
+    url: 'https://mindofkv.substack.com',
+  },
+
   newsletter: {
     name: 'Stay Curious',
     pitch: 'One email on Sundays with the most interesting things I found that week: ideas, books, experiments, and the occasional rabbit hole.',
-    action: 'https://buttondown.com/api/emails/embed-subscribe/mindofkv',
+    action: 'https://mindofkv.substack.com/api/v1/free?nojs=true',
     emailField: 'email',
   },
 
