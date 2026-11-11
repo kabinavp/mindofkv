@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+const updated = 'November 2026'; // update when you edit this page
+---
+<Base title="Now" description="What I'm focused on right now.">
+  <div class="wrap">
+    <header class="page-head" style="max-width:var(--prose);margin:0 auto">
+      <p class="eyebrow">Now · updated {updated}</p>
+      <h1>What I'm doing now</h1>
+      <p>A <a href="https://nownownow.com/about">now page</a> — a snapshot of my current focus. Update this every month or so.</p>
+    </header>
+    <div class="prose">
+      <h2>Building</h2>
+      <ul><li>Shipping v1 of my current side project.</li><li>Rebuilding this website (you're looking at it).</li></ul>
+      <h2>Learning</h2>
+      <ul><li>Getting better on camera, one video at a time.</li></ul>
+      <h2>Reading</h2>
+      <ul><li>Add the books you're reading here.</li></ul>
+    </div>
+  </div>
+</Base>

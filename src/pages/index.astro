@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+import Newsletter from '../components/Newsletter.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import VideoCard from '../components/VideoCard.astro';
+import SeriesCard from '../components/SeriesCard.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getArticles, getVideos, getSeries, getProducts, getAllTopics } from '../lib/content';
+
+const [articles, videos, series, products, topics] = await Promise.all([
+  getArticles(), getVideos(), getSeries(), getProducts(), getAllTopics(),
+]);
+const shipped = products.filter((p) => p.data.status === 'live').length;
+---
+<Base>
+  <section class="hero wrap">
+    <div class="intro">
+      <p class="eyebrow">Builder · Writer · Perpetual beginner</p>
+      <h1>Hi, I'm KV. I build things <em>in public</em> and share what I learn.</h1>
+      <p class="lede">
+        This is my corner of the internet — essays, videos and long-running series on building products,
+        thinking clearly, and getting a little better at making things every week.
+      </p>
+      <div class="actions">
+        <a href="/start-here" class="btn">Start here</a>
+        <a href="/building" class="btn ghost">See what I'm building</a>
+      </div>
+    </div>
+    <aside class="ledger" aria-label="At a glance">
+      <p class="eyebrow">The ledger</p>
+      <dl>
+        <div><dt>Products shipped</dt><dd>{shipped}</dd></div>
+        <div><dt>In the workshop</dt><dd>{products.filter((p) => p.data.status === 'building').length}</dd></div>
+        <div><dt>Articles</dt><dd>{articles.length}</dd></div>
+        <div><dt>Videos</dt><dd>{videos.length}</dd></div>
+      </dl>
+      <a href="/now" class="link-arrow now">What I'm doing now</a>
+    </aside>
+  </section>
+
+  <section class="wrap" style="padding-bottom:72px"><Newsletter /></section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <div><p class="eyebrow">Building</p><h2>Things I'm making</h2><p>Side projects, products and experiments — shipped, in progress, and occasionally abandoned.</p></div>
+      <a href="/building" class="link-arrow">All projects</a>
+    </div>
+    <div class="grid">{products.slice(0, 3).map((p) => <ProductCard entry={p} />)}</div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <div><p class="eyebrow">Writing</p><h2>Latest articles</h2></div>
+      <a href="/articles" class="link-arrow">All articles</a>
+    </div>
+    <div class="grid">{articles.slice(0, 3).map((a) => <ArticleCard entry={a} />)}</div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <div><p class="eyebrow">Watch</p><h2>Latest videos</h2></div>
+      <a href="/videos" class="link-arrow">All videos</a>
+    </div>
+    <div class="grid">{videos.slice(0, 3).map((v) => <VideoCard entry={v} />)}</div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <div><p class="eyebrow">Series</p><h2>Go deep on one thing</h2><p>Multi-part collections of articles and videos you can follow start to finish.</p></div>
+      <a href="/series" class="link-arrow">All series</a>
+    </div>
+    <div class="grid">{series.slice(0, 3).map((s) => <SeriesCard entry={s} />)}</div>
+  </section>
+
+  {topics.length > 0 && (
+    <section class="section wrap">
+      <div class="section-head"><div><p class="eyebrow">Topics</p><h2>Browse by topic</h2></div></div>
+      <div class="topics">{topics.map((t) => <a class="pill" href={`/topics/${t.slug}`}>{t.name} <span class="muted">{t.count}</span></a>)}</div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .hero { display: grid; grid-template-columns: 1.7fr 1fr; gap: 56px; align-items: end; padding-top: 88px; padding-bottom: 72px; }
+  h1 em { font-style: italic; color: var(--accent); }
+  .intro .eyebrow { margin-bottom: 20px; }
+  .lede { font-size: 1.22rem; color: var(--ink-2); margin-top: 24px; max-width: 54ch; }
+  .actions { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
+  .ledger { border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; background: var(--surface); }
+  dl { margin: 16px 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  dl div { background: var(--surface); padding: 14px; }
+  dt { font-size: 0.8rem; color: var(--ink-3); }
+  dd { margin: 4px 0 0; font: 500 2rem/1 var(--serif); }
+  .topics { display: flex; flex-wrap: wrap; gap: 8px; }
+  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; gap: 36px; padding-top: 48px; } }
+</style>

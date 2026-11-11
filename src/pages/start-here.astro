@@ -1,0 +1,40 @@
+---
+import Base from '../layouts/Base.astro';
+import Newsletter from '../components/Newsletter.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import VideoCard from '../components/VideoCard.astro';
+import SeriesCard from '../components/SeriesCard.astro';
+import { getArticles, getVideos, getSeries } from '../lib/content';
+const articles = (await getArticles()).filter((a) => a.data.featured);
+const videos = (await getVideos()).filter((v) => v.data.featured);
+const series = await getSeries();
+---
+<Base title="Start here" description="New here? The best places to begin.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Start here</p>
+      <h1>Welcome — glad you found your way in.</h1>
+      <p>I'm KV. By day I build software; on the side I build products, write and make videos about the process.
+        This site is where all of it lives. If you're new, here's the best path through.</p>
+    </header>
+
+    <section class="section steps">
+      <div><span>01</span><h3>Read my favourites</h3><p class="muted">The essays that best capture how I think about building.</p></div>
+      <div><span>02</span><h3>Pick a series</h3><p class="muted">Follow a single theme from part one to the end.</p></div>
+      <div><span>03</span><h3>Join the Build Log</h3><p class="muted">One email a week. The best way to keep up.</p></div>
+    </section>
+
+    {articles.length > 0 && <section class="section"><h2 class="h">My favourite essays</h2><div class="grid">{articles.map((a) => <ArticleCard entry={a} />)}</div></section>}
+    {videos.length > 0 && <section class="section"><h2 class="h">Videos to start with</h2><div class="grid">{videos.map((v) => <VideoCard entry={v} />)}</div></section>}
+    <section class="section"><h2 class="h">Series</h2><div class="grid">{series.map((s) => <SeriesCard entry={s} />)}</div></section>
+    <section class="section"><Newsletter /></section>
+  </div>
+</Base>
+<style>
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .steps div { padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+  .steps span { font: 500 0.85rem var(--mono); color: var(--accent); }
+  .steps h3 { margin: 10px 0 6px; }
+  .h { margin-bottom: 28px; }
+  @media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
+</style>

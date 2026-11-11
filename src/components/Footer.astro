@@ -1,0 +1,31 @@
+---
+import Logo from './Logo.astro';
+import { SITE } from '../site.config';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="wrap cols">
+    <div>
+      <Logo />
+      <p class="muted blurb">{SITE.tagline}</p>
+    </div>
+    <div>
+      <p class="eyebrow">Explore</p>
+      <ul>{SITE.nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}<li><a href="/now">Now</a></li></ul>
+    </div>
+    <div>
+      <p class="eyebrow">Follow</p>
+      <ul>{SITE.socials.map((s) => <li><a href={s.href} rel="me noopener" target="_blank">{s.label}</a></li>)}<li><a href="/rss.xml">RSS</a></li></ul>
+    </div>
+  </div>
+  <div class="wrap legal"><span>© {year} {SITE.author}</span><span>Built in public.</span></div>
+</footer>
+<style>
+  .footer { border-top: 1px solid var(--line); padding: 56px 0 32px; margin-top: 40px; }
+  .cols { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 32px; }
+  .blurb { margin-top: 16px; max-width: 34ch; }
+  ul { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 6px; }
+  ul a { text-decoration: none; color: var(--ink-2); } ul a:hover { color: var(--ink); }
+  .legal { display: flex; justify-content: space-between; margin-top: 48px; font-size: 0.85rem; color: var(--ink-3); }
+  @media (max-width: 700px) { .cols { grid-template-columns: 1fr 1fr; } .cols > :first-child { grid-column: 1 / -1; } }
+</style>

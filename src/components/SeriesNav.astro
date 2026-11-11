@@ -1,0 +1,27 @@
+---
+import { getEntry } from 'astro:content';
+import { getSeriesItems, hrefOf } from '../lib/content';
+interface Props { seriesId: string; currentId: string; }
+const { seriesId, currentId } = Astro.props;
+const series = await getEntry('series', seriesId);
+const items = await getSeriesItems(seriesId);
+const idx = items.findIndex((i) => i.entry.id === currentId);
+const prev = items[idx - 1];
+const next = items[idx + 1];
+---
+{series && (
+  <aside class="sn">
+    <p class="eyebrow">Part {idx + 1} of {items.length} · Series</p>
+    <a href={`/series/${seriesId}`} class="name">{series.data.title}</a>
+    <div class="pn">
+      {prev ? <a href={hrefOf(prev)}>← {prev.entry.data.title}</a> : <span></span>}
+      {next && <a href={hrefOf(next)} class="next">{next.entry.data.title} →</a>}
+    </div>
+  </aside>
+)}
+<style>
+  .sn { max-width: var(--prose); margin: 0 auto 40px; padding: 20px 24px; border-radius: var(--radius); background: var(--accent-soft); }
+  .name { display: block; font: 500 1.25rem var(--serif); margin: 6px 0 12px; text-decoration: none; }
+  .pn { display: flex; justify-content: space-between; gap: 16px; font-size: 0.92rem; }
+  .pn a { color: var(--ink-2); } .next { text-align: right; margin-left: auto; }
+</style>

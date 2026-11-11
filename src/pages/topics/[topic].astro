@@ -1,0 +1,22 @@
+---
+import Base from '../../layouts/Base.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import VideoCard from '../../components/VideoCard.astro';
+import { getArticles, getVideos, getAllTopics, slugify } from '../../lib/content';
+
+export async function getStaticPaths() {
+  return (await getAllTopics()).map((t) => ({ params: { topic: t.slug }, props: { name: t.name } }));
+}
+const { topic } = Astro.params;
+const { name } = Astro.props;
+const has = (e: { data: { topics: string[] } }) => e.data.topics.some((t) => slugify(t) === topic);
+const articles = (await getArticles()).filter(has);
+const videos = (await getVideos()).filter(has);
+---
+<Base title={`#${name}`} description={`Everything on ${name}.`}>
+  <div class="wrap">
+    <header class="page-head"><p class="eyebrow">Topic</p><h1>#{name}</h1></header>
+    {videos.length > 0 && <section class="section" style="padding-top:0"><h2 style="margin-bottom:24px">Videos</h2><div class="grid">{videos.map((v) => <VideoCard entry={v} />)}</div></section>}
+    {articles.length > 0 && <section class="section"><h2 style="margin-bottom:24px">Articles</h2><div class="grid">{articles.map((a) => <ArticleCard entry={a} />)}</div></section>}
+  </div>
+</Base>

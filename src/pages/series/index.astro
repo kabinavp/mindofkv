@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import SeriesCard from '../../components/SeriesCard.astro';
+import { getSeries } from '../../lib/content';
+const series = await getSeries();
+---
+<Base title="Series" description="Multi-part deep dives you can follow start to finish.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Series</p>
+      <h1>Go deep on one thing</h1>
+      <p>Each series is a sequence of articles and videos on a single theme. Start at part one and follow along.</p>
+    </header>
+    <div class="grid">{series.map((s) => <SeriesCard entry={s} />)}</div>
+  </div>
+</Base>

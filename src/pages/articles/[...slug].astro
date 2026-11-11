@@ -1,0 +1,44 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import SeriesNav from '../../components/SeriesNav.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getArticles, fmtDate, readingTime, slugify } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const all = await getArticles();
+  return all.map((entry) => ({ params: { slug: entry.id }, props: { entry, all } }));
+}
+const { entry, all } = Astro.props;
+const { Content } = await render(entry);
+const { title, description, date, topics, series } = entry.data;
+const related = all.filter((a) => a.id !== entry.id && a.data.topics.some((t) => topics.includes(t))).slice(0, 2);
+---
+<Base title={title} description={description} type="article">
+  <article class="wrap">
+    <header class="head">
+      <p class="eyebrow">{fmtDate(date)} · {readingTime(entry.body)} min read</p>
+      <h1>{title}</h1>
+      <p class="dek">{description}</p>
+      {topics.length > 0 && <p class="topics">{topics.map((t) => <a class="pill" href={`/topics/${slugify(t)}`}>{t}</a>)}</p>}
+    </header>
+    {series && <SeriesNav seriesId={series.id} currentId={entry.id} />}
+    <div class="prose"><Content /></div>
+    {series && <div style="margin-top:56px"><SeriesNav seriesId={series.id} currentId={entry.id} /></div>}
+  </article>
+  <section class="wrap end"><Newsletter /></section>
+  {related.length > 0 && (
+    <section class="wrap end">
+      <div class="section-head"><h2>Keep reading</h2></div>
+      <div class="grid">{related.map((a) => <ArticleCard entry={a} />)}</div>
+    </section>
+  )}
+</Base>
+<style>
+  .head { max-width: var(--prose); margin: 0 auto; padding: 72px 0 40px; }
+  .head h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); margin-top: 16px; }
+  .dek { font-size: 1.25rem; color: var(--ink-2); margin-top: 18px; }
+  .topics { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+  .end { margin-top: 80px; }
+</style>

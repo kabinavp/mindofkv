@@ -1,0 +1,30 @@
+---
+import Base from '../layouts/Base.astro';
+import ProductCard from '../components/ProductCard.astro';
+import { getProducts } from '../lib/content';
+const products = await getProducts();
+const groups = [
+  { key: 'live', title: 'Shipped & live' },
+  { key: 'building', title: 'In the workshop' },
+  { key: 'idea', title: 'On the whiteboard' },
+  { key: 'retired', title: 'The graveyard', note: 'Projects I shut down — and what they taught me.' },
+] as const;
+---
+<Base title="Building" description="Products, side projects and experiments I'm building in public.">
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">Building</p>
+      <h1>Things I'm making</h1>
+      <p>I believe the best way to learn is to ship. Here's everything I've built, am building, or want to build — including the stuff that didn't work.</p>
+    </header>
+    {groups.map((g) => {
+      const list = products.filter((p) => p.data.status === g.key);
+      return list.length > 0 && (
+        <section class="section">
+          <div class="section-head"><div><h2>{g.title}</h2>{'note' in g && <p>{g.note}</p>}</div></div>
+          <div class="grid">{list.map((p) => <ProductCard entry={p} />)}</div>
+        </section>
+      );
+    })}
+  </div>
+</Base>

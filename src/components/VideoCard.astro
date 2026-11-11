@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { fmtDate } from '../lib/content';
+interface Props { entry: CollectionEntry<'videos'>; }
+const { entry } = Astro.props;
+const { title, date, youtubeId, duration } = entry.data;
+---
+<a href={`/videos/${entry.id}`} class="card">
+  <div class="thumb">
+    {youtubeId
+      ? <img src={`https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`} alt="" loading="lazy" />
+      : <span class="ph">{title}</span>}
+    <span class="play" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+    {duration && <span class="dur">{duration}</span>}
+  </div>
+  <h3>{title}</h3>
+  <p class="meta">{fmtDate(date)}</p>
+</a>
+<style>
+  .card { display: flex; flex-direction: column; gap: 12px; text-decoration: none; }
+  .thumb { position: relative; aspect-ratio: 16/9; border-radius: var(--radius); overflow: hidden; background: var(--ink); }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+  .card:hover img { transform: scale(1.03); }
+  .ph { position: absolute; inset: 0; padding: 20px; display: flex; align-items: end; color: var(--bg); font: 500 1.25rem/1.15 var(--serif);
+    background: radial-gradient(circle at 85% 15%, var(--accent) 0, transparent 45%), var(--ink); }
+  .play { position: absolute; top: 14px; left: 14px; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); }
+  .dur { position: absolute; right: 10px; bottom: 10px; background: rgba(0,0,0,.75); color: #fff; font: 500 0.75rem var(--mono); padding: 3px 7px; border-radius: 6px; }
+  h3 { font-size: 1.15rem; }
+  .meta { font-size: 0.82rem; color: var(--ink-3); margin-top: -6px; }
+</style>

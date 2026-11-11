@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import Newsletter from '../components/Newsletter.astro';
+import { SITE } from '../site.config';
+const n = SITE.newsletter;
+---
+<Base title={n.name} description={n.pitch}>
+  <div class="wrap nl">
+    <p class="eyebrow">Newsletter</p>
+    <h1>{n.name}</h1>
+    <p class="lede">{n.pitch}</p>
+    <Newsletter variant="inline" />
+    <ul class="what">
+      <li><b>What I shipped</b> — progress, numbers and screenshots from the projects I'm building.</li>
+      <li><b>What I learned</b> — one idea I think is worth your time.</li>
+      <li><b>What I'm reading</b> — the best links from my week.</li>
+    </ul>
+  </div>
+</Base>
+<style>
+  .nl { max-width: 640px; padding-top: 88px; padding-bottom: 40px; display: grid; gap: 22px; }
+  .lede { font-size: 1.25rem; color: var(--ink-2); }
+  .what { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 12px; color: var(--ink-2); }
+  .what li { padding-left: 20px; position: relative; } .what li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
+  .what b { color: var(--ink); }
+</style>

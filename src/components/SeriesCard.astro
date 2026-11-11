@@ -1,0 +1,27 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getSeriesItems } from '../lib/content';
+interface Props { entry: CollectionEntry<'series'>; }
+const { entry } = Astro.props;
+const items = await getSeriesItems(entry.id);
+const { title, description, status, hue } = entry.data;
+---
+<a href={`/series/${entry.id}`} class="card" style={`--h:${hue}`}>
+  <div class="cover">
+    <span class="count">{items.length} {items.length === 1 ? 'part' : 'parts'}</span>
+    <span class="status">{status}</span>
+    <h3>{title}</h3>
+  </div>
+  <p class="desc">{description}</p>
+</a>
+<style>
+  .card { display: flex; flex-direction: column; gap: 14px; text-decoration: none; }
+  .cover { aspect-ratio: 4/3; border-radius: var(--radius); padding: 22px; display: flex; flex-direction: column; justify-content: end; position: relative; overflow: hidden;
+    background: linear-gradient(150deg, hsl(var(--h) 70% 52%), hsl(calc(var(--h) + 35) 65% 28%)); color: #fff; transition: transform .15s; }
+  .cover::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 27px, rgba(255,255,255,.09) 27px 28px); }
+  .card:hover .cover { transform: translateY(-2px); }
+  h3 { font-size: 1.6rem; position: relative; }
+  .count, .status { position: absolute; top: 18px; font: 500 0.72rem var(--mono); text-transform: uppercase; letter-spacing: .1em; }
+  .count { left: 22px; } .status { right: 22px; background: rgba(0,0,0,.25); padding: 3px 8px; border-radius: 999px; }
+  .desc { color: var(--ink-2); font-size: 0.97rem; }
+</style>
