@@ -42,8 +42,7 @@ export const slugify = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-'
 export const fmtDate = (d: Date) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 export const readingTime = (body = '') => Math.max(1, Math.round(body.split(/\s+/).length / 230));
 
-export const getBooks = async () =>
-  (await getCollection('books')).sort((a, b) => b.data.finished.valueOf() - a.data.finished.valueOf());
+export const getBooks = async () => (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
 
 // ISBN-13 (978…) → ISBN-10, which Amazon uses as the product ID for most books.
 export function isbn10(isbn: string) {

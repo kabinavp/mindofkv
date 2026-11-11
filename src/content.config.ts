@@ -69,12 +69,15 @@ const books = defineCollection({
   schema: z.object({
     title: z.string(),
     author: z.string(),
-    isbn: z.string().optional(), // ISBN-13 or ISBN-10: used for the cover and the Amazon link
-    cover: z.string().optional(), // optional local image, e.g. /books/the-mom-test.jpg (overrides the ISBN cover)
-    finished: z.coerce.date(),
+    order: z.number(), // position on the shelf (1 = top)
+    status: z.enum(['reading', 'read']).default('read'),
+    isbn: z.string().optional(), // optional: pins the exact edition for the cover and Amazon link
+    cover: z.string().optional(), // optional local image, e.g. /books/martyr.jpg (overrides everything)
+    year: z.number().optional(), // year first published
+    finished: z.coerce.date().optional(),
     rating: z.number().min(1).max(5).optional(),
     link: z.string().url().optional(), // any other store link; overrides the Amazon link
-    topics: z.array(z.string()).default([]),
+    myTake: z.boolean().default(false), // false = the text below is a short description; true = it's my review
     favourite: z.boolean().default(false),
   }),
 });

@@ -1,15 +1,15 @@
 ---
 // Real cover from a local image or Open Library (by ISBN). If it can't load, a typeset cover takes its place.
 import { hash } from '../lib/hash';
-interface Props { title: string; author: string; isbn?: string; cover?: string; }
-const { title, author, isbn, cover } = Astro.props;
-const src = cover ?? (isbn ? `https://covers.openlibrary.org/b/isbn/${isbn.replace(/-/g, '')}-L.jpg?default=false` : undefined);
-const tones = [['#2f4a3a', '#e9e2c9'], ['#7a3b2a', '#f3e6d0'], ['#2c3a55', '#e7e3d6'], ['#6b5a2e', '#f4ecd4'], ['#3d3a36', '#ece7da']];
+interface Props { title: string; author: string; src?: string; }
+const { title, author, src } = Astro.props;
+const tones = [['#2f4a3a', '#e9e2c9'], ['#7a3b2a', '#f3e6d0'], ['#2c3a55', '#e7e3d6'], ['#6b5a2e', '#f4ecd4'], ['#3d3a36', '#ece7da'], ['#4a3a5c', '#ece4f0'], ['#6e2f3a', '#f5e3e3']];
 const [bg, fg] = tones[hash(title) % tones.length];
+const longWord = title.split(/\s+/).some((w) => w.length > 10);
 ---
 <div class="cover" style={`--bg:${bg};--fg:${fg}`}>
   <div class="fallback" aria-hidden={src ? 'true' : undefined}>
-    <span class="ft">{title}</span><span class="fa">{author}</span>
+    <span class:list={['ft', { sm: longWord }]}>{title}</span><span class="fa">{author}</span>
   </div>
   {src && <img src={src} alt={`Cover of ${title} by ${author}`} loading="lazy" onerror="this.remove()" />}
 </div>
@@ -19,6 +19,7 @@ const [bg, fg] = tones[hash(title) % tones.length];
   .cover::after { content: ''; position: absolute; inset: 0 auto 0 0; width: 6px; background: linear-gradient(90deg, rgba(255,255,255,.18), rgba(0,0,0,.08)); pointer-events: none; }
   img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .fallback { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 14% 12% 12% 16%; color: var(--fg); }
-  .ft { font: italic 400 clamp(14px, 1.3vw, 17px)/1.15 var(--serif); }
+  .ft { font: italic 400 clamp(13px, 1.2vw, 16px)/1.15 var(--serif); overflow-wrap: anywhere; hyphens: auto; }
+  .ft.sm { font-size: clamp(11px, 1vw, 13.5px); }
   .fa { font: 500 9.5px/1.3 var(--sans); letter-spacing: .08em; text-transform: uppercase; opacity: .8; }
 </style>
