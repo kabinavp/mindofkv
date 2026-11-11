@@ -1,0 +1,46 @@
+---
+// Hand-drawn style icons for each model, set on a cream stamp tile.
+interface Props { id: string; size?: number; }
+const { id, size = 40 } = Astro.props;
+---
+<span class="mi" style={`--s:${size}px`} aria-hidden="true">
+  <svg viewBox="0 0 32 32" fill="none" stroke="#2f2c27" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    {id === 'inversion' && (<>
+      <path d="M10 6v13a6 6 0 0 0 12 0V10" />
+      <path d="m18 13.5 4-4 4 4" stroke="#c8582b" />
+      <path d="m6.5 9.5 3.5-3.5 3.5 3.5" opacity=".35" />
+    </>)}
+    {id === 'pre-mortem' && (<>
+      <path d="M9 26V13a7 7 0 0 1 14 0v13" /><path d="M6 26h20" />
+      <path d="m12.5 16 2.3 2.3 4.7-4.6" stroke="#c8582b" />
+      <path d="M13 22h6" opacity=".45" />
+    </>)}
+    {id === 'circle-of-influence' && (<>
+      <circle cx="16" cy="16" r="11" opacity=".35" /><circle cx="16" cy="16" r="7" opacity=".7" /><circle cx="16" cy="16" r="3" />
+      <circle cx="16" cy="16" r="1" fill="#c8582b" stroke="#c8582b" />
+      <path d="M24.5 8.5 27 6" stroke="#c8582b" />
+    </>)}
+    {id === 'default-high-trust' && (<>
+      <circle cx="12.5" cy="16" r="7" /><circle cx="19.5" cy="16" r="7" />
+      <path d="M16 10.3a7 7 0 0 1 0 11.4 7 7 0 0 1 0-11.4Z" fill="#c8582b" stroke="#c8582b" />
+    </>)}
+    {id === 'momentum-over-measurement' && (<>
+      <circle cx="18" cy="17" r="8" /><circle cx="18" cy="17" r="1.3" fill="#2f2c27" />
+      <path d="M18 9v16M10 17h16M12.4 11.4l11.2 11.2M23.6 11.4 12.4 22.6" opacity=".35" />
+      <path d="M3 13h5M2 17h5M3 21h5" stroke="#c8582b" />
+    </>)}
+    {id === 'honest-gap-analysis' && (<>
+      <path d="M6 26V19h6v7M20 26V9h6v17M4 26h24" />
+      <path d="M12 19h5M17 19v-10h3" stroke="#c8582b" stroke-dasharray="1.6 2" />
+      <path d="m15 11 2-2 2 2" stroke="#c8582b" />
+    </>)}
+    {!['inversion', 'pre-mortem', 'circle-of-influence', 'default-high-trust', 'momentum-over-measurement', 'honest-gap-analysis'].includes(id) && (<>
+      <path d="M16 6a7 7 0 0 0-4 12.7V22h8v-3.3A7 7 0 0 0 16 6Z" /><path d="M13 26h6" /><path d="M16 22v-5" stroke="#c8582b" />
+    </>)}
+  </svg>
+</span>
+<style>
+  .mi { display: inline-grid; place-items: center; flex: none; width: var(--s); height: var(--s); border-radius: 4px;
+    background: var(--stamp); border: 1px solid var(--stamp-edge); box-shadow: 0 1px 0 rgba(120,100,40,.2), inset 0 0 0 2px rgba(255,255,255,.35); }
+  .mi svg { width: 72%; height: 72%; }
+</style>
