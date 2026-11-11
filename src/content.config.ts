@@ -79,4 +79,17 @@ const books = defineCollection({
   }),
 });
 
-export const collections = { articles, videos, series, products, books };
+const models = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/models' }),
+  schema: z.object({
+    title: z.string(),
+    oneliner: z.string(), // the model in one sentence
+    essays: z.array(z.string()).default([]), // Substack post slugs or local article ids
+    books: z.array(z.string()).default([]), // book ids
+    videos: z.array(z.string()).default([]), // video ids
+    related: z.array(z.string()).default([]), // other model ids
+    order: z.number().default(0),
+  }),
+});
+
+export const collections = { articles, videos, series, products, books, models };

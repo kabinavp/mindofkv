@@ -1,0 +1,22 @@
+---
+title: Circle of Influence
+oneliner: Growth depends on how many people beyond your manager know your work and trust your judgment.
+essays: [circle-of-influence, own-your-career-growth]
+related: [default-high-trust, honest-gap-analysis]
+order: 3
+---
+Hard work alone often grows a career more slowly than it deserves. A common reason is a small circle of influence: only your direct manager really knows what you do. Expanding it builds what I call organisational capital.
+
+It grows in three stages:
+
+1. **Information.** Leaders in other teams know your name and where you sit.
+2. **Insight.** They know what you’re working on and what you’ve achieved recently.
+3. **Interact.** They’re comfortable coming to you to trade ideas and ask for your input.
+
+The first two help, but only the third moves your growth, because that’s when other decision-makers become invested in you.
+
+## Ways to widen it
+
+- Ask for 30 minutes to get someone’s input on a specific problem, with enough context that the request makes sense.
+- Share a document and ask for their review.
+- Follow up and show what you did with their advice.

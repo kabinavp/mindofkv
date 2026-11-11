@@ -15,7 +15,7 @@ export const SITE = {
 
   newsletter: {
     name: 'Stay Curious',
-    pitch: 'One email on Sundays with the most interesting things I found that week: ideas, books, experiments, and the occasional rabbit hole.',
+    pitch: 'A short email every Sunday: one idea, one question, one book, and one line worth keeping.',
     // The email list lives on Buttondown so every email is sent from mindofkv.com.
     // Buttondown's "RSS-to-email" watches https://mindofkv.com/rss.xml and emails each new post automatically.
     action: 'https://buttondown.com/api/emails/embed-subscribe/mindofkv',
@@ -56,9 +56,9 @@ export const SITE = {
 
   nav: [
     { label: 'Writing', href: '/articles' },
-    { label: 'Videos', href: '/videos' },
-    { label: 'Series', href: '/series' },
+    { label: 'Models', href: '/models' },
     { label: 'Books', href: '/books' },
+    { label: 'Videos', href: '/videos' },
     { label: 'Projects', href: '/projects' },
     { label: 'About', href: '/about' },
   ],

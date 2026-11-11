@@ -1,0 +1,67 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getModels, getBooks, getVideos, getArticles, fmtDate } from '../../lib/content';
+import { getPosts } from '../../lib/substack';
+
+export async function getStaticPaths() {
+  const models = await getModels();
+  return models.map((entry, i) => ({ params: { id: entry.id }, props: { entry, n: i + 1, all: models } }));
+}
+const { entry, n, all } = Astro.props;
+const { Content } = await render(entry);
+const { title, oneliner, essays, books, videos, related } = entry.data;
+const [posts, local, allBooks, allVideos] = await Promise.all([getPosts(), getArticles(), getBooks(), getVideos()]);
+const essayRows = essays.map((slug) => {
+  const p = posts.find((x) => x.slug === slug);
+  if (p) return { title: p.title, sub: p.subtitle, date: p.date, href: `/articles/${p.slug}` };
+  const a = local.find((x) => x.id === slug);
+  return a ? { title: a.data.title, sub: a.data.description, date: a.data.date, href: `/articles/${a.id}` } : null;
+}).filter(Boolean) as { title: string; sub: string; date: Date; href: string }[];
+const bookRows = allBooks.filter((b) => books.includes(b.id));
+const videoRows = allVideos.filter((v) => videos.includes(v.id));
+const relatedRows = all.filter((m) => related.includes(m.id));
+---
+<Base title={title} description={oneliner} type="article">
+  <article class="page">
+    <p class="meta"><a href="/models" class="u">Models</a> · No. {String(n).padStart(2, '0')}</p>
+    <h1 class="title" style="margin-top:10px">{title}</h1>
+    <p class="dek">{oneliner}</p>
+    <div class="prose" style="margin-top:32px"><Content /></div>
+
+    {essayRows.length > 0 && (
+      <section>
+        <h2 class="sub-h">Where I’ve used it</h2>
+        <ul class="refs">{essayRows.map((e) => <li><a href={e.href} class="u">{e.title}</a> <span class="meta">· {fmtDate(e.date)}</span>{e.sub && <span class="s">{e.sub}</span>}</li>)}</ul>
+      </section>
+    )}
+    {bookRows.length > 0 && (
+      <section>
+        <h2 class="sub-h">Books behind it</h2>
+        <ul class="refs">{bookRows.map((b) => <li><a href={`/books#${b.id}`} class="u"><i>{b.data.title}</i></a> <span class="meta">· {b.data.author}</span></li>)}</ul>
+      </section>
+    )}
+    {videoRows.length > 0 && (
+      <section>
+        <h2 class="sub-h">On video</h2>
+        <ul class="refs">{videoRows.map((v) => <li><a href={`/videos/${v.id}`} class="u">{v.data.title}</a></li>)}</ul>
+      </section>
+    )}
+    {relatedRows.length > 0 && (
+      <section>
+        <h2 class="sub-h">Pairs well with</h2>
+        <ul class="pairs">{relatedRows.map((m) => <li><a href={`/models/${m.id}`}><span class="t">{m.data.title}</span><span class="o">{m.data.oneliner}</span></a></li>)}</ul>
+      </section>
+    )}
+  </article>
+</Base>
+<style>
+  .dek { font-size: 20px; line-height: 1.5; color: var(--ink); font-style: italic; max-width: 600px; }
+  .refs { list-style: none; margin: 0; padding: 0; max-width: 600px; display: grid; gap: 12px; }
+  .refs .s { display: block; font-style: italic; color: var(--ink-3); font-size: 15.5px; }
+  .pairs { list-style: none; margin: 0; padding: 0; max-width: 600px; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .pairs a { display: grid; gap: 4px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 3px; background: var(--paper); transition: border-color .2s; }
+  .pairs a:hover { border-color: var(--ink-3); }
+  .pairs .t { font: italic 400 1.15rem var(--serif); color: var(--ink); }
+  .pairs .o { font-size: 14.5px; line-height: 1.45; color: var(--ink-2); }
+</style>

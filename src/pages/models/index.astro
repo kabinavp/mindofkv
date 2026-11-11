@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getModels } from '../../lib/content';
+const models = await getModels();
+---
+<Base title="Models" description="Thinking tools I keep coming back to, each with the essays where I’ve used it.">
+  <div class="page">
+    <h1 class="title">Models</h1>
+    <p>Thinking tools I keep coming back to. Each one gets a short page explaining the idea, the questions it makes you ask, and the essays where I’ve put it to work.</p>
+    <ol class="models">
+      {models.map((m, i) => (
+        <li>
+          <a href={`/models/${m.id}`}>
+            <span class="n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="body">
+              <span class="t">{m.data.title}</span>
+              <span class="o">{m.data.oneliner}</span>
+              <span class="meta">{m.data.essays.length} {m.data.essays.length === 1 ? 'essay' : 'essays'}{m.data.related.length > 0 && ` · pairs with ${m.data.related.length} more`}</span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Base>
+<style>
+  .models { list-style: none; margin: 48px 0 0; padding: 0; max-width: 640px; display: grid; gap: 4px; }
+  .models a { display: grid; grid-template-columns: 40px 1fr; gap: 8px; padding: 16px 0; border-top: 1px solid var(--line); }
+  .models li:last-child a { border-bottom: 1px solid var(--line); }
+  .n { font: 400 12px/2.1 var(--sans); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .body { display: grid; gap: 2px; }
+  .t { font: italic 400 1.4rem/1.25 var(--serif); color: var(--ink); transition: color .2s; }
+  .o { color: var(--ink-2); line-height: 1.5; }
+  .models .meta { margin-top: 4px; }
+  .models a:hover .t { color: var(--ink-2); }
+</style>

@@ -3,18 +3,50 @@ import Base from '../layouts/Base.astro';
 import Subscribe from '../components/Subscribe.astro';
 import { SITE } from '../site.config';
 const n = SITE.newsletter;
+const parts = [
+  { k: 'One idea', d: 'A model or insight worth thinking about, usually from something I wrote or tried that week.' },
+  { k: 'One question', d: 'Something I’m wondering about. Reply with your answer; the best ones end up in the next issue.' },
+  { k: 'One book', d: 'A book from my shelf and the single reason it’s worth your time.' },
+  { k: 'One line worth keeping', d: 'A quote, a sentence or a phrase I couldn’t stop thinking about.' },
+];
 ---
-<Base title={n.name} description={n.pitch} bare>
+<Base title={n.name} description={n.pitch} signup={false}>
   <div class="page">
     <h1 class="title">{n.name}</h1>
-    <p class="measure">{n.pitch}</p>
-    <div style="margin-top:28px"><Subscribe id="nl-email" /></div>
-    <p class="meta" style="margin-top:12px">Free. Unsubscribe in one click.</p>
-    <ul class="what">
-      <li><span class="ink">Something I found:</span> an idea, a fact or a question I couldn’t shake.</li>
-      <li><span class="ink">Something I tried:</span> an experiment, a project or a ride, and how it went.</li>
-      <li><span class="ink">Something to read:</span> one link or book worth your time.</li>
-    </ul>
+    <p class="measure">A short email every Sunday morning. Same four parts every week, so it takes five minutes to read and you always know what you’re getting.</p>
+    <div style="margin-top:28px; max-width:420px"><Subscribe id="nl-email" /></div>
+    <p class="meta" style="margin-top:10px">Free. Sent from mindofkv.com. Unsubscribe in one click.</p>
+
+    <h2 class="sub-h">What’s inside</h2>
+    <ol class="parts">{parts.map((p) => <li><span class="k">{p.k}</span><span class="d">{p.d}</span></li>)}</ol>
+
+    <h2 class="sub-h">A sample issue</h2>
+    <article class="issue" aria-label="Sample issue of Stay Curious">
+      <header>
+        <p class="from"><b>{n.name}</b> <span>· from Mind of KV · Sunday</span></p>
+        <p class="subj">No. 12: Solve for failure first</p>
+      </header>
+      <section><p class="lbl">One idea</p><p><b>Inversion.</b> Instead of asking how a launch could win, ask how it could flop, then remove those causes. Before we shipped a payment gateway, a pre-mortem caught the problems that would have hurt most. <a href="/models/inversion" class="u">Read the model →</a></p></section>
+      <section><p class="lbl">One question</p><p><i>Why does the ride home always feel shorter?</i> Hit reply and tell me your theory.</p></section>
+      <section><p class="lbl">One book</p><p><i>The Mom Test</i> by Rob Fitzpatrick, because people lie to be nice, and this teaches you to ask questions they can’t be polite about. <a href="/books#the-mom-test" class="u">My review →</a></p></section>
+      <section><p class="lbl">One line worth keeping</p><blockquote>“All I want to know is where I’m going to die, so I’ll never go there.” <span>— Charlie Munger</span></blockquote></section>
+      <footer>Stay curious,<br />KV</footer>
+    </article>
   </div>
 </Base>
-<style>.what { margin: 48px 0 0; padding-left: 1.1em; max-width: 560px; } .what li + li { margin-top: 4px; } .what li::marker { color: var(--ink-3); }</style>
+<style>
+  .parts { margin: 0; padding: 0; list-style: none; max-width: 600px; display: grid; gap: 14px; counter-reset: p; }
+  .parts li { display: grid; grid-template-columns: 34px 1fr; counter-increment: p; }
+  .parts li::before { content: counter(p, decimal-leading-zero); font: 400 12px/2.1 var(--sans); color: var(--ink-3); grid-row: span 2; }
+  .k { font: italic 400 1.2rem var(--serif); color: var(--ink); }
+  .d { color: var(--ink-2); line-height: 1.5; }
+  .issue { max-width: 560px; margin-top: 8px; background: #fff; border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 1px 0 rgba(0,0,0,.03), 0 14px 30px -18px rgba(40,40,20,.25); padding: 26px 28px; display: grid; gap: 22px; font-size: 16.5px; }
+  .issue header { border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+  .from { font: 400 13px var(--sans); color: var(--ink-3); } .from b { color: var(--ink); font-weight: 500; }
+  .subj { font: italic 400 1.35rem/1.3 var(--serif); color: var(--ink); margin-top: 6px !important; }
+  .lbl { font: 500 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px !important; }
+  .issue b { font-weight: 500; color: var(--ink); }
+  .issue blockquote { margin: 0; font-style: italic; color: var(--ink); } .issue blockquote span { font-style: normal; color: var(--ink-3); font-size: 14px; }
+  .issue footer { font-style: italic; color: var(--ink-2); }
+  @media (max-width: 560px) { .issue { padding: 20px 18px; } }
+</style>

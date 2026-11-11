@@ -59,6 +59,10 @@ One paragraph review goes here.
 ```
 To earn from Amazon links, put your Associates tracking ID in `SITE.amazon.tag` (`src/site.config.ts`). The required disclosure line appears automatically once a tag is set.
 
+**Model:** `src/content/models/<id>.md` → `/models/<id>`. Front-matter: `title`, `oneliner`, `essays` (Substack slugs), `books`, `videos`, `related` (other model ids), `order`. Essays listed here automatically show the model at the end of the post.
+
+**Newsletter:** each Sunday issue follows `newsletter/TEMPLATE.md` (one idea, one question, one book, one line worth keeping).
+
 **Product:** `src/content/products/my-app.md` with `title`, `tagline`, `status` (live/projects/idea/retired), `started`, `url`, `stack`, `metric` and `order`.
 
 > All current content is placeholder content. Replace or delete it.

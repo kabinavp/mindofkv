@@ -1,11 +1,11 @@
 /* Notebook paper: a faint square grid, soft grey ink, a serif voice and a quiet sans for UI. */
 :root {
-  --paper: #f1f1ed;
-  --grid: rgba(70, 70, 40, 0.055);
+  --paper: #ffffff;
+  --grid: rgba(40, 40, 30, 0.06);
   --ink: #2e2d2a;
   --ink-2: #5d5c56;
   --ink-3: #96958d;
-  --line: #d6d5cc;
+  --line: #e2e2de;
   --stamp: #f4e4b2;
   --stamp-edge: #d9c587;
   --live: #4f8a2c;

@@ -55,3 +55,6 @@ export function isbn10(isbn: string) {
   const check = (11 - (sum % 11)) % 11;
   return core + (check === 10 ? 'X' : String(check));
 }
+
+export const getModels = async () => (await getCollection('models')).sort((a, b) => a.data.order - b.data.order);
+export const modelsForEssay = async (slug: string) => (await getModels()).filter((m) => m.data.essays.includes(slug));
