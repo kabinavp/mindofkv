@@ -1,0 +1,27 @@
+---
+// Mind of KV logo: the hand-drawn doodle face (the site's cursor companion) beside a serif wordmark.
+---
+<a href="/" class="logo" aria-label="Mind of KV, home">
+  <svg class="mark" viewBox="0 0 28 32" aria-hidden="true">
+    <path class="outline" pathLength="1" d="M14 2.6C20.3 2.2 24.6 7.4 24.6 15.2 25 23.6 20.6 29.3 14.2 29.4 7.6 29.6 3.5 23.9 3.4 15.7 3.2 7.8 7.9 3 14 2.6Z" />
+    <g class="eyes"><circle cx="10.6" cy="13.6" r="1.25" /><circle cx="17.4" cy="13.6" r="1.25" /></g>
+    <path class="mouth" pathLength="1" d="M10.4 20.4Q14 23.4 17.6 20.4" />
+  </svg>
+  <span class="word"><i>Mind of</i> <b>KV</b></span>
+</a>
+<style>
+  .logo { display: inline-flex; align-items: center; gap: 9px; color: var(--ink); }
+  .mark { width: 22px; height: 25px; overflow: visible; transform: rotate(-4deg); transition: transform .4s cubic-bezier(.2,.8,.2,1.4); }
+  .outline { fill: var(--paper); stroke: var(--ink); stroke-width: 1.45; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; animation: draw 1.1s .15s cubic-bezier(.6,.1,.3,1) backwards; }
+  .mouth { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 1; animation: draw .5s 1.05s ease-out backwards; transition: d .3s; }
+  .eyes { fill: var(--ink); transform-box: fill-box; transform-origin: center; animation: pop .35s .9s cubic-bezier(.2,.8,.2,1.6) backwards, blink 5s 3s infinite; }
+  .logo:hover .mark { transform: rotate(6deg) scale(1.06); }
+  .logo:hover .mouth { d: path('M9.8 19.8Q14 25 18.2 19.8'); }
+  .word { font: 400 18px/1 var(--serif); letter-spacing: -0.01em; white-space: nowrap; }
+  .word i { font-style: italic; color: var(--ink-2); }
+  .word b { font: 600 13.5px/1 var(--sans); letter-spacing: 0.06em; margin-left: 1px; vertical-align: 1px; }
+  @keyframes draw { from { stroke-dashoffset: 1; } }
+  @keyframes pop { from { transform: scale(0); } }
+  @keyframes blink { 0%, 96%, 100% { transform: scaleY(1); } 98% { transform: scaleY(.1); } }
+  @media (prefers-reduced-motion: reduce) { .outline, .mouth, .eyes { animation: none; } }
+</style>

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Stamp from '../components/Stamp.astro';
+import Subscribe from '../components/Subscribe.astro';
 import { getArticles, getVideos, getProducts, getBooks } from '../lib/content';
 import { SITE } from '../site.config';
 
@@ -16,8 +17,8 @@ const hill = SITE.hill;
       data-lat={hill.lat ?? ''} data-lon={hill.lon ?? ''}></canvas>
 
     <div class="intro">
-      <h1>Mind of KV</h1>
-      <p>I’m KV, a builder. I write software for a living and make products on the side, and I share all of it here: the essays, the videos, and the things I’m building.</p>
+      <h1>Hi, I’m KV.</h1>
+      <p>I’m a builder. I write software for a living and make products on the side, and I share all of it here: the essays, the videos, and the things I’m building.</p>
       <p class="free">
         <span>In my free time,</span>
         <span class="stamps">
@@ -32,6 +33,10 @@ const hill = SITE.hill;
         {v0 && <> Newest video: <a href={`/videos/${v0.id}`}>{v0.data.title}</a>.</>}
         {bk && <> Last book I loved: <a href={`/books#${bk.id}`}><i>{bk.data.title}</i></a>.</>}
       </p>
+      <div class="join">
+        <p><span class="ink">Get {SITE.newsletter.name}.</span> One email every Sunday: what I shipped, what broke, and the best thing I read.</p>
+        <Subscribe id="home-email" />
+      </div>
     </div>
 
     <p class="weather" aria-live="polite">
@@ -132,11 +137,17 @@ const hill = SITE.hill;
   .lately { margin-top: 18px !important; }
   .lately a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
   .lately a:hover { text-decoration-color: var(--ink-2); }
+  .join { margin-top: 30px; display: grid; gap: 10px; max-width: 460px; }
+  .join p { font-size: 15.5px; line-height: 1.5; }
   .weather { position: absolute; z-index: 1; right: var(--gut); bottom: 22px; margin: 0; text-align: right; font: 400 13px/1.45 var(--sans); color: #fff; text-shadow: 0 1px 6px rgba(20, 30, 5, .35); display: grid; }
   .weather .dim { opacity: .78; }
   .doodle { position: fixed; left: 0; top: 0; width: 40px; height: 46px; z-index: 30; pointer-events: none; opacity: 0; transition: opacity .3s; will-change: transform; }
   @media (max-width: 700px) {
-    .intro { padding-top: 104px; }
-    .weather { left: var(--gut); bottom: 16px; font-size: 12px; }
+    .home { height: max(100svh, 1010px); }
+    .intro { padding-top: 112px; font-size: 16.5px; }
+    .join { margin-top: 22px; }
+    .join { margin-top: 30px; display: grid; gap: 10px; max-width: 460px; }
+  .join p { font-size: 15.5px; line-height: 1.5; }
+  .weather { left: var(--gut); bottom: 16px; font-size: 12px; }
   }
 </style>
