@@ -11,7 +11,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
     { params: { slug: 'models' }, props: { kicker: 'Models', title: 'A library of thinking tools', sub: 'Short, practical models for product, leadership and life, each with real examples.' } },
     { params: { slug: 'weekly' }, props: { kicker: 'Weekly · Every Sunday', title: SITE.newsletter.name, sub: 'One idea, one question, one book and one line worth keeping. Five minutes, every Sunday.' } },
     ...models.map((m, i) => ({ params: { slug: `models/${m.id}` }, props: { kicker: `Model No. ${String(i + 1).padStart(2, '0')}`, title: m.data.title, sub: m.data.oneliner } })),
-    ...posts.map((p) => ({ params: { slug: `articles/${p.slug}` }, props: { kicker: 'Essay', title: p.title, sub: p.subtitle } })),
     ...local.map((a) => ({ params: { slug: `articles/${a.id}` }, props: { kicker: 'Essay', title: a.data.title, sub: a.data.description } })),
   ];
 };

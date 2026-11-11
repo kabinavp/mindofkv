@@ -57,3 +57,13 @@ export function isbn10(isbn: string) {
 
 export const getModels = async () => (await getCollection('models')).sort((a, b) => a.data.order - b.data.order);
 export const modelsForEssay = async (slug: string) => (await getModels()).filter((m) => m.data.essays.includes(slug));
+
+// Each essay lives in full on exactly one model page: the first model (by order) that lists it first.
+// Other models that mention it link to that model instead, so no essay appears twice.
+export async function essayHomes() {
+  const models = await getModels();
+  const home = new Map<string, string>();
+  for (const m of models) if (m.data.essays[0] && !home.has(m.data.essays[0])) home.set(m.data.essays[0], m.id);
+  for (const m of models) for (const e of m.data.essays) if (!home.has(e)) home.set(e, m.id);
+  return home; // essay slug → model id
+}

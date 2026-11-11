@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ModelIcon from '../../components/ModelIcon.astro';
-import { getModels, getBooks, getVideos, getArticles, fmtDate } from '../../lib/content';
+import { getModels, getBooks, getVideos, getArticles, fmtDate, essayHomes } from '../../lib/content';
 import { getPosts } from '../../lib/substack';
 
 export async function getStaticPaths() {
@@ -12,20 +12,16 @@ export async function getStaticPaths() {
 const { entry, n, all } = Astro.props;
 const { Content } = await render(entry);
 const { title, oneliner, essays, books, videos, related } = entry.data;
-const [posts, local, allBooks, allVideos] = await Promise.all([getPosts(), getArticles(), getBooks(), getVideos()]);
-const essayRows = essays.map((slug) => {
-  const p = posts.find((x) => x.slug === slug);
-  if (p) return { title: p.title, sub: p.subtitle, date: p.date, href: `/articles/${p.slug}` };
-  const a = local.find((x) => x.id === slug);
-  return a ? { title: a.data.title, sub: a.data.description, date: a.data.date, href: `/articles/${a.id}` } : null;
-}).filter(Boolean) as { title: string; sub: string; date: Date; href: string }[];
+const [posts, local, allBooks, allVideos, homes] = await Promise.all([getPosts(), getArticles(), getBooks(), getVideos(), essayHomes()]);
+const ownEssays = essays.filter((slug) => homes.get(slug) === entry.id).map((slug) => posts.find((p) => p.slug === slug)).filter(Boolean) as Awaited<ReturnType<typeof getPosts>>;
+const elsewhere = essays.filter((slug) => homes.get(slug) && homes.get(slug) !== entry.id).map((slug) => ({ post: posts.find((p) => p.slug === slug), model: all.find((m) => m.id === homes.get(slug)) })).filter((x) => x.post && x.model);
 const bookRows = allBooks.filter((b) => books.includes(b.id));
 const videoRows = allVideos.filter((v) => videos.includes(v.id));
 const relatedRows = all.filter((m) => related.includes(m.id));
 import { SITE } from '../../site.config';
 const url = `${SITE.url}/models/${entry.id}`;
 const jsonld = [
-  { '@type': 'Article', '@id': `${url}#article`, headline: entry.data.seoTitle ?? title, description: entry.data.seoDescription ?? oneliner, url, image: `${SITE.url}/og/models/${entry.id}.png`, author: { '@id': `${SITE.url}/#kv` }, publisher: { '@id': `${SITE.url}/#kv` }, dateModified: (entry.data.updated ?? new Date()).toISOString(), about: { '@type': 'DefinedTerm', name: title, description: oneliner, inDefinedTermSet: `${SITE.url}/models` } },
+  { '@type': 'Article', '@id': `${url}#article`, headline: entry.data.seoTitle ?? title, description: entry.data.seoDescription ?? oneliner, url, image: `${SITE.url}/og/models/${entry.id}.png`, author: { '@id': `${SITE.url}/#kv` }, publisher: { '@id': `${SITE.url}/#kv` }, dateModified: (entry.data.updated ?? new Date()).toISOString(), about: { '@type': 'DefinedTerm', name: title, description: oneliner, inDefinedTermSet: `${SITE.url}/models` }, hasPart: ownEssays.map((p) => ({ '@type': 'BlogPosting', headline: p.title, description: p.subtitle, datePublished: p.date.toISOString(), url: `${url}#${p.slug}`, author: { '@id': `${SITE.url}/#kv` } })) },
   { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Models', item: `${SITE.url}/models` }, { '@type': 'ListItem', position: 2, name: title, item: url }] },
 ];
 ---
@@ -36,10 +32,19 @@ const jsonld = [
     <p class="dek">{oneliner}</p>
     <div class="prose" style="margin-top:32px"><Content /></div>
 
-    {essayRows.length > 0 && (
+    {ownEssays.map((p) => (
+      <section class="essay" id={p.slug}>
+        <p class="ek">The essay</p>
+        <h2 class="et">{p.title}</h2>
+        {p.subtitle && <p class="es">{p.subtitle}</p>}
+        <p class="meta">{fmtDate(p.date)} · {Math.max(1, Math.round(p.words / 230))} min read</p>
+        <div class="prose ebody"><Fragment set:html={p.html} /></div>
+      </section>
+    ))}
+    {elsewhere.length > 0 && (
       <section>
-        <h2 class="sub-h">Where I’ve used it</h2>
-        <ul class="refs">{essayRows.map((e) => <li><a href={e.href} class="u">{e.title}</a> <span class="meta">· {fmtDate(e.date)}</span>{e.sub && <span class="s">{e.sub}</span>}</li>)}</ul>
+        <h2 class="sub-h">In practice</h2>
+        <ul class="refs">{elsewhere.map(({ post, model }) => <li>Read <i>{post!.title}</i> in <a href={`/models/${model!.id}#${post!.slug}`} class="u">{model!.data.title}</a>, where it’s part of the story.</li>)}</ul>
       </section>
     )}
     {bookRows.length > 0 && (
@@ -66,6 +71,13 @@ const jsonld = [
   .head { display: flex; align-items: center; gap: 14px; margin-top: 14px; } .head .title { margin: 0; }
   .head + .dek { margin-top: 14px !important; }
   .dek { font-size: 20px; line-height: 1.5; color: var(--ink); font-style: italic; max-width: 600px; }
+  .essay { max-width: 600px; margin-top: 72px; padding-top: 32px; border-top: 1px solid var(--line); scroll-margin-top: 24px; }
+  .ek { font: 500 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  .et { font: italic 400 clamp(1.6rem, 2.4vw, 2rem)/1.2 var(--serif); color: var(--ink); margin: 8px 0 0; }
+  .es { font-size: 18px; font-style: italic; color: var(--ink-3); margin-top: 6px !important; }
+  .essay .meta { margin-top: 8px !important; }
+  .ebody { margin-top: 24px; }
+  .ebody :global(figure) { margin: 1.6em 0; } .ebody :global(figure img) { width: 100%; height: auto; }
   .refs { list-style: none; margin: 0; padding: 0; max-width: 600px; display: grid; gap: 12px; }
   .refs .s { display: block; font-style: italic; color: var(--ink-3); font-size: 15.5px; }
   .pairs { list-style: none; margin: 0; padding: 0; max-width: 600px; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }

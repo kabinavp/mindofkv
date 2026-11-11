@@ -1,0 +1,23 @@
+---
+// Essays now live inside their model pages. Old essay links (Substack, LinkedIn, search) forward there.
+import { getPosts } from '../../lib/substack';
+import { essayHomes } from '../../lib/content';
+import { SITE } from '../../site.config';
+
+export async function getStaticPaths() {
+  const [posts, homes] = await Promise.all([getPosts(), essayHomes()]);
+  return posts.map((p) => ({ params: { slug: p.slug }, props: { to: homes.has(p.slug) ? `/models/${homes.get(p.slug)}#${p.slug}` : '/models', title: p.title } }));
+}
+const { to, title } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{title} · {SITE.name}</title>
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href={new URL(to.split('#')[0] + '/', SITE.url).href} />
+    <meta http-equiv="refresh" content={`0; url=${to}`} />
+  </head>
+  <body><p>This essay now lives at <a href={to}>{to}</a>.</p></body>
+</html>

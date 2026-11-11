@@ -1,12 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import EntryList from '../components/EntryList.astro';
-import { getArticles, getVideos } from '../lib/content';
-import { getPosts } from '../lib/substack';
-const favs = [
-  ...(await getPosts()).slice(0, 3).map((p) => ({ title: p.title, href: `/articles/${p.slug}`, date: p.date, kind: 'Essay' })),
-  ...(await getArticles()).filter((a) => a.data.featured).map((e) => ({ title: e.data.title, href: `/articles/${e.id}`, date: e.data.date, kind: 'Essay' })),
-].sort((a, b) => b.date.valueOf() - a.date.valueOf());
+import { getModels } from '../lib/content';
+const favs = (await getModels()).slice(0, 4).map((m) => ({ title: m.data.title, href: `/models/${m.id}`, kind: 'Model', note: m.data.oneliner }));
 ---
 <Base title="Start here" description="New here? The best places to begin.">
   <div class="page">
@@ -15,6 +11,6 @@ const favs = [
     <h2 class="sub-h">Favourites</h2>
     <EntryList rows={favs} />
     <h2 class="sub-h">Then</h2>
-    <p class="measure">Browse the <a href="/models" class="u">models</a> I think with, follow a <a href="/series" class="u">series</a> from part one, see what I’m <a href="/projects" class="u">making</a>, or check what I’m doing <a href="/now" class="u">now</a>. The best way to keep up is the newsletter below.</p>
+    <p class="measure">Browse the rest of the <a href="/models" class="u">models</a>, see what I’m <a href="/books" class="u">reading</a>, or check what I’m doing <a href="/now" class="u">now</a>. The best way to keep up is <a href="/weekly" class="u">Stay Curious</a>, every Sunday.</p>
   </div>
 </Base>
