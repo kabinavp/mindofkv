@@ -22,8 +22,14 @@ const essayRows = essays.map((slug) => {
 const bookRows = allBooks.filter((b) => books.includes(b.id));
 const videoRows = allVideos.filter((v) => videos.includes(v.id));
 const relatedRows = all.filter((m) => related.includes(m.id));
+import { SITE } from '../../site.config';
+const url = `${SITE.url}/models/${entry.id}`;
+const jsonld = [
+  { '@type': 'Article', '@id': `${url}#article`, headline: entry.data.seoTitle ?? title, description: entry.data.seoDescription ?? oneliner, url, image: `${SITE.url}/og/models/${entry.id}.png`, author: { '@id': `${SITE.url}/#kv` }, publisher: { '@id': `${SITE.url}/#kv` }, dateModified: (entry.data.updated ?? new Date()).toISOString(), about: { '@type': 'DefinedTerm', name: title, description: oneliner, inDefinedTermSet: `${SITE.url}/models` } },
+  { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Models', item: `${SITE.url}/models` }, { '@type': 'ListItem', position: 2, name: title, item: url }] },
+];
 ---
-<Base title={title} description={oneliner} type="article">
+<Base title={entry.data.seoTitle ?? title} description={entry.data.seoDescription ?? oneliner} type="article" image={`/og/models/${entry.id}.png`} jsonld={jsonld} modified={entry.data.updated}>
   <article class="page">
     <p class="meta"><a href="/models" class="u">Models</a> · No. {String(n).padStart(2, '0')}</p>
     <div class="head"><ModelIcon id={entry.id} size={48} /><h1 class="title">{title}</h1></div>

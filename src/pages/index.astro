@@ -28,7 +28,7 @@ const hill = SITE.hill;
         <button type="button" class="next-q" data-next-q aria-label="Show another question">another one ↻</button>
       </p>
       <div class="join">
-        <p><span class="ink">{SITE.newsletter.name}.</span> Every Sunday: one idea, one question, one book, one line worth keeping.</p>
+        <p><span class="ink">{SITE.newsletter.club}.</span> Every Sunday: one idea, one question, one book, one line worth keeping.{SITE.newsletter.subscribers && <> Join {SITE.newsletter.subscribers}+ curious readers.</>}</p>
         <Subscribe id="home-email" />
       </div>
     </div>

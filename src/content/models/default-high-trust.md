@@ -1,6 +1,9 @@
 ---
 title: Default High Trust
 oneliner: Start relationships by extending trust, then protect it with consistent contact, instead of making people earn it first.
+seoTitle: "Default High Trust: How to Fix Trust Deficits in Teams"
+seoDescription: "Misaligned teams usually have a trust deficit. How starting from high trust, consistent contact and a shared way of working fixes it."
+updated: 2026-11-11
 essays: [building-trust]
 related: [circle-of-influence]
 order: 4

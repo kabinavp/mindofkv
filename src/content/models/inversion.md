@@ -1,6 +1,9 @@
 ---
 title: Inversion
 oneliner: Instead of asking how to succeed, ask how you could fail, then avoid those things.
+seoTitle: "Inversion: Solve for Failure to Make Better Decisions"
+seoDescription: "Inversion is a mental model that flips the question from “how do we win?” to “how could this fail?”. Questions to ask, when to use it, and a real product example."
+updated: 2026-11-11
 essays: [invert-to-win]
 related: [pre-mortem, momentum-over-measurement]
 order: 1

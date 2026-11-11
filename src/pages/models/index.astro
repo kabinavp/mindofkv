@@ -2,9 +2,11 @@
 import Base from '../../layouts/Base.astro';
 import ModelIcon from '../../components/ModelIcon.astro';
 import { getModels } from '../../lib/content';
+import { SITE } from '../../site.config';
 const models = await getModels();
+const jsonld = { '@type': 'CollectionPage', name: 'Mental Models Library', url: `${SITE.url}/models`, hasPart: models.map((m) => ({ '@type': 'Article', headline: m.data.title, url: `${SITE.url}/models/${m.id}` })) };
 ---
-<Base title="Models" description="Thinking tools I keep coming back to, each with the essays where I’ve used it.">
+<Base title="Mental Models for Product, Leadership and Life" description="A growing library of practical mental models: inversion, pre-mortems, circle of influence and more, each explained with questions to ask and real examples." image="/og/models.png" jsonld={jsonld}>
   <div class="page">
     <h1 class="title">Models</h1>
     <p>Thinking tools I keep coming back to. Each one gets a short page explaining the idea, the questions it makes you ask, and the essays where I’ve put it to work.</p>

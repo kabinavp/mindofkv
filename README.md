@@ -21,6 +21,13 @@ npm run build      # outputs static site to dist/
 | About / Start here / Now pages | `src/pages/about.astro`, `start-here.astro`, `now.astro` |
 | Favicon | `public/favicon.svg` |
 
+## Search (SEO)
+
+- Every page has a title, description, canonical URL, structured data (schema.org) and an auto-generated share image (`/og/...png`, built by `src/lib/og.ts`).
+- Model pages use `seoTitle` / `seoDescription`: write them as the phrase people actually search (e.g. "How to Run a Pre-mortem").
+- Sections that still hold sample content are hidden from Google (noindex, left out of the sitemap). The list is in `src/seo.config.mjs`; remove a section from it once its content is real.
+- After launch: verify the site in Google Search Console and Bing Webmaster Tools, and submit `https://mindofkv.com/sitemap-index.xml` to both.
+
 ## Publishing content
 
 Drop a Markdown (`.md`) or MDX (`.mdx`) file into the matching folder. The filename becomes the URL.

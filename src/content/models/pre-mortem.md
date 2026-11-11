@@ -1,6 +1,9 @@
 ---
 title: Pre-mortem
 oneliner: Imagine the project has already failed, then write down why. Fix those causes before you start.
+seoTitle: "Pre-mortem: How to Run One Before Your Next Launch"
+seoDescription: "A pre-mortem imagines a project has already failed and asks why. A step-by-step way to run one with your team, with a real payment-gateway launch example."
+updated: 2026-11-11
 essays: [invert-to-win]
 related: [inversion]
 order: 2

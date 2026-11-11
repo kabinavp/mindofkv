@@ -1,6 +1,9 @@
 ---
 title: Honest Gap Analysis
 oneliner: Own your growth by finding out exactly what the next level needs, writing down your gaps, and checking progress out loud.
+seoTitle: "Honest Gap Analysis: How to Own Your Career Growth"
+seoDescription: "A simple loop to own your growth: learn what the next level needs, write an honest gap analysis, validate it with your manager, and track progress."
+updated: 2026-11-11
 essays: [own-your-career-growth]
 related: [circle-of-influence]
 order: 6

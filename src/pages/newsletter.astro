@@ -10,9 +10,10 @@ const parts = [
   { k: 'One line worth keeping', d: 'A quote, a sentence or a phrase I couldn’t stop thinking about.' },
 ];
 ---
-<Base title={n.name} description={n.pitch} signup={false}>
+<Base title={`${n.name} newsletter`} description={n.pitch} image="/og/newsletter.png" signup={false}>
   <div class="page">
     <h1 class="title">{n.name}</h1>
+    <p class="club">{SITE.newsletter.club}{SITE.newsletter.subscribers ? ` and ${SITE.newsletter.subscribers}+ curious readers` : ''}.</p>
     <p class="measure">A short email every Sunday morning. Same four parts every week, so it takes five minutes to read and you always know what you’re getting.</p>
     <div style="margin-top:28px; max-width:420px"><Subscribe id="nl-email" /></div>
     <p class="meta" style="margin-top:10px">Free. Sent from mindofkv.com. Unsubscribe in one click.</p>
@@ -35,6 +36,7 @@ const parts = [
   </div>
 </Base>
 <style>
+  .club { font: italic 400 1.25rem var(--serif); color: var(--ink); margin-bottom: 8px !important; }
   .parts { margin: 0; padding: 0; list-style: none; max-width: 600px; display: grid; gap: 14px; counter-reset: p; }
   .parts li { display: grid; grid-template-columns: 34px 1fr; counter-increment: p; }
   .parts li::before { content: counter(p, decimal-leading-zero); font: 400 12px/2.1 var(--sans); color: var(--ink-3); grid-row: span 2; }

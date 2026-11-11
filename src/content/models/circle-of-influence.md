@@ -1,6 +1,9 @@
 ---
 title: Circle of Influence
 oneliner: Growth depends on how many people beyond your manager know your work and trust your judgment.
+seoTitle: "Circle of Influence at Work: 3 Stages to Grow Your Career"
+seoDescription: "Why hard work alone grows your career slowly, and how to widen your circle of influence at work in three stages: Information, Insight, Interact."
+updated: 2026-11-11
 essays: [circle-of-influence, own-your-career-growth]
 related: [default-high-trust, honest-gap-analysis]
 order: 3

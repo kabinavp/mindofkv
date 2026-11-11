@@ -15,6 +15,9 @@ export const SITE = {
 
   newsletter: {
     name: 'Stay Curious',
+    club: 'Join the Curious Club',
+    // Your real subscriber count. When set, signups read “Join 340+ curious readers”. Leave null to hide.
+    subscribers: null as number | null,
     pitch: 'A short email every Sunday: one idea, one question, one book, and one line worth keeping.',
     // The email list lives on Buttondown so every email is sent from mindofkv.com.
     // Buttondown's "RSS-to-email" watches https://mindofkv.com/rss.xml and emails each new post automatically.

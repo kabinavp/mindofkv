@@ -84,6 +84,9 @@ const models = defineCollection({
   schema: z.object({
     title: z.string(),
     oneliner: z.string(), // the model in one sentence
+    seoTitle: z.string().optional(), // what people search for, e.g. "How to Run a Pre-mortem"
+    seoDescription: z.string().optional(),
+    updated: z.coerce.date().optional(),
     essays: z.array(z.string()).default([]), // Substack post slugs or local article ids
     books: z.array(z.string()).default([]), // book ids
     videos: z.array(z.string()).default([]), // video ids
