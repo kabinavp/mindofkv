@@ -4,15 +4,15 @@ export const SITE = {
   author: 'KV',
   email: 'hello@mindofkv.com',
   url: 'https://mindofkv.com',
-  tagline: 'A builder’s public notebook.',
+  tagline: 'Notes from a curious mind.',
   description:
-    'Essays, videos, series and products from KV — a builder documenting what gets made and what gets learned along the way.',
+    'Essays, videos, books and experiments from KV, following curiosity wherever it goes.',
 
   // Newsletter. Point `action` at your provider's form endpoint
   // (Buttondown, Kit/ConvertKit, Beehiiv, Substack…). Field name is usually "email".
   newsletter: {
-    name: 'The Build Log',
-    pitch: 'One email every Sunday. What I shipped, what broke, and the best thing I read that week.',
+    name: 'Stay Curious',
+    pitch: 'One email on Sundays with the most interesting things I found that week: ideas, books, experiments, and the occasional rabbit hole.',
     action: 'https://buttondown.com/api/emails/embed-subscribe/mindofkv',
     emailField: 'email',
   },
@@ -33,6 +33,15 @@ export const SITE = {
     tag: '',
   },
 
+  // Questions on the homepage ("Currently wondering"). Visitors can flip through them.
+  wondering: [
+    'Why does the ride home always feel shorter?',
+    'What would you make if nobody could ever see it?',
+    'Why do the best ideas show up mid-climb and never at the desk?',
+    'How much of good taste can actually be learned?',
+    'What’s the smallest change that would change everything?',
+  ],
+
   socials: [
     { label: 'YouTube', href: 'https://youtube.com/@mindofkv' },
     { label: 'X', href: 'https://x.com/mindofkv' },
@@ -45,7 +54,7 @@ export const SITE = {
     { label: 'Videos', href: '/videos' },
     { label: 'Series', href: '/series' },
     { label: 'Books', href: '/books' },
-    { label: 'Building', href: '/building' },
+    { label: 'Projects', href: '/projects' },
     { label: 'About', href: '/about' },
   ],
 };

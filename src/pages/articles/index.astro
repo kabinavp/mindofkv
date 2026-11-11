@@ -6,10 +6,10 @@ const articles = await getArticles();
 const topics = await getAllTopics();
 const years = [...new Set(articles.map((a) => a.data.date.getFullYear()))].sort((a, b) => b - a);
 ---
-<Base title="Writing" description="Essays and notes on building, thinking and making things.">
+<Base title="Writing" description="Essays and notes on ideas I can’t stop thinking about.">
   <div class="page">
     <h1 class="title">Writing</h1>
-    <p>Essays and notes from the workshop. Some are polished, some are me thinking out loud.</p>
+    <p>Essays and notes on ideas I can’t stop thinking about. Some are polished, some are me thinking out loud.</p>
     <p class="meta topics">Topics: {topics.map((t, i) => <>{i > 0 && ', '}<a href={`/topics/${t.slug}`} class="u">{t.name}</a></>)}</p>
     {years.map((y) => (
       <section>

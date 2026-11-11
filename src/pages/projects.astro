@@ -2,12 +2,12 @@
 import Base from '../layouts/Base.astro';
 import { getProducts } from '../lib/content';
 const products = await getProducts();
-const label = { live: 'Live', building: 'Building', idea: 'Idea', retired: 'Retired' } as const;
+const label = { live: 'Live', building: 'In progress', idea: 'Idea', retired: 'Retired' } as const;
 ---
-<Base title="Building" description="Products, side projects and experiments, built in public.">
+<Base title="Projects" description="Things I’ve made, am making, or want to make.">
   <div class="page">
-    <h1 class="title">Building</h1>
-    <p>Everything I’ve made, am making, or want to make. Real numbers included, and the ones that didn’t work out stay on the list.</p>
+    <h1 class="title">Projects</h1>
+    <p>Things I’ve made, am making, or want to make. Some worked and some didn’t. Every one of them started with “I wonder if…”.</p>
     <ul class="ps">
       {products.map((p) => (
         <li>

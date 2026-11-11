@@ -31,7 +31,7 @@ Drop a Markdown (`.md`) or MDX (`.mdx`) file into the matching folder. The filen
 title: My post
 description: One-line summary (used in cards + SEO)
 date: 2026-11-12
-topics: [building, ai]      # creates /topics/building etc.
+topics: [building, ai]      # creates /topics/projects etc.
 featured: true              # shows on Start Here
 series: build-in-public     # optional: filename of a series
 seriesOrder: 4              # optional: position in the series
@@ -59,7 +59,7 @@ One paragraph review goes here.
 ```
 To earn from Amazon links, put your Associates tracking ID in `SITE.amazon.tag` (`src/site.config.ts`). The required disclosure line appears automatically once a tag is set.
 
-**Product:** `src/content/products/my-app.md` with `title`, `tagline`, `status` (live/building/idea/retired), `started`, `url`, `stack`, `metric` and `order`.
+**Product:** `src/content/products/my-app.md` with `title`, `tagline`, `status` (live/projects/idea/retired), `started`, `url`, `stack`, `metric` and `order`.
 
 > All current content is placeholder content. Replace or delete it.
 

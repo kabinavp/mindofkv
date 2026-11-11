@@ -5,10 +5,10 @@ import { SITE } from '../../site.config';
 const videos = await getVideos();
 const yt = SITE.socials.find((s) => s.label === 'YouTube');
 ---
-<Base title="Videos" description="Build logs, walkthroughs and conversations.">
+<Base title="Videos" description="Experiments, walkthroughs and long rides, on camera.">
   <div class="page">
     <h1 class="title">Videos</h1>
-    <p>Build logs and walkthroughs, filmed while the work happens. New ones land on {yt ? <a href={yt.href} class="u" target="_blank" rel="noopener">YouTube</a> : 'YouTube'} first.</p>
+    <p>Experiments, walkthroughs and the occasional long ride, filmed as they happen. New ones land on {yt ? <a href={yt.href} class="u" target="_blank" rel="noopener">YouTube</a> : 'YouTube'} first.</p>
     <ul class="vids">
       {videos.map((v) => (
         <li><a href={`/videos/${v.id}`}>

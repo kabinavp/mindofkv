@@ -2,39 +2,33 @@
 import Base from '../layouts/Base.astro';
 import Stamp from '../components/Stamp.astro';
 import Subscribe from '../components/Subscribe.astro';
-import { getArticles, getVideos, getProducts, getBooks } from '../lib/content';
 import { SITE } from '../site.config';
 
-const [articles, videos, products, books] = await Promise.all([getArticles(), getVideos(), getProducts(), getBooks()]);
-const bk = books[0];
-const a0 = articles[0], v0 = videos[0];
-const b0 = products.find((p) => p.data.status === 'building') ?? products[0];
 const hill = SITE.hill;
 ---
 <Base bare>
   <section class="home">
-    <canvas id="hill" class="hill" role="img" aria-label="A grassy hill with a lone tree. KV rides a bike up and down the slope."
+    <canvas id="hill" class="hill" role="img" aria-label="A grassy hill with a lone tree. KV rides a bike up and down the slope." data-questions={JSON.stringify(SITE.wondering)}
       data-lat={hill.lat ?? ''} data-lon={hill.lon ?? ''}></canvas>
 
     <div class="intro">
       <h1>Hi, I’m KV.</h1>
-      <p>I’m a builder. I write software for a living and make products on the side, and I share all of it here: the essays, the videos, and the things I’m building.</p>
+      <p>I chase ideas, ride hills, read too many books, and make things just to see what happens. This is my notebook, where all of it ends up: essays, videos, books and experiments.</p>
       <p class="free">
         <span>In my free time,</span>
         <span class="stamps">
           <Stamp kind="ride" label="I ride. Toggle the cyclist" pressed />
-          <Stamp kind="build" label="I build. Toggle the builder" />
+          <Stamp kind="build" label="I make things. Toggle the maker" />
           <Stamp kind="film" label="I film. Toggle the filmmaker" />
         </span>
       </p>
-      <p class="lately">
-        Lately I’m building <a href="/building">{b0?.data.title}</a>.{' '}
-        {a0 && <>Newest essay: <a href={`/articles/${a0.id}`}>{a0.data.title}</a>.</>}
-        {v0 && <> Newest video: <a href={`/videos/${v0.id}`}>{v0.data.title}</a>.</>}
-        {bk && <> Last book I loved: <a href={`/books#${bk.id}`}><i>{bk.data.title}</i></a>.</>}
+      <p class="wonder">
+        <span class="meta">Currently wondering</span>
+        <span class="q" data-q>{SITE.wondering[0]}</span>
+        <button type="button" class="next-q" data-next-q aria-label="Show another question">another one ↻</button>
       </p>
       <div class="join">
-        <p><span class="ink">Get {SITE.newsletter.name}.</span> One email every Sunday: what I shipped, what broke, and the best thing I read.</p>
+        <p><span class="ink">{SITE.newsletter.name}.</span> One email on Sundays with the most interesting things I found that week.</p>
         <Subscribe id="home-email" />
       </div>
     </div>
@@ -92,6 +86,15 @@ const hill = SITE.hill;
     b.addEventListener('click', () => b.setAttribute('aria-pressed', String(hill.toggle(b.dataset.activity as Activity))));
   });
 
+  // Currently wondering: flip through questions
+  const qs: string[] = JSON.parse(canvas.dataset.questions ?? '[]');
+  const qEl = document.querySelector<HTMLElement>('[data-q]')!;
+  let qi = 0;
+  document.querySelector('[data-next-q]')?.addEventListener('click', () => {
+    qi = (qi + 1) % qs.length;
+    qEl.classList.remove('in'); void qEl.offsetWidth; qEl.textContent = qs[qi]; qEl.classList.add('in');
+  });
+
   // Doodle face that follows the cursor
   const doodle = document.querySelector<SVGSVGElement>('[data-doodle]')!;
   if (matchMedia('(pointer: fine)').matches && !still) {
@@ -127,7 +130,7 @@ const hill = SITE.hill;
 </script>
 
 <style>
-  .home { position: relative; height: max(100svh, 640px); overflow: hidden; }
+  .home { position: relative; height: max(100svh, 780px); overflow: hidden; }
   .hill { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .intro { position: relative; z-index: 1; padding: clamp(110px, 17vh, 170px) var(--gut) 0 var(--col); max-width: calc(var(--col) + 600px); }
   h1 { font: italic 400 clamp(1.9rem, 2.6vw, 2.2rem)/1.15 var(--serif); color: var(--ink-2); letter-spacing: -0.01em; margin: 0 0 14px; }
@@ -137,6 +140,13 @@ const hill = SITE.hill;
   .lately { margin-top: 18px !important; }
   .lately a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
   .lately a:hover { text-decoration-color: var(--ink-2); }
+  .wonder { margin-top: 26px !important; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .wonder .meta { width: 100%; }
+  .q { font: italic 400 21px/1.35 var(--serif); color: var(--ink); }
+  .q.in { animation: qin .5s cubic-bezier(.2,.8,.2,1); }
+  @keyframes qin { from { opacity: 0; transform: translateY(6px); } }
+  .next-q { border: 0; background: none; padding: 0; cursor: pointer; font: 400 12.5px var(--sans); color: var(--ink-3); }
+  .next-q:hover { color: var(--ink); }
   .join { margin-top: 30px; display: grid; gap: 10px; max-width: 460px; }
   .join p { font-size: 15.5px; line-height: 1.5; }
   .weather { position: absolute; z-index: 1; right: var(--gut); bottom: 22px; margin: 0; text-align: right; font: 400 13px/1.45 var(--sans); color: #fff; text-shadow: 0 1px 6px rgba(20, 30, 5, .35); display: grid; }
@@ -146,7 +156,14 @@ const hill = SITE.hill;
     .home { height: max(100svh, 1010px); }
     .intro { padding-top: 112px; font-size: 16.5px; }
     .join { margin-top: 22px; }
-    .join { margin-top: 30px; display: grid; gap: 10px; max-width: 460px; }
+    .wonder { margin-top: 26px !important; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .wonder .meta { width: 100%; }
+  .q { font: italic 400 21px/1.35 var(--serif); color: var(--ink); }
+  .q.in { animation: qin .5s cubic-bezier(.2,.8,.2,1); }
+  @keyframes qin { from { opacity: 0; transform: translateY(6px); } }
+  .next-q { border: 0; background: none; padding: 0; cursor: pointer; font: 400 12.5px var(--sans); color: var(--ink-3); }
+  .next-q:hover { color: var(--ink); }
+  .join { margin-top: 30px; display: grid; gap: 10px; max-width: 460px; }
   .join p { font-size: 15.5px; line-height: 1.5; }
   .weather { left: var(--gut); bottom: 16px; font-size: 12px; }
   }

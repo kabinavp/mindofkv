@@ -26,7 +26,7 @@ const GRASS = ['#4b6a1d', '#5d7a24', '#6f8a2c', '#82983a', '#97a64a', '#adb763']
 const SKIN = '#a8724f';
 const LINES: Record<Activity, string[]> = {
   ride: ['Hill repeats again', 'Legs are cooked', 'One more lap', 'Best ideas come at 25 km/h'],
-  build: ['Shipping tonight', 'One more bug…', 'It works on my machine', 'Should’ve written tests'],
+  build: ['What if I tried…', 'One more experiment', 'Wait, that worked?', 'Down another rabbit hole'],
   film: ['Rolling', 'Take twelve', 'Make it look effortless', 'Got the shot'],
 };
 
