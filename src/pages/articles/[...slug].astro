@@ -2,29 +2,53 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import SeriesNav from '../../components/SeriesNav.astro';
+import Subscribe from '../../components/Subscribe.astro';
 import { getArticles, fmtDate, readingTime, slugify } from '../../lib/content';
+import { getPosts } from '../../lib/substack';
+import { SITE } from '../../site.config';
 
 export async function getStaticPaths() {
-  const all = await getArticles();
-  return all.map((entry) => ({ params: { slug: entry.id }, props: { entry, all } }));
+  const [local, posts] = await Promise.all([getArticles(), getPosts()]);
+  return [
+    ...local.map((entry) => ({ params: { slug: entry.id }, props: { kind: 'local' as const, entry, post: undefined } })),
+    ...posts.map((post) => ({ params: { slug: post.slug }, props: { kind: 'substack' as const, post, entry: undefined } })),
+  ];
 }
-const { entry, all } = Astro.props;
-const { Content } = await render(entry);
-const { title, description, date, topics, series } = entry.data;
-const i = all.findIndex((a) => a.id === entry.id);
-const older = all[i + 1];
+const { kind, entry, post } = Astro.props;
+const Content = entry ? (await render(entry)).Content : null;
+const title = entry?.data.title ?? post!.title;
+const description = entry?.data.description ?? post!.subtitle;
+const date = entry?.data.date ?? post!.date;
+const minutes = entry ? readingTime(entry.body) : Math.max(1, Math.round(post!.words / 230));
+const topics = entry?.data.topics ?? [];
+const series = entry?.data.series;
+const all = (await getPosts()).map((p) => ({ title: p.title, slug: p.slug, date: p.date }));
+const idx = all.findIndex((p) => p.slug === (post?.slug ?? entry?.id));
+const older = idx >= 0 ? all[idx + 1] : undefined;
 ---
-<Base title={title} description={description} type="article">
+<Base title={title} description={description} type="article" image={post?.image} signup={false}>
   <article class="page">
-    <p class="meta">{fmtDate(date)} · {readingTime(entry.body)} min read{topics.length > 0 && <> · {topics.map((t, k) => <>{k > 0 && ', '}<a href={`/topics/${slugify(t)}`} class="u">{t}</a></>)}</>}</p>
+    <p class="meta">{fmtDate(date)} · {minutes} min read{topics.length > 0 && <> · {topics.map((t, k) => <>{k > 0 && ', '}<a href={`/topics/${slugify(t)}`} class="u">{t}</a></>)}</>}</p>
     <h1 class="title" style="margin-top:10px">{title}</h1>
-    <p class="dek">{description}</p>
-    {series && <div style="margin:36px 0"><SeriesNav seriesId={series.id} currentId={entry.id} /></div>}
-    <div class="prose" style="margin-top:36px"><Content /></div>
-    {older && <p class="more">Older: <a href={`/articles/${older.id}`} class="u">{older.data.title}</a></p>}
+    {description && <p class="dek">{description}</p>}
+    {series && <div style="margin:36px 0"><SeriesNav seriesId={series.id} currentId={entry!.id} /></div>}
+    <div class="prose" style="margin-top:36px">
+      {Content ? <Content /> : <Fragment set:html={post!.html} />}
+    </div>
+    <div class="end">
+      <p><span class="ink">{SITE.newsletter.name}.</span> Get the next essay in your inbox.</p>
+      <Subscribe id="post-email" />
+      {kind === 'substack' && <p class="meta">Also on <a href={post!.url} class="u" target="_blank" rel="noopener">Substack</a>, if you’d like to comment there.</p>}
+    </div>
+    {older && <p class="more">Older: <a href={`/articles/${older.slug}`} class="u">{older.title}</a></p>}
   </article>
 </Base>
 <style>
   .dek { font-size: 19px; color: var(--ink-3); font-style: italic; max-width: 600px; }
-  .more { margin-top: 64px !important; font-size: 15.5px; }
+  .prose :global(figure) { margin: 1.6em 0; }
+  .prose :global(figure img) { width: 100%; height: auto; }
+  .prose :global(figcaption) { font: 400 13px var(--sans); color: var(--ink-3); margin-top: 8px; text-align: center; }
+  .prose :global(.captioned-image-container) { max-width: 600px; }
+  .end { max-width: 560px; display: grid; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line); }
+  .more { margin-top: 48px !important; margin-bottom: 64px !important; font-size: 15.5px; }
 </style>

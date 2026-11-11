@@ -8,7 +8,7 @@ export const SITE = {
   description:
     'Essays, videos, books and experiments from KV, following curiosity wherever it goes.',
 
-  // Writing and the newsletter both live on Substack.
+  // Essays are drafted on Substack and published here (each gets a page on mindofkv.com).
   substack: {
     url: 'https://mindofkv.substack.com',
   },
@@ -16,7 +16,9 @@ export const SITE = {
   newsletter: {
     name: 'Stay Curious',
     pitch: 'One email on Sundays with the most interesting things I found that week: ideas, books, experiments, and the occasional rabbit hole.',
-    action: 'https://mindofkv.substack.com/api/v1/free?nojs=true',
+    // The email list lives on Buttondown so every email is sent from mindofkv.com.
+    // Buttondown's "RSS-to-email" watches https://mindofkv.com/rss.xml and emails each new post automatically.
+    action: 'https://buttondown.com/api/emails/embed-subscribe/mindofkv',
     emailField: 'email',
   },
 

@@ -1,11 +1,8 @@
-// Saves the current Substack feed to src/data/substack.json (the offline fallback). Run: npm run snapshot
+// Saves the current Substack feed to src/data/substack.json (the offline fallback).
+// Run: npm run snapshot   (behind a proxy, prefix with NODE_USE_ENV_PROXY=1)
 import { writeFileSync } from 'node:fs';
+import { parseFeed } from '../src/lib/substack-parse.mjs';
 const url = process.argv[2] ?? 'https://mindofkv.substack.com';
-const xml = await (await fetch(`${url}/feed`)).text();
-const pick = (s, t) => (s.match(new RegExp(`<${t}[^>]*>(?:<!\\[CDATA\\[)?([\\s\\S]*?)(?:\\]\\]>)?</${t}>`)) ?? [])[1]?.trim() ?? '';
-const posts = xml.split('<item>').slice(1).map((c) => {
-  const i = c.split('</item>')[0]; const e = i.match(/<enclosure[^>]*url="([^"]+)"/);
-  return { title: pick(i, 'title'), subtitle: pick(i, 'description'), url: pick(i, 'link'), date: new Date(pick(i, 'pubDate')).toISOString(), image: e ? e[1].replace(/&amp;/g, '&') : undefined };
-});
+const posts = parseFeed(await (await fetch(`${url}/feed`)).text());
 writeFileSync('src/data/substack.json', JSON.stringify(posts, null, 2) + '\n');
 console.log(`Saved ${posts.length} posts`);

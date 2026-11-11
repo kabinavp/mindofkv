@@ -1,13 +1,14 @@
 ---
 import Subscribe from './Subscribe.astro';
 import { SITE } from '../site.config';
+const { signup = true } = Astro.props as { signup?: boolean };
 const year = new Date().getFullYear();
 ---
 <footer class="ftr">
-  <div class="nl">
+  {signup && <div class="nl">
     <p><span class="ink">{SITE.newsletter.name}.</span> {SITE.newsletter.pitch}</p>
     <Subscribe id="ftr-email" />
-  </div>
+  </div>}
   <p class="links">
     <span>© {year} KV</span>
     <a href="/now">Now</a><a href="/start-here">Start here</a><a href="/rss.xml">RSS</a>
@@ -17,6 +18,7 @@ const year = new Date().getFullYear();
 <style>
   .ftr { padding: 0 var(--gut) 40px var(--col); }
   .nl { max-width: 560px; display: grid; gap: 14px; padding-top: 28px; border-top: 1px solid var(--line); }
-  .links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 72px; font: 400 12.5px var(--sans); color: var(--ink-3); }
+  .nl + .links { margin-top: 72px; }
+  .links { border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 0; font: 400 12.5px var(--sans); color: var(--ink-3); }
   .links a:hover { color: var(--ink); }
 </style>

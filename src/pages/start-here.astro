@@ -4,7 +4,7 @@ import EntryList from '../components/EntryList.astro';
 import { getArticles, getVideos } from '../lib/content';
 import { getPosts } from '../lib/substack';
 const favs = [
-  ...(await getPosts()).slice(0, 3).map((p) => ({ title: p.title, href: p.url, date: p.date, kind: 'Essay' })),
+  ...(await getPosts()).slice(0, 3).map((p) => ({ title: p.title, href: `/articles/${p.slug}`, date: p.date, kind: 'Essay' })),
   ...(await getArticles()).filter((a) => a.data.featured).map((e) => ({ title: e.data.title, href: `/articles/${e.id}`, date: e.data.date, kind: 'Essay' })),
   ...(await getVideos()).filter((v) => v.data.featured).map((e) => ({ title: e.data.title, href: `/videos/${e.id}`, date: e.data.date, kind: 'Video' })),
 ].sort((a, b) => b.date.valueOf() - a.date.valueOf());

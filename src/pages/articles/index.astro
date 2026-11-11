@@ -6,7 +6,7 @@ import { SITE } from '../../site.config';
 
 // Substack posts plus any essays written directly on this site, newest first.
 const posts = [
-  ...(await getPosts()).map((p) => ({ title: p.title, subtitle: p.subtitle, date: p.date, href: p.url, external: true })),
+  ...(await getPosts()).map((p) => ({ title: p.title, subtitle: p.subtitle, date: p.date, href: `/articles/${p.slug}`, external: false })),
   ...(await getArticles()).map((a) => ({ title: a.data.title, subtitle: a.data.description, date: a.data.date, href: `/articles/${a.id}`, external: false })),
 ].sort((a, b) => b.date.valueOf() - a.date.valueOf());
 const years = [...new Set(posts.map((p) => p.date.getFullYear()))].sort((a, b) => b - a);
@@ -14,7 +14,7 @@ const years = [...new Set(posts.map((p) => p.date.getFullYear()))].sort((a, b) =
 <Base title="Writing" description="Essays on product, leadership, teams and the ideas I can’t stop thinking about.">
   <div class="page">
     <h1 class="title">Writing</h1>
-    <p>Essays on product, leadership, teams, and whatever else I can’t stop thinking about. They’re published on <a href={SITE.substack.url} class="u" target="_blank" rel="noopener">Substack</a>, where you can also subscribe.</p>
+    <p>Essays on product, leadership, teams, and whatever else I can’t stop thinking about. New ones arrive by email through {SITE.newsletter.name}.</p>
     {years.map((y) => (
       <section>
         <h2 class="sub-h">{y}</h2>
