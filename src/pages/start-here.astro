@@ -6,13 +6,12 @@ import { getPosts } from '../lib/substack';
 const favs = [
   ...(await getPosts()).slice(0, 3).map((p) => ({ title: p.title, href: `/articles/${p.slug}`, date: p.date, kind: 'Essay' })),
   ...(await getArticles()).filter((a) => a.data.featured).map((e) => ({ title: e.data.title, href: `/articles/${e.id}`, date: e.data.date, kind: 'Essay' })),
-  ...(await getVideos()).filter((v) => v.data.featured).map((e) => ({ title: e.data.title, href: `/videos/${e.id}`, date: e.data.date, kind: 'Video' })),
 ].sort((a, b) => b.date.valueOf() - a.date.valueOf());
 ---
 <Base title="Start here" description="New here? The best places to begin.">
   <div class="page">
     <h1 class="title">Start here</h1>
-    <p>Welcome. I’m KV, and this is my notebook: essays, videos, books and projects, all following whatever I’m curious about. If you only read a few things, make it these.</p>
+    <p>Welcome. I’m KV, and this is my notebook: mental models, essays, books and projects, all following whatever I’m curious about. If you only read a few things, make it these.</p>
     <h2 class="sub-h">Favourites</h2>
     <EntryList rows={favs} />
     <h2 class="sub-h">Then</h2>

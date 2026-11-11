@@ -1,24 +1,28 @@
-<!--
-Stay Curious — weekly template. Copy into Buttondown each Sunday.
-Subject line: "No. <issue>: <the idea in five words>"
-Keep it under 300 words. Same four parts, same order, every week.
--->
+---
+# Save each issue as src/content/weekly/NNN.md (e.g. 001.md). It appears in the archive at /weekly/001.
+# Paste the same content into Buttondown to send it on Sunday morning.
+number: 1
+date: 2026-11-15
+subject: "The idea in five words"
+model: inversion        # optional: the model featured in "One idea"
+book: white-nights      # optional: the book featured in "One book"
+---
 
-**One idea**
+## One idea
 
 **<Model or insight>.** <Two or three sentences: what it is, and where you saw it this week.>
-[Read more →](https://mindofkv.com/models/<model>)
+[Read the model →](/models/<model>)
 
-**One question**
+## One question
 
 *<The question you can't stop thinking about?>* Hit reply and tell me your answer.
 
-**One book**
+## One book
 
 *<Title>* by <Author>: <one sentence on why it's worth reading.>
-[My review →](https://mindofkv.com/books#<book-id>)
+[On my shelf →](/books#<book-id>)
 
-**One line worth keeping**
+## One line worth keeping
 
 > "<Quote>" — <Who said it>
 

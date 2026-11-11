@@ -58,10 +58,9 @@ export const SITE = {
   ],
 
   nav: [
-    { label: 'Writing', href: '/articles' },
     { label: 'Models', href: '/models' },
+    { label: 'Weekly', href: '/weekly' },
     { label: 'Books', href: '/books' },
-    { label: 'Videos', href: '/videos' },
     { label: 'Projects', href: '/projects' },
     { label: 'About', href: '/about' },
   ],

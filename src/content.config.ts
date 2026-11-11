@@ -98,4 +98,17 @@ const models = defineCollection({
   }),
 });
 
-export const collections = { articles, videos, series, products, books, models };
+// Weekly issues ("Stay Curious"), published every Sunday. One file per issue: src/content/weekly/001.md
+const weekly = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/weekly' }),
+  schema: z.object({
+    number: z.number(),
+    date: z.coerce.date(),
+    subject: z.string(), // e.g. "Solve for failure first"
+    model: z.string().optional(), // model id featured as "One idea"
+    book: z.string().optional(), // book id featured as "One book"
+    draft: z.boolean().default(false),
+  }),
+});
+
+export const collections = { articles, videos, series, products, books, models, weekly };

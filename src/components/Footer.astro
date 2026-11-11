@@ -1,5 +1,6 @@
 ---
 import Subscribe from './Subscribe.astro';
+import Mascot from './Mascot.astro';
 import { SITE } from '../site.config';
 const { signup = true } = Astro.props as { signup?: boolean };
 const year = new Date().getFullYear();
@@ -9,6 +10,7 @@ const year = new Date().getFullYear();
     <p><span class="ink">{SITE.newsletter.club}.</span> {SITE.newsletter.pitch}</p>
     <Subscribe id="ftr-email" />
   </div>}
+  <div class="sign"><Mascot height={44} /><p>Stay curious.<span>KV</span></p></div>
   <p class="links">
     <span>© {year} KV</span>
     <a href="/now">Now</a><a href="/series">Series</a><a href="/start-here">Start here</a><a href="/rss.xml">RSS</a>
@@ -18,7 +20,8 @@ const year = new Date().getFullYear();
 <style>
   .ftr { padding: 0 var(--gut) 40px var(--col); }
   .nl { max-width: 560px; display: grid; gap: 14px; padding-top: 28px; border-top: 1px solid var(--line); }
-  .nl + .links { margin-top: 72px; }
+  .sign { display: flex; align-items: flex-end; gap: 12px; margin-top: 72px; margin-bottom: 18px; }
+  .sign p { font: italic 400 1.2rem/1.2 var(--serif); color: var(--ink); } .sign span { display: block; font: 400 12px var(--sans); color: var(--ink-3); font-style: normal; margin-top: 2px; }
   .links { border-top: 1px solid var(--line); padding-top: 18px; display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 0; font: 400 12.5px var(--sans); color: var(--ink-3); }
   .links a:hover { color: var(--ink); }
 </style>

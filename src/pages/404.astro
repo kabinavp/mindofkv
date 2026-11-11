@@ -1,9 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
+import Mascot from '../components/Mascot.astro';
 ---
 <Base title="Not found" bare>
-  <div class="page">
-    <h1 class="title">Nothing here yet</h1>
-    <p>This page hasn’t been built. Head back <a href="/" class="u">to the hill</a>.</p>
+  <div class="page nf">
+    <Mascot height={110} />
+    <div>
+      <h1 class="title">Nothing here yet</h1>
+      <p>This page doesn’t exist, or it moved. Head back <a href="/" class="u">to the hill</a> or browse the <a href="/models" class="u">models</a>.</p>
+    </div>
   </div>
 </Base>
+<style>.nf { display: flex; align-items: flex-end; gap: 28px; flex-wrap: wrap; }</style>

@@ -34,7 +34,11 @@ const { id, size = 40 } = Astro.props;
       <path d="M12 19h5M17 19v-10h3" stroke="#c8582b" stroke-dasharray="1.6 2" />
       <path d="m15 11 2-2 2 2" stroke="#c8582b" />
     </>)}
-    {!['inversion', 'pre-mortem', 'circle-of-influence', 'default-high-trust', 'momentum-over-measurement', 'honest-gap-analysis'].includes(id) && (<>
+    {id === 'prototype-before-you-spec' && (<>
+      <rect x="5" y="7" width="22" height="17" rx="2" /><path d="M5 11.5h22" /><circle cx="8" cy="9.3" r=".5" fill="#2f2c27" />
+      <path d="M17.5 13.5 14 18.5h3.5l-1.5 4 4.5-6h-3.5l1.5-3z" fill="#c8582b" stroke="#c8582b" stroke-width="1" />
+    </>)}
+    {!['prototype-before-you-spec', 'inversion', 'pre-mortem', 'circle-of-influence', 'default-high-trust', 'momentum-over-measurement', 'honest-gap-analysis'].includes(id) && (<>
       <path d="M16 6a7 7 0 0 0-4 12.7V22h8v-3.3A7 7 0 0 0 16 6Z" /><path d="M13 26h6" /><path d="M16 22v-5" stroke="#c8582b" />
     </>)}
   </svg>

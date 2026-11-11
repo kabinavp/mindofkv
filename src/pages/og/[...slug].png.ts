@@ -9,8 +9,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return [
     { params: { slug: 'home' }, props: { kicker: 'Notes from a curious mind', title: 'Essays, models and books on how to think, decide and lead.' } },
     { params: { slug: 'models' }, props: { kicker: 'Models', title: 'A library of thinking tools', sub: 'Short, practical models for product, leadership and life, each with real examples.' } },
-    { params: { slug: 'writing' }, props: { kicker: 'Writing', title: 'Essays on product, leadership and teams' } },
-    { params: { slug: 'newsletter' }, props: { kicker: 'Newsletter', title: SITE.newsletter.name, sub: SITE.newsletter.pitch } },
+    { params: { slug: 'weekly' }, props: { kicker: 'Weekly · Every Sunday', title: SITE.newsletter.name, sub: 'One idea, one question, one book and one line worth keeping. Five minutes, every Sunday.' } },
     ...models.map((m, i) => ({ params: { slug: `models/${m.id}` }, props: { kicker: `Model No. ${String(i + 1).padStart(2, '0')}`, title: m.data.title, sub: m.data.oneliner } })),
     ...posts.map((p) => ({ params: { slug: `articles/${p.slug}` }, props: { kicker: 'Essay', title: p.title, sub: p.subtitle } })),
     ...local.map((a) => ({ params: { slug: `articles/${a.id}` }, props: { kicker: 'Essay', title: a.data.title, sub: a.data.description } })),

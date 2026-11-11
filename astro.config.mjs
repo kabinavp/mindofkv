@@ -9,6 +9,7 @@ const artifact = process.env.ARTIFACT === '1';
 export default defineConfig({
   site: 'https://mindofkv.com',
   trailingSlash: 'ignore',
+  redirects: { '/articles': '/models', '/newsletter': '/weekly', '/videos': '/models' },
   integrations: [
     mdx(),
     sitemap({ filter: (page) => !isNoindex(new URL(page).pathname.replace(/\/$/, '')) }),

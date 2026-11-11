@@ -68,7 +68,7 @@ To earn from Amazon links, put your Associates tracking ID in `SITE.amazon.tag` 
 
 **Model:** `src/content/models/<id>.md` → `/models/<id>`. Front-matter: `title`, `oneliner`, `essays` (Substack slugs), `books`, `videos`, `related` (other model ids), `order`. Essays listed here automatically show the model at the end of the post.
 
-**Newsletter:** each Sunday issue follows `newsletter/TEMPLATE.md` (one idea, one question, one book, one line worth keeping).
+**Weekly (Stay Curious):** each Sunday issue is a file in `src/content/weekly/` (copy `newsletter/TEMPLATE.md`). It appears in the archive at `/weekly/NNN`; paste the same text into Buttondown to send it.
 
 **Product:** `src/content/products/my-app.md` with `title`, `tagline`, `status` (live/projects/idea/retired), `started`, `url`, `stack`, `metric` and `order`.
 

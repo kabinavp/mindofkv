@@ -1,0 +1,31 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Subscribe from '../../components/Subscribe.astro';
+import { fmtDate } from '../../lib/content';
+import { SITE } from '../../site.config';
+
+export async function getStaticPaths() {
+  const issues = await getCollection('weekly', (e) => import.meta.env.DEV || !e.data.draft);
+  return issues.map((entry) => ({ params: { number: String(entry.data.number).padStart(3, '0') }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { number, date, subject } = entry.data;
+---
+<Base title={`${subject} · ${SITE.newsletter.name} No. ${number}`} description={`${SITE.newsletter.name} No. ${number}: one idea, one question, one book and one line worth keeping.`} type="article" published={date} signup={false}>
+  <article class="page">
+    <p class="meta"><a href="/weekly" class="u">Weekly</a> · No. {number} · {fmtDate(date)} · 5-minute read</p>
+    <h1 class="title" style="margin-top:10px">{subject}</h1>
+    <div class="prose issue"><Content /></div>
+    <div class="end">
+      <p><span class="ink">{SITE.newsletter.club}.</span> Get the next issue on Sunday.</p>
+      <Subscribe id="issue-email" />
+    </div>
+  </article>
+</Base>
+<style>
+  .issue { margin-top: 28px; }
+  .issue :global(h2) { font: 500 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-top: 2.2em; }
+  .end { max-width: 560px; display: grid; gap: 12px; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line); }
+</style>
