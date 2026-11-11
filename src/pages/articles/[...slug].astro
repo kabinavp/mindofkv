@@ -1,10 +1,12 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import Newsletter from '../../components/Newsletter.astro';
+import Field from '../../components/Field.astro';
 import SeriesNav from '../../components/SeriesNav.astro';
-import ArticleCard from '../../components/ArticleCard.astro';
+import EntryList from '../../components/EntryList.astro';
+import Subscribe from '../../components/Subscribe.astro';
 import { getArticles, fmtDate, readingTime, slugify } from '../../lib/content';
+import { SITE } from '../../site.config';
 
 export async function getStaticPaths() {
   const all = await getArticles();
@@ -12,33 +14,64 @@ export async function getStaticPaths() {
 }
 const { entry, all } = Astro.props;
 const { Content } = await render(entry);
-const { title, description, date, topics, series } = entry.data;
-const related = all.filter((a) => a.id !== entry.id && a.data.topics.some((t) => topics.includes(t))).slice(0, 2);
+const { title, description, date, topics, series, palette } = entry.data;
+const related = all.filter((a) => a.id !== entry.id).sort((a, b) =>
+  b.data.topics.filter((t) => topics.includes(t)).length - a.data.topics.filter((t) => topics.includes(t)).length).slice(0, 3);
 ---
 <Base title={title} description={description} type="article">
-  <article class="wrap">
-    <header class="head">
-      <p class="eyebrow">{fmtDate(date)} · {readingTime(entry.body)} min read</p>
-      <h1>{title}</h1>
-      <p class="dek">{description}</p>
-      {topics.length > 0 && <p class="topics">{topics.map((t) => <a class="pill" href={`/topics/${slugify(t)}`}>{t}</a>)}</p>}
+  <article>
+    <header class="wrap head">
+      <div class="meta">
+        <p class="label">Essay</p>
+        <dl>
+          <div><dt>Published</dt><dd>{fmtDate(date)}</dd></div>
+          <div><dt>Reading</dt><dd>{readingTime(entry.body)} min</dd></div>
+          {topics.length > 0 && <div><dt>Topics</dt><dd>{topics.map((t, i) => <>{i > 0 && ', '}<a href={`/topics/${slugify(t)}`}>{t}</a></>)}</dd></div>}
+        </dl>
+      </div>
+      <div class="titles">
+        <h1>{title}</h1>
+        <p class="lead">{description}</p>
+      </div>
     </header>
-    {series && <SeriesNav seriesId={series.id} currentId={entry.id} />}
-    <div class="prose"><Content /></div>
-    {series && <div style="margin-top:56px"><SeriesNav seriesId={series.id} currentId={entry.id} /></div>}
+    <div class="wrap"><div class="cover"><Field seed={entry.id} palette={palette} /></div></div>
+    <div class="wrap body">
+      <aside class="side">{series && <SeriesNav seriesId={series.id} currentId={entry.id} />}</aside>
+      <div class="prose"><Content /></div>
+    </div>
+    <div class="wrap end">
+      <div class="end-in">
+        {series && <SeriesNav seriesId={series.id} currentId={entry.id} />}
+        <div class="sub-box">
+          <p class="lead"><b>Enjoyed this?</b> {SITE.newsletter.pitch}</p>
+          <Subscribe id="post-email" />
+        </div>
+      </div>
+    </div>
   </article>
-  <section class="wrap end"><Newsletter /></section>
   {related.length > 0 && (
-    <section class="wrap end">
-      <div class="section-head"><h2>Keep reading</h2></div>
-      <div class="grid">{related.map((a) => <ArticleCard entry={a} />)}</div>
-    </section>
+    <section class="wrap more"><h2>Keep reading</h2><EntryList numbered={false} rows={related.map((a) => ({ title: a.data.title, href: `/articles/${a.id}`, date: a.data.date, kind: 'Essay' }))} /></section>
   )}
 </Base>
 <style>
-  .head { max-width: var(--prose); margin: 0 auto; padding: 72px 0 40px; }
-  .head h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); margin-top: 16px; }
-  .dek { font-size: 1.25rem; color: var(--ink-2); margin-top: 18px; }
-  .topics { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
-  .end { margin-top: 80px; }
+  .head { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 168px; padding-bottom: 64px; }
+  .meta { grid-column: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
+  dl { margin: 0; display: grid; gap: 12px; font-size: 12.5px; }
+  dt { color: var(--ink-3); } dd { margin: 0; } dd a:hover { color: var(--ink-2); }
+  .titles { grid-column: 2 / 5; }
+  .titles .lead { margin-top: 22px; max-width: 32em; }
+  .cover { position: relative; height: clamp(220px, 38vw, 460px); border-radius: 22px; }
+  .body { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 96px; }
+  .side { grid-column: 1; } .side :global(.sn) { position: sticky; top: 100px; }
+  .side :global(.pn) { grid-template-columns: 1fr; } .side :global(.n) { text-align: left; }
+  .prose { grid-column: 2 / 5; }
+  .end { display: grid; grid-template-columns: repeat(4, 1fr); padding-top: 96px; }
+  .end-in { grid-column: 2 / 4; display: grid; gap: 64px; }
+  .sub-box { display: grid; gap: 24px; border-top: 1px solid var(--line); padding-top: 32px; }
+  .more { padding-top: 128px; padding-bottom: 128px; } .more h2 { margin-bottom: 48px; }
+  @media (max-width: 860px) {
+    .head, .body, .end { grid-template-columns: 1fr; } .head { padding-top: 120px; }
+    .meta, .titles, .prose, .end-in { grid-column: 1; } .meta { order: 2; } .side { display: none; }
+    .body { padding-top: 56px; } dl { grid-template-columns: repeat(3, auto); justify-content: start; gap: 24px; }
+  }
 </style>

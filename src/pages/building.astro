@@ -1,30 +1,30 @@
 ---
 import Base from '../layouts/Base.astro';
-import ProductCard from '../components/ProductCard.astro';
+import ProductCell from '../components/ProductCell.astro';
 import { getProducts } from '../lib/content';
 const products = await getProducts();
-const groups = [
-  { key: 'live', title: 'Shipped & live' },
-  { key: 'building', title: 'In the workshop' },
-  { key: 'idea', title: 'On the whiteboard' },
-  { key: 'retired', title: 'The graveyard', note: 'Projects I shut down — and what they taught me.' },
-] as const;
+const count = (s: string) => products.filter((p) => p.data.status === s).length;
 ---
-<Base title="Building" description="Products, side projects and experiments I'm building in public.">
+<Base title="Building" description="Products, side projects and experiments, built in public.">
   <div class="wrap">
     <header class="page-head">
-      <p class="eyebrow">Building</p>
-      <h1>Things I'm making</h1>
-      <p>I believe the best way to learn is to ship. Here's everything I've built, am building, or want to build — including the stuff that didn't work.</p>
+      <p class="label">Building</p>
+      <div>
+        <h1>Things I’m making</h1>
+        <p class="lead"><b>The best way to learn is to ship.</b> Everything I’ve built, am building, or want to build — with real numbers, including the projects that didn’t work out.</p>
+      </div>
     </header>
-    {groups.map((g) => {
-      const list = products.filter((p) => p.data.status === g.key);
-      return list.length > 0 && (
-        <section class="section">
-          <div class="section-head"><div><h2>{g.title}</h2>{'note' in g && <p>{g.note}</p>}</div></div>
-          <div class="grid">{list.map((p) => <ProductCard entry={p} />)}</div>
-        </section>
-      );
-    })}
+    <div class="cols facts">
+      {[['Live', count('live')], ['Building', count('building')], ['Ideas', count('idea')], ['Retired', count('retired')]].map(([l, v]) => (
+        <div><p class="label">{l}</p><p class="stat">{String(v).padStart(2, '0')}</p></div>
+      ))}
+    </div>
+    <div class="grid">{products.map((p) => <ProductCell entry={p} />)}</div>
   </div>
+  <div style="height:128px"></div>
 </Base>
+<style>
+  .facts > div { height: 200px; display: flex; flex-direction: column; justify-content: space-between; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; margin-top: 120px; border-right: 1px solid var(--line); row-gap: 72px; }
+  @media (max-width: 760px) { .facts { grid-template-columns: 1fr 1fr; } .facts > div { height: 140px; } .grid { grid-template-columns: 1fr; margin-top: 72px; } }
+</style>

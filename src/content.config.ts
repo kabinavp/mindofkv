@@ -15,6 +15,7 @@ const articles = defineCollection({
     date: z.coerce.date(),
     topics: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
+    palette: z.string().optional(),
     draft: z.boolean().default(false),
     ...seriesLink,
   }),
@@ -30,6 +31,7 @@ const videos = defineCollection({
     duration: z.string().optional(),
     topics: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
+    palette: z.string().optional(),
     draft: z.boolean().default(false),
     ...seriesLink,
   }),
@@ -41,7 +43,7 @@ const series = defineCollection({
     title: z.string(),
     description: z.string(),
     status: z.enum(['ongoing', 'complete', 'planned']).default('ongoing'),
-    hue: z.number().default(20), // colour of the series cover (0-360)
+    palette: z.string().optional(), // moss | dune | glacier | ember | dusk | sea | stone | bloom
     order: z.number().default(0),
   }),
 });
@@ -55,7 +57,9 @@ const products = defineCollection({
     started: z.coerce.date(),
     url: z.string().url().optional(),
     stack: z.array(z.string()).default([]),
-    metric: z.string().optional(), // e.g. "1,200 users" or "$450 MRR"
+    metric: z.string().optional(), // e.g. "1,200"
+    metricLabel: z.string().optional(), // e.g. "users"
+    palette: z.string().optional(),
     order: z.number().default(0),
   }),
 });

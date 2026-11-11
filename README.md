@@ -16,6 +16,7 @@ npm run build      # outputs static site to dist/
 | --- | --- |
 | Name, tagline, nav, socials, newsletter endpoint | `src/site.config.ts` |
 | Colours & fonts | `src/styles/global.css` (`:root` tokens) |
+| Atmosphere palettes | `src/lib/palette.ts` |
 | Homepage hero copy | `src/pages/index.astro` |
 | About / Start here / Now pages | `src/pages/about.astro`, `start-here.astro`, `now.astro` |
 | Favicon | `public/favicon.svg` |
@@ -46,6 +47,10 @@ draft: false
 
 > All current content is placeholder content. Replace or delete it.
 
+### Imagery
+
+Every article, video, series and product automatically gets a generated "atmosphere" image: a soft, motion-blurred colour field. Each one is unique to its filename. To pick a specific mood, add `palette:` to the front-matter. The options are `moss`, `dune`, `glacier`, `ember`, `dusk`, `sea`, `stone` and `bloom`. To use a real photo on the About page, swap the tile in `src/pages/about.astro` for an `<img>`.
+
 ## Newsletter
 
 The signup form posts to `SITE.newsletter.action`. Create a list on Buttondown, Kit, Beehiiv or similar and paste its form endpoint there.
@@ -54,4 +59,4 @@ The signup form posts to `SITE.newsletter.action`. Create a list on Buttondown, 
 
 Push to GitHub, then import the repo on **Vercel**, **Netlify** or **Cloudflare Pages** (build: `npm run build`, output: `dist`). Point `mindofkv.com` at it in your DNS settings.
 
-Free extras: `/rss.xml`, `/sitemap-index.xml`, Open Graph tags, dark mode.
+Free extras: `/rss.xml`, `/sitemap-index.xml` and Open Graph tags.

@@ -1,19 +1,27 @@
 ---
 import Base from '../../layouts/Base.astro';
-import VideoCard from '../../components/VideoCard.astro';
+import VideoTile from '../../components/VideoTile.astro';
 import { getVideos } from '../../lib/content';
 import { SITE } from '../../site.config';
 const videos = await getVideos();
 const yt = SITE.socials.find((s) => s.label === 'YouTube');
 ---
-<Base title="Videos" description="Videos on building, tools and the creative process.">
+<Base title="Videos" description="Build logs, walkthroughs and conversations.">
   <div class="wrap">
     <header class="page-head">
-      <p class="eyebrow">Watch</p>
-      <h1>Videos</h1>
-      <p>Build logs, walkthroughs and conversations. New videos land on YouTube first.</p>
-      {yt && <p style="margin-top:24px"><a class="btn" href={yt.href} target="_blank" rel="noopener">Subscribe on YouTube</a></p>}
+      <p class="label">Video</p>
+      <div>
+        <h1>Watch the work</h1>
+        <p class="lead"><b>Build logs, walkthroughs and honest attempts at hard things.</b> Filmed as they happen, not after they worked.</p>
+        {yt && <p style="margin-top:32px"><a class="btn" href={yt.href} target="_blank" rel="noopener">Subscribe on YouTube</a></p>}
+      </div>
     </header>
-    <div class="grid">{videos.map((v) => <VideoCard entry={v} />)}</div>
+    <div class="grid">{videos.map((v) => <VideoTile entry={v} />)}</div>
   </div>
+  <div style="height:128px"></div>
 </Base>
+<style>
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 56px 24px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+</style>

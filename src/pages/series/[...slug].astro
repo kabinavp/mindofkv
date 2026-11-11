@@ -1,7 +1,8 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import Newsletter from '../../components/Newsletter.astro';
+import Field from '../../components/Field.astro';
+import Subscribe from '../../components/Subscribe.astro';
 import { getSeries, getSeriesItems, hrefOf, fmtDate } from '../../lib/content';
 
 export async function getStaticPaths() {
@@ -10,46 +11,61 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const items = await getSeriesItems(entry.id);
-const { title, description, status, hue } = entry.data;
+const { title, description, status, palette } = entry.data;
+const essays = items.filter((i) => i.kind === 'article').length;
+const vids = items.length - essays;
+const started = items[0]?.entry.data.date;
 ---
 <Base title={title} description={description}>
-  <header class="banner" style={`--h:${hue}`}>
-    <div class="wrap">
-      <p class="eyebrow">Series · {status} · {items.length} parts</p>
-      <h1>{title}</h1>
-      <p class="dek">{description}</p>
-      {items[0] && <a href={hrefOf(items[0])} class="btn">Start with part 1</a>}
+  <div class="wrap">
+    <header class="page-head">
+      <p class="label">Series</p>
+      <div>
+        <h1>{title}</h1>
+        <p class="lead"><b>{description}</b></p>
+        {items[0] && <p style="margin-top:32px"><a href={hrefOf(items[0])} class="btn">Start with part one</a></p>}
+      </div>
+    </header>
+    <div class="banner"><Field seed={entry.id} palette={palette} /></div>
+    <div class="cols facts">
+      <div><p class="label">Parts</p><p class="stat">{String(items.length).padStart(2, '0')}</p></div>
+      <div><p class="label">Status</p><p class="stat cap">{status}</p></div>
+      <div><p class="label">Format</p><p class="stat">{essays}<small>essays</small> {vids}<small>videos</small></p></div>
+      <div><p class="label">Started</p><p class="stat">{started ? started.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }) : '—'}</p></div>
     </div>
-  </header>
-  <div class="wrap body">
-    <div class="prose intro"><Content /></div>
-    <ol class="parts">
-      {items.map((i, n) => (
-        <li>
-          <a href={hrefOf(i)}>
-            <span class="n">{String(n + 1).padStart(2, '0')}</span>
-            <span class="t">{i.entry.data.title}<small>{i.kind === 'video' ? '▶ Video' : 'Article'} · {fmtDate(i.entry.data.date)}</small></span>
-          </a>
-        </li>
-      ))}
-      {status !== 'complete' && <li class="more"><span class="n">··</span><span class="t">More parts on the way — subscribe to get them first.</span></li>}
-    </ol>
+    <div class="body">
+      <div class="prose intro"><Content /></div>
+      <ol class="parts">
+        {items.map((it, n) => (
+          <li><a href={hrefOf(it)}>
+            <span class="idx">{String(n + 1).padStart(2, '0')}</span>
+            <span class="t">{it.entry.data.title}</span>
+            <span class="k">{it.kind === 'video' ? 'Video' : 'Essay'}</span>
+            <span class="d">{fmtDate(it.entry.data.date)}</span>
+          </a></li>
+        ))}
+        {status !== 'complete' && <li class="next"><span class="idx">{String(items.length + 1).padStart(2, '0')}</span><span class="t">Next part in progress</span><span class="k">—</span><span class="d"></span></li>}
+      </ol>
+      <div class="sub"><p class="lead"><b>Follow the series.</b> New parts go out in the Build Log first.</p><Subscribe id="series-email" /></div>
+    </div>
   </div>
-  <section class="wrap" style="margin-top:72px"><Newsletter /></section>
+  <div style="height:128px"></div>
 </Base>
 <style>
-  .banner { padding: 80px 0 56px; color: #fff; background: linear-gradient(150deg, hsl(var(--h) 70% 50%), hsl(calc(var(--h) + 35) 65% 24%)); }
-  .banner .eyebrow { color: rgba(255,255,255,.8); }
-  .banner h1 { margin: 14px 0 16px; }
-  .dek { font-size: 1.2rem; max-width: 56ch; opacity: .9; margin-bottom: 28px; }
-  .banner .btn { background: #fff; color: #111; border-color: #fff; }
-  .body { padding-top: 56px; }
-  .intro { margin: 0 auto 40px; }
-  .parts { list-style: none; padding: 0; margin: 0 auto; max-width: var(--prose); border-top: 1px solid var(--line); }
-  .parts li a, .more { display: flex; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
-  .n { font: 500 0.9rem var(--mono); color: var(--accent); padding-top: 4px; }
-  .t { font: 500 1.2rem/1.3 var(--serif); display: flex; flex-direction: column; gap: 4px; }
-  .t small { font: 0.82rem var(--sans); color: var(--ink-3); }
-  .parts a:hover .t { color: var(--accent); }
-  .more .t { color: var(--ink-3); font-style: italic; }
+  .banner { position: relative; height: clamp(200px, 30vw, 380px); border-radius: 22px; }
+  .facts { margin-top: 72px; } .facts > div { height: 200px; display: flex; flex-direction: column; justify-content: space-between; }
+  .stat small { font-size: 13px; letter-spacing: 0; color: var(--ink-2); margin: 0 10px 0 4px; } .cap { text-transform: capitalize; }
+  .body { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 120px; }
+  .intro, .parts, .sub { grid-column: 2 / 5; }
+  .parts { list-style: none; padding: 0; margin: 64px 0 0; border-top: 1px solid var(--line); }
+  .parts a, .next { display: grid; grid-template-columns: 48px 1fr 80px 110px; gap: 16px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--line); transition: padding .4s var(--ease); }
+  .parts a:hover { padding-left: 10px; } .parts a:hover .t { color: var(--ink-2); }
+  .t { font-size: 20px; letter-spacing: -0.03em; } .k, .d { font-size: 12.5px; color: var(--ink-2); } .d { text-align: right; }
+  .next .t { color: var(--ink-3); }
+  .sub { display: grid; gap: 24px; margin-top: 96px; max-width: 640px; }
+  @media (max-width: 860px) {
+    .facts { grid-template-columns: 1fr 1fr; } .facts > div { height: 150px; }
+    .body { grid-template-columns: 1fr; padding-top: 72px; } .intro, .parts, .sub { grid-column: 1; }
+    .parts a, .next { grid-template-columns: 32px 1fr auto; } .k { display: none; }
+  }
 </style>

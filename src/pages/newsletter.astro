@@ -1,26 +1,45 @@
 ---
 import Base from '../layouts/Base.astro';
-import Newsletter from '../components/Newsletter.astro';
+import Tile from '../components/Tile.astro';
+import Subscribe from '../components/Subscribe.astro';
 import { SITE } from '../site.config';
 const n = SITE.newsletter;
 ---
 <Base title={n.name} description={n.pitch}>
-  <div class="wrap nl">
-    <p class="eyebrow">Newsletter</p>
-    <h1>{n.name}</h1>
-    <p class="lede">{n.pitch}</p>
-    <Newsletter variant="inline" />
-    <ul class="what">
-      <li><b>What I shipped</b> — progress, numbers and screenshots from the projects I'm building.</li>
-      <li><b>What I learned</b> — one idea I think is worth your time.</li>
-      <li><b>What I'm reading</b> — the best links from my week.</li>
-    </ul>
-  </div>
+  <section class="hero">
+    <div class="tiles" aria-hidden="true">
+      <Tile seed="nl-a" palette="ember" x="8%" y="14%" w={200} depth={1}><div class="glass"><div class="g-head"><span>Shipped</span><span class="g-dim">#12</span></div><div class="g-row"><span class="g-dim">Feature</span><span>Billing v2</span></div><div class="g-row"><span class="g-dim">Users</span><span>+84</span></div></div></Tile>
+      <Tile seed="nl-b" palette="moss" x="72%" y="10%" w={220}><div class="glass"><div class="g-head"><span>Broke</span><span class="g-dim">#12</span></div><div class="g-row"><span class="g-dim">Deploy</span><span>Rolled back</span></div><div class="g-row"><span class="g-dim">Lesson</span><span>Test prod</span></div></div></Tile>
+      <Tile seed="nl-c" palette="glacier" x="14%" y="64%" w={220} mobile={false}><div class="glass"><div class="g-head"><span>Read</span><span class="g-dim">#12</span></div><div class="g-title">The best essay I found this week</div></div></Tile>
+      <Tile seed="nl-d" palette="dusk" x="70%" y="66%" w={190} depth={2}><div class="glass"><div class="g-row"><span class="g-dim">Sent</span><span>Sunday 8am</span></div></div></Tile>
+    </div>
+    <div class="copy">
+      <p class="label">Newsletter</p>
+      <h1>{n.name}</h1>
+      <p class="lead"><b>One email, every Sunday.</b> What I shipped, what broke, and the best thing I read that week.</p>
+      <div class="f"><Subscribe id="nl-email" /></div>
+      <p class="fine">Free. No spam. Unsubscribe in one click.</p>
+    </div>
+  </section>
+  <section class="wrap">
+    <div class="cols three">
+      <div><p class="label">01 · Shipped</p><p class="t">Progress, numbers and screenshots from what I’m building.</p></div>
+      <div><p class="label">02 · Broke</p><p class="t">The mistakes, and what they taught me.</p></div>
+      <div><p class="label">03 · Read</p><p class="t">One link genuinely worth your time.</p></div>
+    </div>
+  </section>
+  <div style="height:128px"></div>
 </Base>
 <style>
-  .nl { max-width: 640px; padding-top: 88px; padding-bottom: 40px; display: grid; gap: 22px; }
-  .lede { font-size: 1.25rem; color: var(--ink-2); }
-  .what { list-style: none; padding: 0; margin: 24px 0 0; display: grid; gap: 12px; color: var(--ink-2); }
-  .what li { padding-left: 20px; position: relative; } .what li::before { content: '→'; position: absolute; left: 0; color: var(--accent); }
-  .what b { color: var(--ink); }
+  .hero { position: relative; min-height: 760px; display: grid; place-items: center; overflow: hidden; }
+  .tiles { position: absolute; inset: 0; max-width: 1400px; margin: 0 auto; }
+  .copy { position: relative; text-align: center; display: grid; justify-items: center; gap: 18px; padding: 40px; }
+  .copy::before { content: ''; position: absolute; inset: -40px -80px; z-index: -1; background: radial-gradient(closest-side, var(--bg) 60%, transparent); }
+  .copy .lead { max-width: 26em; }
+  .f { width: 380px; max-width: 100%; margin-top: 8px; }
+  .fine { font-size: 11.5px; color: var(--ink-3); }
+  .three { grid-template-columns: repeat(3, 1fr); }
+  .three > div { height: 240px; display: flex; flex-direction: column; justify-content: space-between; }
+  .t { font-size: 22px; letter-spacing: -0.03em; line-height: 1.25; max-width: 14em; }
+  @media (max-width: 760px) { .three { grid-template-columns: 1fr; } .three > div { height: 160px; } }
 </style>

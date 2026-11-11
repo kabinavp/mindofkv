@@ -1,96 +1,321 @@
 ---
 import Base from '../layouts/Base.astro';
-import Newsletter from '../components/Newsletter.astro';
-import ArticleCard from '../components/ArticleCard.astro';
-import VideoCard from '../components/VideoCard.astro';
-import SeriesCard from '../components/SeriesCard.astro';
-import ProductCard from '../components/ProductCard.astro';
-import { getArticles, getVideos, getSeries, getProducts, getAllTopics } from '../lib/content';
+import Tile from '../components/Tile.astro';
+import ProductCell from '../components/ProductCell.astro';
+import EntryList from '../components/EntryList.astro';
+import { getArticles, getVideos, getSeries, getProducts, getSeriesItems, getAllTopics, fmtDate, readingTime } from '../lib/content';
+import { hash } from '../lib/palette';
+import { SITE } from '../site.config';
 
-const [articles, videos, series, products, topics] = await Promise.all([
-  getArticles(), getVideos(), getSeries(), getProducts(), getAllTopics(),
-]);
-const shipped = products.filter((p) => p.data.status === 'live').length;
+const [articles, videos, series, products, topics] = await Promise.all([getArticles(), getVideos(), getSeries(), getProducts(), getAllTopics()]);
+const live = products.filter((p) => p.data.status === 'live');
+const building = products.filter((p) => p.data.status === 'building');
+const a0 = articles[0], v0 = videos[0], s0 = series[0], b0 = building[0] ?? products[0];
+const s0items = s0 ? await getSeriesItems(s0.id) : [];
+
+// Deterministic "commit graph" for the hero
+const graph = Array.from({ length: 7 * 16 }, (_, i) => (hash('kv' + i) % 100) / 100);
+
+const log = [
+  ...articles.map((e) => ({ kind: 'Essay', title: e.data.title, date: e.data.date, href: `/articles/${e.id}` })),
+  ...videos.map((e) => ({ kind: 'Video', title: e.data.title, date: e.data.date, href: `/videos/${e.id}` })),
+].sort((a, b) => b.date.valueOf() - a.date.valueOf()).slice(0, 6);
+
+const make = [
+  {
+    n: '01', name: 'Writing', seed: 'writing', palette: 'stone',
+    desc: 'Essays and notes on building products, thinking clearly and doing work you’re proud of. Some polished, some thinking out loud.',
+    links: [{ label: 'Read the essays', href: '/articles' }, { label: 'Browse topics', href: `/topics/${topics[0]?.slug ?? ''}` }, { label: 'Subscribe via RSS', href: '/rss.xml' }],
+  },
+  {
+    n: '02', name: 'Video', seed: 'video', palette: 'ember',
+    desc: 'Build logs, tool walkthroughs and honest attempts at hard things — filmed as they happen, not after they worked.',
+    links: [{ label: 'Watch the latest', href: v0 ? `/videos/${v0.id}` : '/videos' }, { label: 'All videos', href: '/videos' }, { label: 'YouTube channel', href: SITE.socials[0].href }],
+  },
+  {
+    n: '03', name: 'Series', seed: 'series', palette: s0?.data.palette ?? 'dusk',
+    desc: 'Long-running, multi-part collections on a single theme. Start at part one and follow along as it’s made.',
+    links: series.slice(0, 3).map((s) => ({ label: s.data.title, href: `/series/${s.id}` })),
+  },
+  {
+    n: '04', name: 'Products', seed: 'products', palette: b0?.data.palette ?? 'sea',
+    desc: 'The things I’m building on the side — with real numbers, shipped in public, including the ones that didn’t work out.',
+    links: products.slice(0, 3).map((p) => ({ label: p.data.title, href: '/building' })),
+  },
+];
 ---
 <Base>
-  <section class="hero wrap">
-    <div class="intro">
-      <p class="eyebrow">Builder · Writer · Perpetual beginner</p>
-      <h1>Hi, I'm KV. I build things <em>in public</em> and share what I learn.</h1>
-      <p class="lede">
-        This is my corner of the internet — essays, videos and long-running series on building products,
-        thinking clearly, and getting a little better at making things every week.
-      </p>
-      <div class="actions">
-        <a href="/start-here" class="btn">Start here</a>
-        <a href="/building" class="btn ghost">See what I'm building</a>
-      </div>
+  <!-- ============ HERO ============ -->
+  <section class="hero" data-hero>
+    <div class="field-layer" aria-hidden="true">
+      <Tile seed="edge-l" palette="stone" x="-4%" y="3%" w={170} depth={2} mobile={false}><div class="glass"><div class="g-row"><span class="g-dim">Commits</span><span>1,284</span></div><div class="g-row"><span class="g-dim">Streak</span><span>41d</span></div></div></Tile>
+
+      {live[0] && (
+        <Tile seed={live[0].id} palette={live[0].data.palette} x="12%" y="10%" mx="3%" my="12%" w={230} depth={1}>
+          <div class="glass">
+            <div class="g-head"><span><i class="g-dot"></i>{live[0].data.title}</span><span class="g-dim">Live</span></div>
+            <div class="g-big">{live[0].data.metric ?? '—'}</div>
+            <div class="g-dim" style="margin-top:4px">{live[0].data.metricLabel}</div>
+            <div class="g-row" style="margin-top:8px"><span class="g-dim">Since</span><span>{live[0].data.started.getFullYear()}</span></div>
+          </div>
+        </Tile>
+      )}
+
+      {v0 && (
+        <Tile seed={v0.id} palette="glacier" x="39%" y="2%" mx="54%" my="9%" w={210} ratio={1.02} href={`/videos/${v0.id}`}>
+          <div class="glass solid">
+            <div class="g-head"><span class="g-dim">Latest video</span><span class="g-dim">{v0.data.duration}</span></div>
+            <div class="g-title">{v0.data.title}</div>
+            <div class="g-btn">▶&nbsp; Watch</div>
+          </div>
+        </Tile>
+      )}
+
+      <Tile seed="nl" palette="ember" x="63%" y="9%" w={220} depth={1} mobile={false} href="/newsletter">
+        <div class="glass">
+          <div class="g-head"><span>{SITE.newsletter.name}</span><span class="g-dim">Sundays</span></div>
+          <div class="g-row"><span class="g-dim">Shipped</span><span>✓</span></div>
+          <div class="g-row"><span class="g-dim">Broke</span><span>2 things</span></div>
+          <div class="g-row"><span class="g-dim">Read</span><span>1 great essay</span></div>
+        </div>
+      </Tile>
+
+      <Tile seed="edge-r" palette="dune" x="91%" y="12%" w={180} depth={2} mobile={false}><div class="glass"><div class="g-row"><span class="g-dim">MRR</span><span>$—</span></div><div class="g-row"><span class="g-dim">Goal</span><span>$1k</span></div></div></Tile>
+
+      {s0 && (
+        <Tile seed={s0.id} palette={s0.data.palette} x="6%" y="42%" w={240} mobile={false} href={`/series/${s0.id}`}>
+          <div class="glass">
+            <div class="g-head"><span>{s0.data.title}</span><span class="g-dim">Series</span></div>
+            {s0items.slice(0, 3).map((it, i) => <div class="g-row"><span class="g-dim">0{i + 1}</span><span class="clip">{it.entry.data.title}</span></div>)}
+          </div>
+        </Tile>
+      )}
+
+      {b0 && (
+        <Tile seed={b0.id + 'h'} palette={b0.data.palette} x="76%" y="40%" w={240} mobile={false} href="/building">
+          <div class="glass">
+            <div class="g-head"><span>{b0.data.title}</span><span class="g-dim">Building</span></div>
+            <div class="bar"><span style="width:64%"></span></div>
+            <div class="g-row" style="margin-top:6px"><span class="g-dim">Version</span><span>{b0.data.metric}</span></div>
+            <div class="g-row"><span class="g-dim">Stage</span><span>{b0.data.metricLabel}</span></div>
+          </div>
+        </Tile>
+      )}
+
+      <Tile seed="graph" palette="moss" x="13%" y="74%" mx="4%" my="72%" w={210} depth={1}>
+        <div class="glass">
+          <div class="g-head"><span>Shipping log</span><span class="g-dim">16 wks</span></div>
+          <div class="graph">{graph.map((v) => <i style={`opacity:${v < .25 ? .12 : v < .55 ? .35 : v < .8 ? .65 : 1}`}></i>)}</div>
+        </div>
+      </Tile>
+
+      {a0 && (
+        <Tile seed={a0.id} palette="sea" x="34%" y="80%" w={220} depth={1} mobile={false} href={`/articles/${a0.id}`}>
+          <div class="glass">
+            <div class="g-head"><span class="g-dim">Essay</span><span class="g-dim">{readingTime(a0.body)} min</span></div>
+            <div class="g-title">{a0.data.title}</div>
+          </div>
+        </Tile>
+      )}
+
+      <Tile seed="now" palette="dusk" x="58%" y="75%" mx="52%" my="74%" w={220} href="/now">
+        <div class="glass">
+          <div class="g-head"><span>Now</span><span class="g-dim">Nov 2026</span></div>
+          <div class="g-row"><span class="g-dim">Building</span><span>{b0?.data.title}</span></div>
+          <div class="g-row"><span class="g-dim">Learning</span><span>On camera</span></div>
+          <div class="g-btn light">What I’m doing now</div>
+        </div>
+      </Tile>
+
+      <Tile seed="edge-br" palette="glacier" x="84%" y="76%" w={190} depth={2} mobile={false}><div class="glass"><div class="g-row"><span class="g-dim">Readers</span><span>—</span></div><div class="g-row"><span class="g-dim">Issues</span><span>01</span></div></div></Tile>
     </div>
-    <aside class="ledger" aria-label="At a glance">
-      <p class="eyebrow">The ledger</p>
-      <dl>
-        <div><dt>Products shipped</dt><dd>{shipped}</dd></div>
-        <div><dt>In the workshop</dt><dd>{products.filter((p) => p.data.status === 'building').length}</dd></div>
-        <div><dt>Articles</dt><dd>{articles.length}</dd></div>
-        <div><dt>Videos</dt><dd>{videos.length}</dd></div>
-      </dl>
-      <a href="/now" class="link-arrow now">What I'm doing now</a>
-    </aside>
+
+    <div class="hero-copy">
+      <h1>I build things in public</h1>
+      <p>Essays, videos and products from KV. A builder’s notebook covering<br class="br" /> the launches, the numbers, and everything learned along the way.</p>
+      <div class="cta"><a href="/start-here" class="btn">Start here</a><a href="/newsletter" class="btn alt">Get the Build Log</a></div>
+    </div>
   </section>
 
-  <section class="wrap" style="padding-bottom:72px"><Newsletter /></section>
-
-  <section class="section wrap">
-    <div class="section-head">
-      <div><p class="eyebrow">Building</p><h2>Things I'm making</h2><p>Side projects, products and experiments — shipped, in progress, and occasionally abandoned.</p></div>
-      <a href="/building" class="link-arrow">All projects</a>
-    </div>
-    <div class="grid">{products.slice(0, 3).map((p) => <ProductCard entry={p} />)}</div>
+  <!-- ============ PROJECT STRIP ============ -->
+  <section class="wrap strip" aria-label="Projects">
+    {products.map((p) => <a href="/building" class="strip-item"><span class:list={['status', p.data.status]}></span>{p.data.title}</a>)}
   </section>
 
-  <section class="section wrap">
-    <div class="section-head">
-      <div><p class="eyebrow">Writing</p><h2>Latest articles</h2></div>
-      <a href="/articles" class="link-arrow">All articles</a>
-    </div>
-    <div class="grid">{articles.slice(0, 3).map((a) => <ArticleCard entry={a} />)}</div>
+  <!-- ============ STATEMENT ============ -->
+  <section class="wrap section statement">
+    <p class="lead" data-reveal>
+      <b>Mind of KV is the public notebook of a builder.</b> I make products alongside a day job and document all of it here — the launches, the numbers, the mistakes, and the ideas I can’t stop thinking about. It’s deliberately broad, held together by one thread: I build things.
+    </p>
   </section>
 
-  <section class="section wrap">
-    <div class="section-head">
-      <div><p class="eyebrow">Watch</p><h2>Latest videos</h2></div>
-      <a href="/videos" class="link-arrow">All videos</a>
+  <!-- ============ STATS ============ -->
+  <section class="wrap">
+    <div class="cols stats">
+      {[
+        { l: 'Shipped', v: live.length, c: 'products live' },
+        { l: 'Workshop', v: building.length, c: 'in progress right now' },
+        { l: 'Writing', v: articles.length, c: 'essays published' },
+        { l: 'Video', v: videos.length, c: 'videos released' },
+      ].map((s, i) => (
+        <div class="stat-cell" data-reveal style={`transition-delay:${i * 80}ms`}>
+          <p class="label">{s.l}</p>
+          <div><p class="stat">{String(s.v).padStart(2, '0')}</p><p class="cap">{s.c}</p></div>
+        </div>
+      ))}
     </div>
-    <div class="grid">{videos.slice(0, 3).map((v) => <VideoCard entry={v} />)}</div>
+    <div class="cols idxrow">{['01', '02', '03', '04'].map((n) => <span class="idx">{n}</span>)}</div>
   </section>
 
-  <section class="section wrap">
-    <div class="section-head">
-      <div><p class="eyebrow">Series</p><h2>Go deep on one thing</h2><p>Multi-part collections of articles and videos you can follow start to finish.</p></div>
-      <a href="/series" class="link-arrow">All series</a>
+  <!-- ============ WHAT I MAKE ============ -->
+  <section class="wrap section">
+    <h2 data-reveal>What I make</h2>
+    <div class="make">
+      {make.map((m, i) => (
+        <article class="make-row">
+          <div class="make-rule"><span class="idx">{m.n}</span><hr class="rule" /></div>
+          <div class="make-body">
+            <div class="make-l" data-reveal><h3>{m.name}</h3><p class="grey">{m.desc}</p></div>
+            <div class="make-c">
+              <Tile seed={m.seed} palette={m.palette} w={300} ratio={1.08} inline>
+                {i === 0 && a0 && (
+                  <div class="glass solid">
+                    <div class="g-head"><span class="g-dim">Essay · {fmtDate(a0.data.date)}</span></div>
+                    <div class="g-title">{a0.data.title}</div>
+                    <div class="g-dim" style="margin-top:6px">{a0.data.description}</div>
+                    <div class="g-btn">Read · {readingTime(a0.body)} min</div>
+                  </div>
+                )}
+                {i === 1 && v0 && (
+                  <div class="glass">
+                    <div class="play">▶</div>
+                    <div class="g-title" style="margin-top:28px">{v0.data.title}</div>
+                    <div class="g-row" style="margin-top:6px"><span class="g-dim">{fmtDate(v0.data.date)}</span><span>{v0.data.duration}</span></div>
+                  </div>
+                )}
+                {i === 2 && s0 && (
+                  <div class="glass">
+                    <div class="g-head"><span>{s0.data.title}</span><span class="g-dim">{s0items.length} parts</span></div>
+                    {s0items.map((it, k) => <div class="g-row"><span class="g-dim">0{k + 1}</span><span class="clip">{it.entry.data.title}</span></div>)}
+                  </div>
+                )}
+                {i === 3 && (
+                  <div class="glass">
+                    <div class="g-head"><span>Portfolio</span><span class="g-dim">{products.length} projects</span></div>
+                    {products.slice(0, 4).map((p) => <div class="g-row"><span>{p.data.title}</span><span class="g-dim">{p.data.status}</span></div>)}
+                  </div>
+                )}
+              </Tile>
+            </div>
+            <ul class="make-r" data-reveal>{m.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
+          </div>
+        </article>
+      ))}
     </div>
-    <div class="grid">{series.slice(0, 3).map((s) => <SeriesCard entry={s} />)}</div>
   </section>
 
-  {topics.length > 0 && (
-    <section class="section wrap">
-      <div class="section-head"><div><p class="eyebrow">Topics</p><h2>Browse by topic</h2></div></div>
-      <div class="topics">{topics.map((t) => <a class="pill" href={`/topics/${t.slug}`}>{t.name} <span class="muted">{t.count}</span></a>)}</div>
-    </section>
-  )}
+  <!-- ============ LOG ============ -->
+  <section class="wrap section log-sec">
+    <div class="sec-head"><h2 data-reveal>Latest</h2><a href="/articles" class="arrow-link">Everything <span>→</span></a></div>
+    <div data-reveal><EntryList rows={log} /></div>
+  </section>
+
+  <!-- ============ BUILDING ============ -->
+  <section class="section build-sec">
+    <div class="wrap sec-head">
+      <h2 data-reveal>Building</h2>
+      <div class="arrows"><button type="button" data-dir="-1" aria-label="Previous">‹</button><button type="button" data-dir="1" aria-label="Next">›</button></div>
+    </div>
+    <div class="wrap"><div class="track" data-track>{products.map((p) => <ProductCell entry={p} />)}</div></div>
+  </section>
+
 </Base>
 
+<script>
+  // Mouse parallax on hero tiles
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  if (hero && matchMedia('(pointer: fine)').matches && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const tiles = [...hero.querySelectorAll<HTMLElement>('.tile')];
+    hero.addEventListener('pointermove', (e) => {
+      const r = hero.getBoundingClientRect();
+      const dx = (e.clientX - r.left) / r.width - 0.5, dy = (e.clientY - r.top) / r.height - 0.5;
+      for (const t of tiles) {
+        const k = [-22, -12, -6][Number(t.dataset.depth ?? 0)];
+        t.style.setProperty('--px', (dx * k).toFixed(1)); t.style.setProperty('--py', (dy * k).toFixed(1));
+      }
+    });
+  }
+  // Building carousel
+  const track = document.querySelector<HTMLElement>('[data-track]');
+  document.querySelectorAll<HTMLButtonElement>('[data-dir]').forEach((b) =>
+    b.addEventListener('click', () => track?.scrollBy({ left: Number(b.dataset.dir) * track.clientWidth / 2, behavior: 'smooth' })));
+</script>
+
 <style>
-  .hero { display: grid; grid-template-columns: 1.7fr 1fr; gap: 56px; align-items: end; padding-top: 88px; padding-bottom: 72px; }
-  h1 em { font-style: italic; color: var(--accent); }
-  .intro .eyebrow { margin-bottom: 20px; }
-  .lede { font-size: 1.22rem; color: var(--ink-2); margin-top: 24px; max-width: 54ch; }
-  .actions { display: flex; gap: 12px; margin-top: 32px; flex-wrap: wrap; }
-  .ledger { border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; background: var(--surface); }
-  dl { margin: 16px 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
-  dl div { background: var(--surface); padding: 14px; }
-  dt { font-size: 0.8rem; color: var(--ink-3); }
-  dd { margin: 4px 0 0; font: 500 2rem/1 var(--serif); }
-  .topics { display: flex; flex-wrap: wrap; gap: 8px; }
-  @media (max-width: 860px) { .hero { grid-template-columns: 1fr; gap: 36px; padding-top: 48px; } }
+  /* Hero */
+  .hero { position: relative; height: max(100svh, 760px); max-height: 1000px; overflow: hidden; display: grid; place-items: center; }
+  .field-layer { position: absolute; inset: 0; max-width: 1600px; margin: 0 auto; }
+  .hero-copy { position: relative; z-index: 2; text-align: center; padding: 48px 56px; }
+  .hero-copy::before { content: ''; position: absolute; inset: -40px -60px; z-index: -1; background: radial-gradient(closest-side, var(--bg) 55%, color-mix(in srgb, var(--bg) 0%, transparent)); }
+  .hero-copy p { margin-top: 18px; color: var(--ink-2); font-size: 14.5px; line-height: 1.45; }
+  .cta { display: flex; gap: 6px; justify-content: center; margin-top: 26px; }
+  .clip { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
+  .bar { height: 4px; border-radius: 4px; background: rgba(255,255,255,.25); overflow: hidden; }
+  .bar span { display: block; height: 100%; background: #fff; border-radius: inherit; }
+  .graph { display: grid; grid-template-columns: repeat(16, 1fr); gap: 3px; }
+  .graph i { aspect-ratio: 1; border-radius: 2px; background: #fff; }
+  .play { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: #fff; color: #111; font-size: 11px; padding-left: 2px; }
+  @media (max-width: 760px) {
+    .hero { height: 760px; }
+    .hero-copy { padding: 32px 16px; }
+    .br { display: none; }
+  }
+
+  /* Strip */
+  .strip { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px 32px; padding-top: 8px; padding-bottom: 8px; }
+  .strip-item { display: inline-flex; align-items: center; gap: 8px; font: 500 21px/1 var(--sans); letter-spacing: -0.045em; color: var(--ink-3); transition: color .3s; }
+  .strip-item:hover { color: var(--ink); }
+  .strip-item .status::before { margin: 0; }
+
+  /* Statement */
+  .statement { display: grid; grid-template-columns: repeat(4, 1fr); padding-top: 160px; padding-bottom: 160px; }
+  .statement .lead { grid-column: 2 / 4; }
+  @media (max-width: 860px) { .statement { grid-template-columns: 1fr; padding-top: 112px; padding-bottom: 112px; } .statement .lead { grid-column: 1; } }
+
+  /* Stats */
+  .stat-cell { height: 420px; display: flex; flex-direction: column; justify-content: space-between; padding-top: 0; padding-bottom: 72px; }
+  .cap { font-size: 13px; margin-top: 8px; }
+  .idxrow > * { padding-top: 64px; }
+  @media (max-width: 760px) {
+    .stats { grid-template-columns: 1fr 1fr; } .stat-cell { height: 260px; padding-bottom: 32px; }
+    .idxrow { display: none; }
+  }
+
+  /* What I make */
+  .make { margin-top: 72px; }
+  .make-rule { display: flex; align-items: center; gap: 8px; } .make-rule .rule { flex: 1; }
+  .make-body { display: grid; grid-template-columns: 1fr 1.25fr 1fr; align-items: center; gap: 24px; padding: 72px 0 96px; }
+  .make-l h3 { font-size: 13px; margin-bottom: 4px; } .make-l p { font-size: 13px; line-height: 1.45; max-width: 25em; }
+  .make-c { display: grid; place-items: center; }
+  .make-r { list-style: none; margin: 0; padding: 0; text-align: right; display: grid; gap: 2px; }
+  .make-r a { font-size: 20px; letter-spacing: -0.03em; transition: color .25s; } .make-r a:hover { color: var(--ink-3); }
+  @media (max-width: 860px) {
+    .make-body { grid-template-columns: 1fr; padding: 40px 0 72px; gap: 32px; }
+    .make-r { text-align: left; }
+  }
+
+  /* Section heads */
+  .sec-head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 56px; }
+  .sec-head > a { font-size: 13px; }
+
+  .log-sec { padding-top: 64px; }
+
+  /* Building carousel */
+  .arrows { display: flex; gap: 14px; }
+  .arrows button { background: none; border: 0; font-size: 30px; line-height: 1; cursor: pointer; color: var(--ink); padding: 0 4px; transition: color .2s; }
+  .arrows button:hover { color: var(--ink-3); }
+  .track { display: grid; grid-auto-flow: column; grid-auto-columns: 50%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; border-right: 1px solid var(--line); }
+  .track::-webkit-scrollbar { display: none; }
+  @media (max-width: 760px) { .track { grid-auto-columns: 88%; } }
+
 </style>

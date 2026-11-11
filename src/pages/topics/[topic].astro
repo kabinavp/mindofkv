@@ -1,7 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import ArticleCard from '../../components/ArticleCard.astro';
-import VideoCard from '../../components/VideoCard.astro';
+import EntryList from '../../components/EntryList.astro';
 import { getArticles, getVideos, getAllTopics, slugify } from '../../lib/content';
 
 export async function getStaticPaths() {
@@ -9,14 +8,28 @@ export async function getStaticPaths() {
 }
 const { topic } = Astro.params;
 const { name } = Astro.props;
+const all = await getAllTopics();
 const has = (e: { data: { topics: string[] } }) => e.data.topics.some((t) => slugify(t) === topic);
-const articles = (await getArticles()).filter(has);
-const videos = (await getVideos()).filter(has);
+const rows = [
+  ...(await getArticles()).filter(has).map((e) => ({ title: e.data.title, href: `/articles/${e.id}`, date: e.data.date, kind: 'Essay' })),
+  ...(await getVideos()).filter(has).map((e) => ({ title: e.data.title, href: `/videos/${e.id}`, date: e.data.date, kind: 'Video' })),
+].sort((a, b) => b.date.valueOf() - a.date.valueOf());
 ---
-<Base title={`#${name}`} description={`Everything on ${name}.`}>
+<Base title={name} description={`Everything on ${name}.`}>
   <div class="wrap">
-    <header class="page-head"><p class="eyebrow">Topic</p><h1>#{name}</h1></header>
-    {videos.length > 0 && <section class="section" style="padding-top:0"><h2 style="margin-bottom:24px">Videos</h2><div class="grid">{videos.map((v) => <VideoCard entry={v} />)}</div></section>}
-    {articles.length > 0 && <section class="section"><h2 style="margin-bottom:24px">Articles</h2><div class="grid">{articles.map((a) => <ArticleCard entry={a} />)}</div></section>}
+    <header class="page-head">
+      <p class="label">Topic</p>
+      <div>
+        <h1 style="text-transform:capitalize">{name}</h1>
+        <p class="lead"><b>{rows.length} {rows.length === 1 ? 'piece' : 'pieces'}</b> filed under {name}.</p>
+        <nav class="topics">{all.map((t) => <a href={`/topics/${t.slug}`} class:list={{ on: t.slug === topic }}>{t.name}</a>)}</nav>
+      </div>
+    </header>
+    <EntryList rows={rows} />
   </div>
+  <div style="height:128px"></div>
 </Base>
+<style>
+  .topics { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 36px; font-size: 13px; color: var(--ink-2); }
+  .topics a:hover, .topics .on { color: var(--ink); }
+</style>

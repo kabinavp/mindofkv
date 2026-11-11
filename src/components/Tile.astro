@@ -1,0 +1,40 @@
+---
+// A floating "photograph" with a glass UI card on top. Used in the hero and as section visuals.
+import Field from './Field.astro';
+interface Props {
+  seed: string; palette?: string;
+  x?: string; y?: string; mx?: string; my?: string; w?: number; depth?: 0 | 1 | 2; ratio?: number;
+  mobile?: boolean; inline?: boolean; href?: string; class?: string;
+}
+const { seed, palette, x = '0', y = '0', mx, my, w = 220, depth = 0, ratio = 1.12, mobile = true, inline = false, href, class: cls } = Astro.props;
+const Tag = href ? 'a' : 'div';
+const delay = -((seed.length * 1.7) % 9).toFixed(2);
+---
+<Tag
+  href={href}
+  class:list={['tile', `d${depth}`, { 'no-m': !mobile, inline }, cls]}
+  style={`--x:${x};--y:${y};${mx ? `--mx:${mx};` : ''}${my ? `--my:${my};` : ''}--w:${w}px;--ratio:${ratio};--delay:${delay}s`}
+  data-depth={depth}
+>
+  <div class="tile-float">
+    <Field seed={seed} palette={palette} />
+    <div class="tile-ui"><slot /></div>
+  </div>
+</Tag>
+<style>
+  .tile { position: absolute; left: var(--x); top: var(--y); width: var(--w); aspect-ratio: var(--ratio); border-radius: 22px;
+    transform: translate3d(calc(var(--px, 0) * 1px), calc(var(--py, 0) * 1px), 0); transition: transform 1.2s var(--ease); }
+  .tile.inline { position: relative; left: auto; top: auto; width: 100%; max-width: var(--w); }
+  .tile-float { position: absolute; inset: 0; border-radius: inherit; animation: drift 11s ease-in-out infinite; animation-delay: var(--delay); }
+  .tile-ui { position: absolute; left: 12%; right: 12%; top: 50%; transform: translateY(-50%); }
+  .d1 { filter: blur(.7px); } .d1 .tile-float { scale: .94; }
+  .d2 { filter: blur(5px); opacity: .9; } .d2 .tile-float { scale: .86; }
+  a.tile .tile-float { transition: scale .8s var(--ease); } a.tile:hover .tile-float { scale: 1.025; }
+  @keyframes drift { 0%, 100% { translate: 0 0; } 50% { translate: 0 -7px; } }
+  @media (prefers-reduced-motion: reduce) { .tile-float { animation: none; } }
+  @media (max-width: 760px) {
+    .tile:not(.inline) { width: calc(var(--w) * .66); left: var(--mx, var(--x)); top: var(--my, var(--y)); }
+    .tile:not(.inline) .tile-ui { zoom: .7; }
+    .no-m { display: none; }
+  }
+</style>

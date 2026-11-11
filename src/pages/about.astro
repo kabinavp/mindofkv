@@ -1,38 +1,48 @@
 ---
 import Base from '../layouts/Base.astro';
-import Newsletter from '../components/Newsletter.astro';
+import Tile from '../components/Tile.astro';
 import { SITE } from '../site.config';
 ---
 <Base title="About" description="Who I am and why this site exists.">
   <div class="wrap">
-    <header class="page-head about">
-      <div class="portrait" aria-hidden="true">KV<!-- Replace with <img src="/kv.jpg" alt="KV"> --></div>
-      <div>
-        <p class="eyebrow">About</p>
-        <h1>I'm KV, and I like making things.</h1>
-      </div>
+    <header class="page-head">
+      <p class="label">About</p>
+      <div><h1>I’m KV, and I like making things</h1></div>
     </header>
-    <div class="prose">
-      <p><strong>Replace this with your story.</strong> A good about page answers three questions: who are you, what do you make, and why should a stranger care?</p>
-      <p>Here's a starting draft: I'm a builder. I spend my days writing software and my evenings and weekends building side products — some useful, some silly, a few that actually make money. Mind of KV is my public notebook: the place where I document what I'm building, what I'm learning, and the ideas I can't stop thinking about.</p>
-      <h2>What you'll find here</h2>
-      <ul>
-        <li><strong>Articles</strong> — essays on building products, thinking clearly and doing good work.</li>
-        <li><strong>Videos</strong> — build logs, tool walkthroughs and conversations.</li>
-        <li><strong>Series</strong> — multi-part deep dives on a single theme.</li>
-        <li><strong>Products</strong> — everything I'm building, in public, with the numbers.</li>
-      </ul>
-      <h2>Why "Mind of KV"?</h2>
-      <p>Because it's deliberately broad. I don't want to be the "X person" — I want this to be wherever my curiosity goes next, held together by one thread: I build things.</p>
-      <h2>Say hello</h2>
-      <p>The best way to reach me is a reply to the newsletter, or find me on {SITE.socials.map((s, i) => <>{i > 0 && (i === SITE.socials.length - 1 ? ' or ' : ', ')}<a href={s.href}>{s.label}</a></>)}.</p>
+    <div class="body">
+      <div class="portrait">
+        <!-- Swap this tile for a real photo: <img src="/kv.jpg" alt="KV" class="photo" /> -->
+        <Tile seed="kv-portrait" palette="dune" w={420} ratio={0.82} inline>
+          <div class="glass solid">
+            <div class="g-head"><span>KV</span><span class="g-dim">Builder</span></div>
+            <div class="g-row"><span class="g-dim">Day job</span><span>Software</span></div>
+            <div class="g-row"><span class="g-dim">Side</span><span>Products</span></div>
+            <div class="g-row"><span class="g-dim">Based</span><span>Earth</span></div>
+          </div>
+        </Tile>
+      </div>
+      <div class="prose">
+        <p><strong>Replace this with your story.</strong> A good about page answers three questions: who are you, what do you make, and why should a stranger care?</p>
+        <p>Here’s a starting draft. I’m a builder. I spend my days writing software and my evenings and weekends building side products — some useful, some silly, a few that actually make money. Mind of KV is my public notebook: where I document what I’m building, what I’m learning, and the ideas I can’t stop thinking about.</p>
+        <h2>Why “Mind of KV”?</h2>
+        <p>Because it’s deliberately broad. I don’t want to be the “X person.” I want this to be wherever curiosity goes next, held together by one thread: I build things.</p>
+        <h2>What you’ll find here</h2>
+        <ul>
+          <li><a href="/articles">Writing</a> — essays on building, thinking clearly and doing good work.</li>
+          <li><a href="/videos">Videos</a> — build logs, walkthroughs and conversations.</li>
+          <li><a href="/series">Series</a> — multi-part deep dives on a single theme.</li>
+          <li><a href="/building">Products</a> — everything I’m building, with the numbers.</li>
+        </ul>
+        <h2>Say hello</h2>
+        <p>Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>, reply to any newsletter, or find me on {SITE.socials.map((s, i) => <>{i > 0 && (i === SITE.socials.length - 1 ? ' or ' : ', ')}<a href={s.href}>{s.label}</a></>)}.</p>
+      </div>
     </div>
-    <section style="margin-top:80px"><Newsletter /></section>
   </div>
+  <div style="height:128px"></div>
 </Base>
 <style>
-  .about { display: flex; gap: 32px; align-items: center; max-width: var(--prose); margin: 0 auto; }
-  .portrait { flex: none; width: 120px; height: 120px; border-radius: 50%; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); font: 600 2rem var(--mono); }
-  .about h1 { font-size: clamp(2rem, 4.5vw, 3rem); margin-top: 10px; }
-  @media (max-width: 560px) { .about { flex-direction: column; align-items: start; } }
+  .body { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .portrait { grid-column: 1 / 3; position: sticky; top: 100px; align-self: start; padding-right: 48px; }
+  .prose { grid-column: 3 / 5; }
+  @media (max-width: 860px) { .body { grid-template-columns: 1fr; gap: 64px; } .portrait, .prose { grid-column: 1; position: static; padding: 0; } }
 </style>

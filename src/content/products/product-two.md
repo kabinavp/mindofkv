@@ -5,4 +5,7 @@ status: building
 started: 2026-10-01
 stack: [Astro, AI, TypeScript]
 order: 1
+metric: "v0.4"
+metricLabel: private beta
+palette: sea
 ---

@@ -6,4 +6,7 @@ started: 2026-11-01
 url: https://mindofkv.com
 stack: [Astro, TypeScript]
 order: 2
+metric: "25"
+metricLabel: pages, built in public
+palette: stone
 ---

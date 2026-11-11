@@ -1,0 +1,27 @@
+---
+import { fmtDate } from '../lib/content';
+interface Row { title: string; href: string; date: Date; kind: string; meta?: string; }
+interface Props { rows: Row[]; numbered?: boolean; }
+const { rows, numbered = true } = Astro.props;
+---
+<ol class="list">
+  {rows.map((r, i) => (
+    <li>
+      <a href={r.href}>
+        <span class="idx">{numbered ? String(rows.length - i).padStart(3, '0') : ''}</span>
+        <span class="t">{r.title}</span>
+        <span class="k">{r.kind}{r.meta && <span class="m"> · {r.meta}</span>}</span>
+        <span class="d">{fmtDate(r.date)}</span>
+      </a>
+    </li>
+  ))}
+</ol>
+<style>
+  .list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  a { display: grid; grid-template-columns: repeat(8, 1fr); align-items: baseline; gap: 0; padding: 18px 0; border-bottom: 1px solid var(--line); transition: padding .4s var(--ease); }
+  .idx { grid-column: 1 / 3; padding-left: 8px; } .t { grid-column: 3 / 7; padding: 0 24px 0 8px; } .k { grid-column: 7; padding-left: 8px; } .d { grid-column: 8; }
+  .t { font-size: 20px; letter-spacing: -0.03em; line-height: 1.25; }
+  .k, .d { font-size: 12.5px; color: var(--ink-2); } .m { color: var(--ink-3); } .d { text-align: right; }
+  a:hover { padding-left: 10px; } a:hover .t { color: var(--ink-2); }
+  @media (max-width: 760px) { a { grid-template-columns: 1fr auto; gap: 6px 16px; } .idx { display: none; } .t { grid-column: 1 / -1; padding: 0; } .k { grid-column: 1; padding: 0; } .d { grid-column: 2; } }
+</style>

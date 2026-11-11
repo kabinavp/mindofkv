@@ -1,0 +1,18 @@
+---
+// A generated "photograph": layered colour fields, motion streaks, grain and a soft glow.
+import { paletteFor, hash } from '../lib/palette';
+interface Props { seed: string; palette?: string; glow?: boolean; class?: string; }
+const { seed, palette, glow = true, class: cls } = Astro.props;
+const { colors: [c1, c2, c3, c4] } = paletteFor(seed, palette);
+const h = hash(seed);
+const vars = [
+  `--c1:${c1}`, `--c2:${c2}`, `--c3:${c3}`, `--c4:${c4}`,
+  `--tilt:${(h % 24) - 12}deg`,
+  `--fx:${20 + (h % 50)}%`, `--fy:${10 + ((h >> 4) % 40)}%`,
+  `--gx:${40 + ((h >> 8) % 55)}%`, `--gy:${45 + ((h >> 12) % 50)}%`,
+].join(';');
+---
+<div class:list={['field', cls]} style={vars} aria-hidden="true">
+  {glow && <div class="field-glow"></div>}
+  <div class="field-img"></div>
+</div>

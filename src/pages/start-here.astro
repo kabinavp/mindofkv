@@ -1,40 +1,41 @@
 ---
 import Base from '../layouts/Base.astro';
-import Newsletter from '../components/Newsletter.astro';
-import ArticleCard from '../components/ArticleCard.astro';
-import VideoCard from '../components/VideoCard.astro';
-import SeriesCard from '../components/SeriesCard.astro';
+import EntryList from '../components/EntryList.astro';
+import Subscribe from '../components/Subscribe.astro';
 import { getArticles, getVideos, getSeries } from '../lib/content';
-const articles = (await getArticles()).filter((a) => a.data.featured);
-const videos = (await getVideos()).filter((v) => v.data.featured);
+const favs = [
+  ...(await getArticles()).filter((a) => a.data.featured).map((e) => ({ title: e.data.title, href: `/articles/${e.id}`, date: e.data.date, kind: 'Essay' })),
+  ...(await getVideos()).filter((v) => v.data.featured).map((e) => ({ title: e.data.title, href: `/videos/${e.id}`, date: e.data.date, kind: 'Video' })),
+].sort((a, b) => b.date.valueOf() - a.date.valueOf());
 const series = await getSeries();
 ---
 <Base title="Start here" description="New here? The best places to begin.">
   <div class="wrap">
     <header class="page-head">
-      <p class="eyebrow">Start here</p>
-      <h1>Welcome — glad you found your way in.</h1>
-      <p>I'm KV. By day I build software; on the side I build products, write and make videos about the process.
-        This site is where all of it lives. If you're new, here's the best path through.</p>
+      <p class="label">Start here</p>
+      <div>
+        <h1>Welcome in</h1>
+        <p class="lead"><b>I’m KV. I build software for a living and products on the side.</b> This site is where I write, film and ship all of it in public. If you’re new, here’s the best way through.</p>
+      </div>
     </header>
-
-    <section class="section steps">
-      <div><span>01</span><h3>Read my favourites</h3><p class="muted">The essays that best capture how I think about building.</p></div>
-      <div><span>02</span><h3>Pick a series</h3><p class="muted">Follow a single theme from part one to the end.</p></div>
-      <div><span>03</span><h3>Join the Build Log</h3><p class="muted">One email a week. The best way to keep up.</p></div>
-    </section>
-
-    {articles.length > 0 && <section class="section"><h2 class="h">My favourite essays</h2><div class="grid">{articles.map((a) => <ArticleCard entry={a} />)}</div></section>}
-    {videos.length > 0 && <section class="section"><h2 class="h">Videos to start with</h2><div class="grid">{videos.map((v) => <VideoCard entry={v} />)}</div></section>}
-    <section class="section"><h2 class="h">Series</h2><div class="grid">{series.map((s) => <SeriesCard entry={s} />)}</div></section>
-    <section class="section"><Newsletter /></section>
+    <div class="cols steps">
+      <a href="#favourites"><span class="label">Read</span><div><p class="s">My favourites</p><p class="grey">The essays and videos that best capture how I think about building.</p></div><span class="idx">01</span></a>
+      <a href="/series"><span class="label">Follow</span><div><p class="s">A series</p><p class="grey">Pick one theme and follow it from part one to the end.</p></div><span class="idx">02</span></a>
+      <a href="/building"><span class="label">Explore</span><div><p class="s">What I’m building</p><p class="grey">Products in progress, with the real numbers.</p></div><span class="idx">03</span></a>
+      <a href="#join"><span class="label">Join</span><div><p class="s">The Build Log</p><p class="grey">One email every Sunday. The best way to keep up.</p></div><span class="idx">04</span></a>
+    </div>
+    <section id="favourites" class="sec"><h2>Favourites</h2><EntryList rows={favs} numbered={false} /></section>
+    <section class="sec"><h2>Series</h2><EntryList numbered={false} rows={series.map((s) => ({ title: s.data.title, href: `/series/${s.id}`, date: new Date(), kind: s.data.status }))} /></section>
+    <section id="join" class="sec join"><h2>Join the Build Log</h2><Subscribe id="start-email" /></section>
   </div>
+  <div style="height:64px"></div>
 </Base>
 <style>
-  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .steps div { padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
-  .steps span { font: 500 0.85rem var(--mono); color: var(--accent); }
-  .steps h3 { margin: 10px 0 6px; }
-  .h { margin-bottom: 28px; }
-  @media (max-width: 760px) { .steps { grid-template-columns: 1fr; } }
+  .steps > a { height: 320px; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 0; transition: background .4s; }
+  .steps > a:hover { background: var(--bg-2); }
+  .s { font-size: 24px; letter-spacing: -0.035em; margin-bottom: 8px; } .steps .grey { font-size: 13px; max-width: 20em; }
+  .sec { padding-top: 128px; } .sec h2 { margin-bottom: 48px; }
+  .sec :global(.d) { visibility: hidden; }
+  .join { display: grid; grid-template-columns: 1fr 1fr; align-items: end; padding-bottom: 64px; } .join h2 { margin: 0; }
+  @media (max-width: 760px) { .steps { grid-template-columns: 1fr 1fr; } .steps > a { height: 240px; } .join { grid-template-columns: 1fr; gap: 24px; } }
 </style>
