@@ -4,9 +4,9 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE } from '../site.config';
 
-interface Props { title?: string; description?: string; image?: string; type?: 'website' | 'article'; }
-const { title, description = SITE.description, image, type = 'website' } = Astro.props;
-const fullTitle = title ? `${title} — ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
+interface Props { title?: string; description?: string; image?: string; type?: 'website' | 'article'; bare?: boolean; }
+const { title, description = SITE.description, image, type = 'website', bare = false } = Astro.props;
+const fullTitle = title ? `${title} · ${SITE.name}` : SITE.name;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -16,7 +16,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#f6f6f4" />
+    <meta name="theme-color" content="#f1f1ed" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
@@ -28,17 +28,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;450;500&family=Geist+Mono:wght@400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet" />
   </head>
   <body>
     <Header />
     <main><slot /></main>
-    <Footer />
-    <script>
-      const io = new IntersectionObserver((entries) => {
-        for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-      }, { rootMargin: '0px 0px -8% 0px' });
-      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
-    </script>
+    {!bare && <Footer />}
   </body>
 </html>

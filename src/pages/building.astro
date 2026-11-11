@@ -1,30 +1,33 @@
 ---
 import Base from '../layouts/Base.astro';
-import ProductCell from '../components/ProductCell.astro';
 import { getProducts } from '../lib/content';
 const products = await getProducts();
-const count = (s: string) => products.filter((p) => p.data.status === s).length;
+const label = { live: 'Live', building: 'Building', idea: 'Idea', retired: 'Retired' } as const;
 ---
 <Base title="Building" description="Products, side projects and experiments, built in public.">
-  <div class="wrap">
-    <header class="page-head">
-      <p class="label">Building</p>
-      <div>
-        <h1>Things I’m making</h1>
-        <p class="lead"><b>The best way to learn is to ship.</b> Everything I’ve built, am building, or want to build — with real numbers, including the projects that didn’t work out.</p>
-      </div>
-    </header>
-    <div class="cols facts">
-      {[['Live', count('live')], ['Building', count('building')], ['Ideas', count('idea')], ['Retired', count('retired')]].map(([l, v]) => (
-        <div><p class="label">{l}</p><p class="stat">{String(v).padStart(2, '0')}</p></div>
+  <div class="page">
+    <h1 class="title">Building</h1>
+    <p>Everything I’ve made, am making, or want to make. Real numbers included, and the ones that didn’t work out stay on the list.</p>
+    <ul class="ps">
+      {products.map((p) => (
+        <li>
+          <div class="head">
+            <h2>{p.data.url ? <a href={p.data.url} class="u" target="_blank" rel="noopener">{p.data.title}</a> : p.data.title}</h2>
+            <span class:list={['chip', p.data.status]}>{label[p.data.status]}</span>
+          </div>
+          <p>{p.data.tagline}</p>
+          <p class="meta">
+            {p.data.metric && <span class="ink">{p.data.metric} {p.data.metricLabel}</span>}
+            {p.data.metric && ' · '}since {p.data.started.getFullYear()}{p.data.stack.length > 0 && ` · ${p.data.stack.join(', ')}`}
+          </p>
+        </li>
       ))}
-    </div>
-    <div class="grid">{products.map((p) => <ProductCell entry={p} />)}</div>
+    </ul>
   </div>
-  <div style="height:128px"></div>
 </Base>
 <style>
-  .facts > div { height: 200px; display: flex; flex-direction: column; justify-content: space-between; }
-  .grid { display: grid; grid-template-columns: 1fr 1fr; margin-top: 120px; border-right: 1px solid var(--line); row-gap: 72px; }
-  @media (max-width: 760px) { .facts { grid-template-columns: 1fr 1fr; } .facts > div { height: 140px; } .grid { grid-template-columns: 1fr; margin-top: 72px; } }
+  .ps { list-style: none; padding: 0; margin: 48px 0 0; max-width: 600px; display: grid; gap: 34px; }
+  .head { display: flex; align-items: center; gap: 12px; }
+  h2 { margin: 0; font: italic 400 1.3rem/1.3 var(--serif); color: var(--ink); }
+  .meta { margin-top: 4px !important; } .meta .ink { font-weight: 500; }
 </style>

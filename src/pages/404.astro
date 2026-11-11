@@ -1,12 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-import Tile from '../components/Tile.astro';
 ---
-<Base title="Not found">
-  <section class="nf">
-    <Tile seed="404" palette="stone" w={300} ratio={1.08} inline>
-      <div class="glass"><div class="g-head"><span>Error</span><span class="g-dim">404</span></div><div class="g-title">This page hasn’t been built yet.</div><a href="/" class="g-btn light">Back home</a></div>
-    </Tile>
-  </section>
+<Base title="Not found" bare>
+  <div class="page">
+    <h1 class="title">Nothing here yet</h1>
+    <p>This page hasn’t been built. Head back <a href="/" class="u">to the hill</a>.</p>
+  </div>
 </Base>
-<style>.nf { min-height: 100svh; display: grid; place-items: center; padding: 120px 16px; }</style>

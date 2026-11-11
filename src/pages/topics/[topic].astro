@@ -8,7 +8,6 @@ export async function getStaticPaths() {
 }
 const { topic } = Astro.params;
 const { name } = Astro.props;
-const all = await getAllTopics();
 const has = (e: { data: { topics: string[] } }) => e.data.topics.some((t) => slugify(t) === topic);
 const rows = [
   ...(await getArticles()).filter(has).map((e) => ({ title: e.data.title, href: `/articles/${e.id}`, date: e.data.date, kind: 'Essay' })),
@@ -16,20 +15,10 @@ const rows = [
 ].sort((a, b) => b.date.valueOf() - a.date.valueOf());
 ---
 <Base title={name} description={`Everything on ${name}.`}>
-  <div class="wrap">
-    <header class="page-head">
-      <p class="label">Topic</p>
-      <div>
-        <h1 style="text-transform:capitalize">{name}</h1>
-        <p class="lead"><b>{rows.length} {rows.length === 1 ? 'piece' : 'pieces'}</b> filed under {name}.</p>
-        <nav class="topics">{all.map((t) => <a href={`/topics/${t.slug}`} class:list={{ on: t.slug === topic }}>{t.name}</a>)}</nav>
-      </div>
-    </header>
-    <EntryList rows={rows} />
+  <div class="page">
+    <p class="meta">Topic</p>
+    <h1 class="title" style="margin-top:10px">{name}</h1>
+    <p>{rows.length} {rows.length === 1 ? 'piece' : 'pieces'} on {name}.</p>
+    <div style="margin-top:40px"><EntryList rows={rows} /></div>
   </div>
-  <div style="height:128px"></div>
 </Base>
-<style>
-  .topics { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 36px; font-size: 13px; color: var(--ink-2); }
-  .topics a:hover, .topics .on { color: var(--ink); }
-</style>

@@ -1,27 +1,26 @@
 ---
 import { fmtDate } from '../lib/content';
-interface Row { title: string; href: string; date: Date; kind: string; meta?: string; }
-interface Props { rows: Row[]; numbered?: boolean; }
-const { rows, numbered = true } = Astro.props;
+interface Row { title: string; href: string; date?: Date; kind?: string; note?: string; }
+interface Props { rows: Row[]; }
+const { rows } = Astro.props;
 ---
-<ol class="list">
-  {rows.map((r, i) => (
+<ul class="entries">
+  {rows.map((r) => (
     <li>
       <a href={r.href}>
-        <span class="idx">{numbered ? String(rows.length - i).padStart(3, '0') : ''}</span>
-        <span class="t">{r.title}</span>
-        <span class="k">{r.kind}{r.meta && <span class="m"> · {r.meta}</span>}</span>
-        <span class="d">{fmtDate(r.date)}</span>
+        <span class="t">{r.title}{r.note && <span class="note"> — {r.note}</span>}</span>
+        <span class="dots" aria-hidden="true"></span>
+        <span class="meta">{r.kind && `${r.kind} · `}{r.date && fmtDate(r.date)}</span>
       </a>
     </li>
   ))}
-</ol>
+</ul>
 <style>
-  .list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-  a { display: grid; grid-template-columns: repeat(8, 1fr); align-items: baseline; gap: 0; padding: 18px 0; border-bottom: 1px solid var(--line); transition: padding .4s var(--ease); }
-  .idx { grid-column: 1 / 3; padding-left: 8px; } .t { grid-column: 3 / 7; padding: 0 24px 0 8px; } .k { grid-column: 7; padding-left: 8px; } .d { grid-column: 8; }
-  .t { font-size: 20px; letter-spacing: -0.03em; line-height: 1.25; }
-  .k, .d { font-size: 12.5px; color: var(--ink-2); } .m { color: var(--ink-3); } .d { text-align: right; }
-  a:hover { padding-left: 10px; } a:hover .t { color: var(--ink-2); }
-  @media (max-width: 760px) { a { grid-template-columns: 1fr auto; gap: 6px 16px; } .idx { display: none; } .t { grid-column: 1 / -1; padding: 0; } .k { grid-column: 1; padding: 0; } .d { grid-column: 2; } }
+  .entries { list-style: none; margin: 0; padding: 0; max-width: 680px; }
+  a { display: flex; align-items: baseline; gap: 10px; padding: 5px 0; }
+  .t { color: var(--ink); transition: color .2s; } .note { color: var(--ink-3); }
+  .dots { flex: 1; min-width: 24px; border-bottom: 1px dotted var(--line); transform: translateY(-5px); }
+  .meta { white-space: nowrap; }
+  a:hover .t { color: var(--ink-2); }
+  @media (max-width: 560px) { a { flex-direction: column; gap: 0; padding: 7px 0; } .dots { display: none; } }
 </style>

@@ -9,19 +9,16 @@ const idx = items.findIndex((i) => i.entry.id === currentId);
 const prev = items[idx - 1], next = items[idx + 1];
 ---
 {series && (
-  <nav class="sn" aria-label="Series navigation">
-    <div class="top"><span class="label">Part {idx + 1} of {items.length}</span><a href={`/series/${seriesId}`} class="name">{series.data.title}</a></div>
-    <div class="pn">
-      <div>{prev && <><p class="label">Previous</p><a href={hrefOf(prev)}>{prev.entry.data.title}</a></>}</div>
-      <div class="n">{next && <><p class="label">Next</p><a href={hrefOf(next)}>{next.entry.data.title}</a></>}</div>
-    </div>
-  </nav>
+  <aside class="sn">
+    <p>Part {idx + 1} of {items.length} in <a href={`/series/${seriesId}`} class="u">{series.data.title}</a>.</p>
+    <p class="pn">
+      {prev && <a href={hrefOf(prev)} class="u">← {prev.entry.data.title}</a>}
+      {next && <a href={hrefOf(next)} class="u next">{next.entry.data.title} →</a>}
+    </p>
+  </aside>
 )}
 <style>
-  .sn { border-top: 1px solid var(--ink); padding-top: 14px; }
-  .top { display: flex; justify-content: space-between; gap: 16px; }
-  .name { font-size: 13px; } .name:hover { color: var(--ink-2); }
-  .pn { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 28px; }
-  .pn a { font-size: 17px; letter-spacing: -0.025em; line-height: 1.25; display: block; margin-top: 4px; } .pn a:hover { color: var(--ink-2); }
-  .n { text-align: right; }
+  .sn { max-width: 600px; padding: 14px 18px; background: rgba(244, 228, 178, .45); border: 1px solid var(--stamp-edge); border-radius: 3px; font-size: 15.5px; }
+  .pn { display: flex; justify-content: space-between; gap: 16px; margin-top: 6px !important; font-size: 14.5px; }
+  .next { margin-left: auto; text-align: right; }
 </style>

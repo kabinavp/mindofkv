@@ -17,6 +17,15 @@ export const SITE = {
     emailField: 'email',
   },
 
+  // The hill on the homepage. Set lat/lon to your favourite spot to get live wind
+  // ("Slight breeze at … right now"). Leave them null to use a gentle default breeze.
+  hill: {
+    spot: 'my favourite hill',
+    city: '',
+    lat: null as number | null,
+    lon: null as number | null,
+  },
+
   socials: [
     { label: 'YouTube', href: 'https://youtube.com/@mindofkv' },
     { label: 'X', href: 'https://x.com/mindofkv' },
@@ -29,9 +38,6 @@ export const SITE = {
     { label: 'Videos', href: '/videos' },
     { label: 'Series', href: '/series' },
     { label: 'Building', href: '/building' },
-  ],
-  navRight: [
     { label: 'About', href: '/about' },
-    { label: 'Now', href: '/now' },
   ],
 };

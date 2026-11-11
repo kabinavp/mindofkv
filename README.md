@@ -16,7 +16,7 @@ npm run build      # outputs static site to dist/
 | --- | --- |
 | Name, tagline, nav, socials, newsletter endpoint | `src/site.config.ts` |
 | Colours & fonts | `src/styles/global.css` (`:root` tokens) |
-| Atmosphere palettes | `src/lib/palette.ts` |
+| Homepage scene | `src/scripts/scene.ts` |
 | Homepage hero copy | `src/pages/index.astro` |
 | About / Start here / Now pages | `src/pages/about.astro`, `start-here.astro`, `now.astro` |
 | Favicon | `public/favicon.svg` |
@@ -47,9 +47,13 @@ draft: false
 
 > All current content is placeholder content. Replace or delete it.
 
-### Imagery
+### The hill (homepage)
 
-Every article, video, series and product automatically gets a generated "atmosphere" image: a soft, motion-blurred colour field. Each one is unique to its filename. To pick a specific mood, add `palette:` to the front-matter. The options are `moss`, `dune`, `glacier`, `ember`, `dusk`, `sea`, `stone` and `bloom`. To use a real photo on the About page, swap the tile in `src/pages/about.astro` for an `<img>`.
+The homepage scene is drawn live in `src/scripts/scene.ts`: grass, the tree, and you riding, building and filming. The stamps next to "In my free time," switch each figure on and off.
+
+- **Live wind:** set `hill.lat` / `hill.lon` (and `hill.spot`) in `src/site.config.ts`. The grass and tree will then sway with the real wind, and the corner reads "Gentle breeze on … right now". The data comes from Open-Meteo, which is free and needs no key.
+- **Speech lines:** edit `LINES` in `scene.ts`.
+- **Jersey colour, skin tone:** `#c8582b` and `SKIN` in `scene.ts`.
 
 ## Newsletter
 

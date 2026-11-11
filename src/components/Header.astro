@@ -1,60 +1,17 @@
 ---
-import Wordmark from './Wordmark.astro';
 import { SITE } from '../site.config';
 const path = Astro.url.pathname;
-const active = (href: string) => path === href || path.startsWith(href + '/');
+const on = (href: string) => path === href || path.startsWith(href + '/');
 ---
-<header class="hdr" data-hdr>
-  <div class="wrap bar">
-    <div class="l">
-      <Wordmark />
-      <nav aria-label="Main">
-        {SITE.nav.map((n) => <a href={n.href} class:list={{ on: active(n.href) }}>{n.label}</a>)}
-      </nav>
-    </div>
-    <div class="r">
-      {SITE.navRight.map((n) => <a href={n.href} class:list={['hide-sm', { on: active(n.href) }]}>{n.label}</a>)}
-      <a href="/newsletter" class="btn hide-sm">Subscribe</a>
-      <button class="menu" type="button" aria-expanded="false" aria-controls="mnav">Menu</button>
-    </div>
-  </div>
-  <div class="mnav" id="mnav">
-    <div class="wrap">
-      {[...SITE.nav, ...SITE.navRight, { label: 'Start here', href: '/start-here' }, { label: 'Newsletter', href: '/newsletter' }].map((n) => <a href={n.href}>{n.label}</a>)}
-    </div>
-  </div>
+<header class="hdr">
+  <a href="/" class="name">KV</a>
+  <nav aria-label="Main">{SITE.nav.map((n) => <a href={n.href} aria-current={on(n.href) ? 'page' : undefined}>{n.label}</a>)}</nav>
 </header>
-<script>
-  const h = document.querySelector<HTMLElement>('[data-hdr]')!;
-  const onScroll = () => h.classList.toggle('scrolled', scrollY > 40);
-  addEventListener('scroll', onScroll, { passive: true }); onScroll();
-  const btn = h.querySelector<HTMLButtonElement>('.menu')!;
-  btn.addEventListener('click', () => {
-    const open = h.classList.toggle('open');
-    btn.setAttribute('aria-expanded', String(open)); btn.textContent = open ? 'Close' : 'Menu';
-  });
-</script>
 <style>
-  .hdr { position: fixed; inset: 0 0 auto; z-index: 50; }
-  .hdr::before {
-    content: ''; position: absolute; inset: 0 0 -28px; pointer-events: none; opacity: 0; transition: opacity .4s;
-    background: linear-gradient(var(--bg) 55%, color-mix(in srgb, var(--bg) 0%, transparent));
-  }
-  .hdr.scrolled::before, .hdr.open::before { opacity: 1; }
-  .hdr.open { background: var(--bg); }
-  .bar { position: relative; display: flex; justify-content: space-between; align-items: center; height: 68px; }
-  .l, .r, nav { display: flex; align-items: center; }
-  .l { gap: 32px; } nav, .r { gap: 26px; }
-  nav a, .r > a:not(.btn) { font-size: 13px; letter-spacing: -0.005em; transition: color .2s; }
-  nav a:hover, .r > a:not(.btn):hover { color: var(--ink-2); }
-  .on { color: var(--ink-2); }
-  .menu { display: none; background: none; border: 0; font: 450 13px var(--sans); color: var(--ink); cursor: pointer; padding: 6px 0; }
-  .mnav { display: none; }
-  @media (max-width: 760px) {
-    nav, .hide-sm { display: none !important; }
-    .menu { display: block; }
-    .hdr.open .mnav { display: block; position: relative; height: calc(100dvh - 68px); }
-    .mnav .wrap { display: flex; flex-direction: column; padding-top: 24px; }
-    .mnav a { font-size: 34px; letter-spacing: -0.045em; line-height: 1.2; padding: 4px 0; }
-  }
+  .hdr { position: absolute; z-index: 20; top: 0; left: 0; right: 0; display: flex; align-items: baseline; gap: 34px; padding: 26px var(--gut) 0; font: 400 14px/1 var(--sans); }
+  .name { color: var(--ink); font-weight: 500; letter-spacing: -0.01em; }
+  nav { display: flex; gap: 20px; flex-wrap: wrap; }
+  nav a { color: var(--ink-3); transition: color .2s; }
+  nav a:hover, nav a[aria-current='page'] { color: var(--ink); }
+  @media (max-width: 560px) { .hdr { gap: 18px; font-size: 13.5px; } nav { gap: 6px 14px; } }
 </style>

@@ -1,12 +1,8 @@
 ---
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import Field from '../../components/Field.astro';
 import SeriesNav from '../../components/SeriesNav.astro';
-import EntryList from '../../components/EntryList.astro';
-import Subscribe from '../../components/Subscribe.astro';
 import { getArticles, fmtDate, readingTime, slugify } from '../../lib/content';
-import { SITE } from '../../site.config';
 
 export async function getStaticPaths() {
   const all = await getArticles();
@@ -14,64 +10,21 @@ export async function getStaticPaths() {
 }
 const { entry, all } = Astro.props;
 const { Content } = await render(entry);
-const { title, description, date, topics, series, palette } = entry.data;
-const related = all.filter((a) => a.id !== entry.id).sort((a, b) =>
-  b.data.topics.filter((t) => topics.includes(t)).length - a.data.topics.filter((t) => topics.includes(t)).length).slice(0, 3);
+const { title, description, date, topics, series } = entry.data;
+const i = all.findIndex((a) => a.id === entry.id);
+const older = all[i + 1];
 ---
 <Base title={title} description={description} type="article">
-  <article>
-    <header class="wrap head">
-      <div class="meta">
-        <p class="label">Essay</p>
-        <dl>
-          <div><dt>Published</dt><dd>{fmtDate(date)}</dd></div>
-          <div><dt>Reading</dt><dd>{readingTime(entry.body)} min</dd></div>
-          {topics.length > 0 && <div><dt>Topics</dt><dd>{topics.map((t, i) => <>{i > 0 && ', '}<a href={`/topics/${slugify(t)}`}>{t}</a></>)}</dd></div>}
-        </dl>
-      </div>
-      <div class="titles">
-        <h1>{title}</h1>
-        <p class="lead">{description}</p>
-      </div>
-    </header>
-    <div class="wrap"><div class="cover"><Field seed={entry.id} palette={palette} /></div></div>
-    <div class="wrap body">
-      <aside class="side">{series && <SeriesNav seriesId={series.id} currentId={entry.id} />}</aside>
-      <div class="prose"><Content /></div>
-    </div>
-    <div class="wrap end">
-      <div class="end-in">
-        {series && <SeriesNav seriesId={series.id} currentId={entry.id} />}
-        <div class="sub-box">
-          <p class="lead"><b>Enjoyed this?</b> {SITE.newsletter.pitch}</p>
-          <Subscribe id="post-email" />
-        </div>
-      </div>
-    </div>
+  <article class="page">
+    <p class="meta">{fmtDate(date)} · {readingTime(entry.body)} min read{topics.length > 0 && <> · {topics.map((t, k) => <>{k > 0 && ', '}<a href={`/topics/${slugify(t)}`} class="u">{t}</a></>)}</>}</p>
+    <h1 class="title" style="margin-top:10px">{title}</h1>
+    <p class="dek">{description}</p>
+    {series && <div style="margin:36px 0"><SeriesNav seriesId={series.id} currentId={entry.id} /></div>}
+    <div class="prose" style="margin-top:36px"><Content /></div>
+    {older && <p class="more">Older: <a href={`/articles/${older.id}`} class="u">{older.data.title}</a></p>}
   </article>
-  {related.length > 0 && (
-    <section class="wrap more"><h2>Keep reading</h2><EntryList numbered={false} rows={related.map((a) => ({ title: a.data.title, href: `/articles/${a.id}`, date: a.data.date, kind: 'Essay' }))} /></section>
-  )}
 </Base>
 <style>
-  .head { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 168px; padding-bottom: 64px; }
-  .meta { grid-column: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 24px; }
-  dl { margin: 0; display: grid; gap: 12px; font-size: 12.5px; }
-  dt { color: var(--ink-3); } dd { margin: 0; } dd a:hover { color: var(--ink-2); }
-  .titles { grid-column: 2 / 5; }
-  .titles .lead { margin-top: 22px; max-width: 32em; }
-  .cover { position: relative; height: clamp(220px, 38vw, 460px); border-radius: 22px; }
-  .body { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; padding-top: 96px; }
-  .side { grid-column: 1; } .side :global(.sn) { position: sticky; top: 100px; }
-  .side :global(.pn) { grid-template-columns: 1fr; } .side :global(.n) { text-align: left; }
-  .prose { grid-column: 2 / 5; }
-  .end { display: grid; grid-template-columns: repeat(4, 1fr); padding-top: 96px; }
-  .end-in { grid-column: 2 / 4; display: grid; gap: 64px; }
-  .sub-box { display: grid; gap: 24px; border-top: 1px solid var(--line); padding-top: 32px; }
-  .more { padding-top: 128px; padding-bottom: 128px; } .more h2 { margin-bottom: 48px; }
-  @media (max-width: 860px) {
-    .head, .body, .end { grid-template-columns: 1fr; } .head { padding-top: 120px; }
-    .meta, .titles, .prose, .end-in { grid-column: 1; } .meta { order: 2; } .side { display: none; }
-    .body { padding-top: 56px; } dl { grid-template-columns: repeat(3, auto); justify-content: start; gap: 24px; }
-  }
+  .dek { font-size: 19px; color: var(--ink-3); font-style: italic; max-width: 600px; }
+  .more { margin-top: 64px !important; font-size: 15.5px; }
 </style>

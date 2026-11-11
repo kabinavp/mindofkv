@@ -2,50 +2,21 @@
 import Subscribe from './Subscribe.astro';
 import { SITE } from '../site.config';
 const year = new Date().getFullYear();
-const cols = [
-  { label: 'Read', links: [{ label: 'Writing', href: '/articles' }, { label: 'Series', href: '/series' }, { label: 'Start here', href: '/start-here' }] },
-  { label: 'Watch & build', links: [{ label: 'Videos', href: '/videos' }, { label: 'Building', href: '/building' }, { label: 'Now', href: '/now' }] },
-  { label: 'About', links: [{ label: 'About KV', href: '/about' }, { label: 'Newsletter', href: '/newsletter' }, { label: 'Email', href: `mailto:${SITE.email}` }] },
-  { label: 'Elsewhere', links: SITE.socials },
-  { label: 'Feeds', links: [{ label: 'RSS', href: '/rss.xml' }, { label: 'Sitemap', href: '/sitemap-index.xml' }] },
-];
 ---
 <footer class="ftr">
-  <div class="wrap">
-    <div class="top">
-      <a href="/newsletter" class="cta arrow-link">Join the Build Log <span>→</span></a>
-      <div class="form">
-        <p class="pitch">{SITE.newsletter.pitch}</p>
-        <Subscribe tone="dark" id="ftr-email" />
-      </div>
-    </div>
-    <div class="grid">
-      {cols.map((c) => (
-        <div class="col">
-          <p class="lbl">{c.label}</p>
-          <ul>{c.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}</ul>
-        </div>
-      ))}
-    </div>
-    <div class="base"><span>© {year} {SITE.author}. Built in public.</span><span>mindofkv.com</span></div>
+  <div class="nl">
+    <p><span class="ink">{SITE.newsletter.name}.</span> {SITE.newsletter.pitch}</p>
+    <Subscribe id="ftr-email" />
   </div>
-  <p class="giant" aria-hidden="true">mind of kv</p>
+  <p class="links">
+    <span>© {year} KV</span>
+    <a href="/now">Now</a><a href="/start-here">Start here</a><a href="/rss.xml">RSS</a>
+    {SITE.socials.map((s) => <a href={s.href} rel="me noopener" target="_blank">{s.label}</a>)}
+  </p>
 </footer>
 <style>
-  .ftr { background: var(--dark); color: #f2f2ef; padding: 128px 0 0; overflow: hidden; margin-top: 0; }
-  .top { display: grid; grid-template-columns: 2fr 1fr; gap: 32px; align-items: end; }
-  .cta { font-size: clamp(2rem, 3.2vw, 2.6rem); letter-spacing: -0.035em; line-height: 1.1; }
-  .pitch { font-size: 13px; color: var(--dark-2); margin-bottom: 14px; max-width: 30em; }
-  .grid { display: grid; grid-template-columns: repeat(5, 1fr); margin-top: 120px; border-right: 1px solid var(--dark-line); }
-  .col { border-left: 1px solid var(--dark-line); padding: 0 8px; min-height: 220px; display: flex; flex-direction: column; justify-content: space-between; }
-  .lbl { font-size: 11.5px; color: #7a7a76; }
-  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 13px; }
-  ul a { transition: color .2s; } ul a:hover { color: var(--dark-2); }
-  .base { display: flex; justify-content: space-between; margin-top: 64px; font-size: 11.5px; color: #6f6f6b; }
-  .giant { font: 500 clamp(5rem, 21vw, 19rem)/.78 var(--sans); letter-spacing: -0.075em; color: #1f1f1e; white-space: nowrap; text-align: center; margin: 40px 0 -0.06em; user-select: none; }
-  @media (max-width: 860px) {
-    .top { grid-template-columns: 1fr; }
-    .grid { grid-template-columns: repeat(2, 1fr); row-gap: 40px; margin-top: 80px; }
-    .col { min-height: 140px; }
-  }
+  .ftr { padding: 0 var(--gut) 40px var(--col); }
+  .nl { max-width: 560px; display: grid; gap: 14px; padding-top: 28px; border-top: 1px solid var(--line); }
+  .links { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 72px; font: 400 12.5px var(--sans); color: var(--ink-3); }
+  .links a:hover { color: var(--ink); }
 </style>

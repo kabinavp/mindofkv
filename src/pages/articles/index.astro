@@ -4,22 +4,19 @@ import EntryList from '../../components/EntryList.astro';
 import { getArticles, getAllTopics } from '../../lib/content';
 const articles = await getArticles();
 const topics = await getAllTopics();
+const years = [...new Set(articles.map((a) => a.data.date.getFullYear()))].sort((a, b) => b - a);
 ---
 <Base title="Writing" description="Essays and notes on building, thinking and making things.">
-  <div class="wrap">
-    <header class="page-head">
-      <p class="label">Writing</p>
-      <div>
-        <h1>Essays & notes</h1>
-        <p class="lead"><b>Field notes from the workshop.</b> Some are polished essays, some are thinking out loud. All of them are things I wish I’d read earlier.</p>
-        <nav class="topics" aria-label="Topics"><span class="on">All</span>{topics.map((t) => <a href={`/topics/${t.slug}`}>{t.name}</a>)}</nav>
-      </div>
-    </header>
-    <EntryList rows={articles.map((a) => ({ title: a.data.title, href: `/articles/${a.id}`, date: a.data.date, kind: 'Essay', meta: a.data.topics[0] }))} />
+  <div class="page">
+    <h1 class="title">Writing</h1>
+    <p>Essays and notes from the workshop. Some are polished, some are me thinking out loud.</p>
+    <p class="meta topics">Topics: {topics.map((t, i) => <>{i > 0 && ', '}<a href={`/topics/${t.slug}`} class="u">{t.name}</a></>)}</p>
+    {years.map((y) => (
+      <section>
+        <h2 class="sub-h">{y}</h2>
+        <EntryList rows={articles.filter((a) => a.data.date.getFullYear() === y).map((a) => ({ title: a.data.title, href: `/articles/${a.id}`, date: a.data.date }))} />
+      </section>
+    ))}
   </div>
-  <div style="height:128px"></div>
 </Base>
-<style>
-  .topics { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 36px; font-size: 13px; color: var(--ink-2); }
-  .topics a:hover, .topics .on { color: var(--ink); }
-</style>
+<style>.topics { margin-top: 18px !important; font-size: 13px; } .topics .u { color: var(--ink-2); }</style>

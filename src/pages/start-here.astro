@@ -1,41 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
 import EntryList from '../components/EntryList.astro';
-import Subscribe from '../components/Subscribe.astro';
-import { getArticles, getVideos, getSeries } from '../lib/content';
+import { getArticles, getVideos } from '../lib/content';
 const favs = [
   ...(await getArticles()).filter((a) => a.data.featured).map((e) => ({ title: e.data.title, href: `/articles/${e.id}`, date: e.data.date, kind: 'Essay' })),
   ...(await getVideos()).filter((v) => v.data.featured).map((e) => ({ title: e.data.title, href: `/videos/${e.id}`, date: e.data.date, kind: 'Video' })),
 ].sort((a, b) => b.date.valueOf() - a.date.valueOf());
-const series = await getSeries();
 ---
 <Base title="Start here" description="New here? The best places to begin.">
-  <div class="wrap">
-    <header class="page-head">
-      <p class="label">Start here</p>
-      <div>
-        <h1>Welcome in</h1>
-        <p class="lead"><b>I’m KV. I build software for a living and products on the side.</b> This site is where I write, film and ship all of it in public. If you’re new, here’s the best way through.</p>
-      </div>
-    </header>
-    <div class="cols steps">
-      <a href="#favourites"><span class="label">Read</span><div><p class="s">My favourites</p><p class="grey">The essays and videos that best capture how I think about building.</p></div><span class="idx">01</span></a>
-      <a href="/series"><span class="label">Follow</span><div><p class="s">A series</p><p class="grey">Pick one theme and follow it from part one to the end.</p></div><span class="idx">02</span></a>
-      <a href="/building"><span class="label">Explore</span><div><p class="s">What I’m building</p><p class="grey">Products in progress, with the real numbers.</p></div><span class="idx">03</span></a>
-      <a href="#join"><span class="label">Join</span><div><p class="s">The Build Log</p><p class="grey">One email every Sunday. The best way to keep up.</p></div><span class="idx">04</span></a>
-    </div>
-    <section id="favourites" class="sec"><h2>Favourites</h2><EntryList rows={favs} numbered={false} /></section>
-    <section class="sec"><h2>Series</h2><EntryList numbered={false} rows={series.map((s) => ({ title: s.data.title, href: `/series/${s.id}`, date: new Date(), kind: s.data.status }))} /></section>
-    <section id="join" class="sec join"><h2>Join the Build Log</h2><Subscribe id="start-email" /></section>
+  <div class="page">
+    <h1 class="title">Start here</h1>
+    <p>Welcome. I’m KV: I build software for a living and products on the side, and this site is where I write, film and ship all of it in public. If you only read a few things, make it these.</p>
+    <h2 class="sub-h">Favourites</h2>
+    <EntryList rows={favs} />
+    <h2 class="sub-h">Then</h2>
+    <p class="measure">Follow a <a href="/series" class="u">series</a> from part one, see what I’m <a href="/building" class="u">building</a>, or check what I’m doing <a href="/now" class="u">now</a>. The best way to keep up is the newsletter below.</p>
   </div>
-  <div style="height:64px"></div>
 </Base>
-<style>
-  .steps > a { height: 320px; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 0; transition: background .4s; }
-  .steps > a:hover { background: var(--bg-2); }
-  .s { font-size: 24px; letter-spacing: -0.035em; margin-bottom: 8px; } .steps .grey { font-size: 13px; max-width: 20em; }
-  .sec { padding-top: 128px; } .sec h2 { margin-bottom: 48px; }
-  .sec :global(.d) { visibility: hidden; }
-  .join { display: grid; grid-template-columns: 1fr 1fr; align-items: end; padding-bottom: 64px; } .join h2 { margin: 0; }
-  @media (max-width: 760px) { .steps { grid-template-columns: 1fr 1fr; } .steps > a { height: 240px; } .join { grid-template-columns: 1fr; gap: 24px; } }
-</style>

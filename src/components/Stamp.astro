@@ -1,0 +1,44 @@
+---
+// Little cream "stamp" tiles with an ink illustration, like a sticker in a notebook.
+interface Props { kind: 'ride' | 'build' | 'film'; label: string; pressed?: boolean; }
+const { kind, label, pressed = false } = Astro.props;
+---
+<button type="button" class="stamp" data-activity={kind} aria-pressed={pressed ? 'true' : 'false'} aria-label={label} title={label}>
+  <svg viewBox="0 0 32 32" aria-hidden="true">
+    {kind === 'ride' && (
+      <g fill="none" stroke="#2f2c27" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="22" r="5.2" /><circle cx="23.5" cy="22" r="5.2" />
+        <path d="M9 22 14.5 22 19.5 14.5 12 14.5 14.5 22M19.5 14.5 23.5 22M18.7 11.5h2.5M11 13h3" />
+        <path d="M14 13.2 17.5 9.3l3 2.2" stroke="#c8582b" stroke-width="2.6" />
+        <circle cx="19.2" cy="6.6" r="1.8" fill="#2f2c27" stroke="none" />
+      </g>
+    )}
+    {kind === 'build' && (
+      <g fill="none" stroke="#2f2c27" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="8" y="9" width="16" height="10.5" rx="1.2" />
+        <path d="M5.5 22.5h21l-1.5-3H7z" fill="#2f2c27" />
+        <path d="M12 13l-2 1.6 2 1.6M20 13l2 1.6-2 1.6M17 12.5l-2 4.3" stroke="#c8582b" />
+      </g>
+    )}
+    {kind === 'film' && (
+      <g fill="none" stroke="#2f2c27" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="7" y="9.5" width="12.5" height="8.5" rx="1.2" fill="#2f2c27" />
+        <path d="M19.5 12l5.5-2.5v8.5l-5.5-2.5" />
+        <path d="M13 18v3.5M13 21.5 8.5 27M13 21.5l4.5 5.5M13 21.5V27" />
+        <circle cx="10" cy="12.2" r="1.1" fill="#e0412b" stroke="none" />
+      </g>
+    )}
+  </svg>
+</button>
+<style>
+  .stamp {
+    width: 30px; height: 30px; padding: 0; display: inline-grid; place-items: center; vertical-align: middle; cursor: pointer;
+    background: var(--stamp); border: 1px solid var(--stamp-edge); border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(120, 100, 40, .25), inset 0 0 0 2px rgba(255, 255, 255, .35);
+    transition: transform .25s cubic-bezier(.2, .8, .2, 1.4), box-shadow .25s, background .25s;
+    transform: rotate(var(--r, 0deg));
+  }
+  .stamp svg { width: 24px; height: 24px; }
+  .stamp:hover { transform: rotate(var(--r, 0deg)) translateY(-2px); box-shadow: 0 4px 8px -3px rgba(120, 100, 40, .45), inset 0 0 0 2px rgba(255, 255, 255, .35); }
+  .stamp[aria-pressed='true'] { background: #f7d98a; box-shadow: inset 0 1px 3px rgba(120, 90, 20, .35); transform: rotate(var(--r, 0deg)) translateY(1px); }
+</style>

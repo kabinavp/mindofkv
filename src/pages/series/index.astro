@@ -1,57 +1,23 @@
 ---
 import Base from '../../layouts/Base.astro';
-import Tile from '../../components/Tile.astro';
 import { getSeries, getSeriesItems, hrefOf } from '../../lib/content';
 const series = await getSeries();
-const withItems = await Promise.all(series.map(async (s) => ({ s, items: await getSeriesItems(s.id) })));
+const rows = await Promise.all(series.map(async (s) => ({ s, items: await getSeriesItems(s.id) })));
 ---
 <Base title="Series" description="Multi-part deep dives you can follow start to finish.">
-  <div class="wrap">
-    <header class="page-head">
-      <p class="label">Series</p>
-      <div>
-        <h1>Go deep on one thing</h1>
-        <p class="lead"><b>Each series is a sequence of essays and videos on a single theme.</b> Start at part one and follow along as it’s made.</p>
-      </div>
-    </header>
-    {withItems.map(({ s, items }, i) => (
-      <article class="row">
-        <div class="rule-row"><span class="idx">{String(i + 1).padStart(2, '0')}</span><hr class="rule" /></div>
-        <div class="body">
-          <div class="l">
-            <h2 class="name"><a href={`/series/${s.id}`}>{s.data.title}</a></h2>
-            <p class="grey">{s.data.description}</p>
-            <p class="st"><span class:list={['status', s.data.status === 'ongoing' ? 'live' : s.data.status === 'planned' ? 'idea' : '']}>{s.data.status}</span><span class="label">{items.length} parts</span></p>
-          </div>
-          <div class="c">
-            <Tile seed={s.id} palette={s.data.palette} w={300} ratio={1.08} inline href={`/series/${s.id}`}>
-              <div class="glass">
-                <div class="g-head"><span>{s.data.title}</span><span class="g-dim">Series</span></div>
-                {items.length ? items.slice(0, 4).map((it, k) => <div class="g-row"><span class="g-dim">0{k + 1}</span><span class="clip">{it.entry.data.title}</span></div>)
-                  : <div class="g-row"><span class="g-dim">Part one</span><span>Coming soon</span></div>}
-              </div>
-            </Tile>
-          </div>
-          <ul class="r">
-            {items.slice(0, 4).map((it) => <li><a href={hrefOf(it)}>{it.entry.data.title}</a></li>)}
-            <li><a href={`/series/${s.id}`} class="all">View series →</a></li>
-          </ul>
-        </div>
-      </article>
+  <div class="page">
+    <h1 class="title">Series</h1>
+    <p>Longer projects told in parts. Each one is a set of essays and videos on a single theme, best read in order.</p>
+    {rows.map(({ s, items }) => (
+      <section class="s">
+        <h2 class="sub-h"><a href={`/series/${s.id}`} class="u">{s.data.title}</a> <span class="meta">· {s.data.status} · {items.length} {items.length === 1 ? 'part' : 'parts'}</span></h2>
+        <p>{s.data.description}</p>
+        {items.length > 0 && <ol class="parts">{items.map((it) => <li><a href={hrefOf(it)} class="u">{it.entry.data.title}</a>{it.kind === 'video' && <span class="meta"> · video</span>}</li>)}</ol>}
+      </section>
     ))}
   </div>
-  <div style="height:96px"></div>
 </Base>
 <style>
-  .rule-row { display: flex; align-items: center; gap: 8px; } .rule-row .rule { flex: 1; }
-  .body { display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 24px; align-items: center; padding: 64px 0 88px; }
-  .name { font-size: 22px; letter-spacing: -0.035em; margin-bottom: 10px; }
-  .l p.grey { font-size: 13px; max-width: 24em; }
-  .st { display: flex; gap: 16px; margin-top: 18px; text-transform: capitalize; }
-  .c { display: grid; place-items: center; }
-  .clip { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
-  .r { list-style: none; margin: 0; padding: 0; text-align: right; display: grid; gap: 6px; }
-  .r a { font-size: 17px; letter-spacing: -0.025em; line-height: 1.25; transition: color .25s; } .r a:hover { color: var(--ink-3); }
-  .r .all { font-size: 13px; color: var(--ink-2); display: inline-block; margin-top: 12px; }
-  @media (max-width: 860px) { .body { grid-template-columns: 1fr; padding: 40px 0 64px; } .r { text-align: left; } }
+  .s { max-width: 600px; } .sub-h .meta { font-style: normal; }
+  .parts { margin: 12px 0 0; padding-left: 1.4em; color: var(--ink-3); } .parts li { padding: 2px 0; }
 </style>
