@@ -1,7 +1,6 @@
-/* Notebook paper: a faint square grid, soft grey ink, a serif voice and a quiet sans for UI. */
+/* Clean white page, soft grey ink, a serif voice and a quiet sans for UI. */
 :root {
   --paper: #ffffff;
-  --grid: rgba(40, 40, 30, 0.06);
   --ink: #2e2d2a;
   --ink-2: #5d5c56;
   --ink-3: #96958d;
@@ -25,9 +24,7 @@
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; color: var(--ink-2);
-  background-color: var(--paper);
-  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: var(--cell) var(--cell);
+  background: var(--paper);
   font: 400 17.5px/1.72 var(--serif);
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
