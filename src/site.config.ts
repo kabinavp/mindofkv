@@ -41,15 +41,6 @@ export const SITE = {
     tag: '',
   },
 
-  // Questions on the homepage ("Currently wondering"). Visitors can flip through them.
-  wondering: [
-    'Why does the ride home always feel shorter?',
-    'What would you make if nobody could ever see it?',
-    'Why do the best ideas show up mid-climb and never at the desk?',
-    'How much of good taste can actually be learned?',
-    'What’s the smallest change that would change everything?',
-  ],
-
   socials: [
     { label: 'YouTube', href: 'https://youtube.com/@mindofkv' },
     { label: 'X', href: 'https://x.com/mindofkv' },

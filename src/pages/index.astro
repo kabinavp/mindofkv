@@ -8,7 +8,7 @@ const hill = SITE.hill;
 ---
 <Base bare>
   <section class="home">
-    <canvas id="hill" class="hill" role="img" aria-label="A grassy hill with a lone tree. KV rides a bike up and down the slope." data-questions={JSON.stringify(SITE.wondering)}
+    <canvas id="hill" class="hill" role="img" aria-label="A grassy hill with a lone tree. KV rides a bike up and down the slope."
       data-lat={hill.lat ?? ''} data-lon={hill.lon ?? ''}></canvas>
 
     <div class="intro">
@@ -21,11 +21,6 @@ const hill = SITE.hill;
           <Stamp kind="build" label="I make things. Toggle the maker" />
           <Stamp kind="film" label="I film. Toggle the filmmaker" />
         </span>
-      </p>
-      <p class="wonder">
-        <span class="meta">Currently wondering</span>
-        <span class="q" data-q>{SITE.wondering[0]}</span>
-        <button type="button" class="next-q" data-next-q aria-label="Show another question">another one ↻</button>
       </p>
       <div class="join">
         <p><span class="ink">{SITE.newsletter.club}.</span> Every Sunday: one idea, one question, one book, one line worth keeping.{SITE.newsletter.subscribers && <> Join {SITE.newsletter.subscribers}+ curious readers.</>}</p>
@@ -77,14 +72,6 @@ const hill = SITE.hill;
     b.addEventListener('click', () => b.setAttribute('aria-pressed', String(hill.toggle(b.dataset.activity as Activity))));
   });
 
-  // Currently wondering: flip through questions
-  const qs: string[] = JSON.parse(canvas.dataset.questions ?? '[]');
-  const qEl = document.querySelector<HTMLElement>('[data-q]')!;
-  let qi = 0;
-  document.querySelector('[data-next-q]')?.addEventListener('click', () => {
-    qi = (qi + 1) % qs.length;
-    qEl.classList.remove('in'); void qEl.offsetWidth; qEl.textContent = qs[qi]; qEl.classList.add('in');
-  });
 
 </script>
 
@@ -99,29 +86,15 @@ const hill = SITE.hill;
   .lately { margin-top: 18px !important; }
   .lately a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
   .lately a:hover { text-decoration-color: var(--ink-2); }
-  .wonder { margin-top: 26px !important; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
-  .wonder .meta { width: 100%; }
-  .q { font: italic 400 21px/1.35 var(--serif); color: var(--ink); }
-  .q.in { animation: qin .5s cubic-bezier(.2,.8,.2,1); }
-  @keyframes qin { from { opacity: 0; transform: translateY(6px); } }
-  .next-q { border: 0; background: none; padding: 0; cursor: pointer; font: 400 12.5px var(--sans); color: var(--ink-3); }
-  .next-q:hover { color: var(--ink); }
   .join { margin-top: 30px; display: grid; gap: 10px; max-width: 460px; }
   .join p { font-size: 15.5px; line-height: 1.5; }
   .weather { position: absolute; z-index: 1; right: var(--gut); bottom: 22px; margin: 0; text-align: right; font: 400 13px/1.45 var(--sans); color: #fff; text-shadow: 0 1px 6px rgba(20, 30, 5, .35); display: grid; }
   .weather .dim { opacity: .78; }
   @media (max-width: 700px) {
-    .home { height: max(100svh, 1010px); }
+    .home { height: max(100svh, 820px); }
     .intro { padding-top: 112px; font-size: 16.5px; }
     .join { margin-top: 22px; }
-    .wonder { margin-top: 26px !important; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
-  .wonder .meta { width: 100%; }
-  .q { font: italic 400 21px/1.35 var(--serif); color: var(--ink); }
-  .q.in { animation: qin .5s cubic-bezier(.2,.8,.2,1); }
-  @keyframes qin { from { opacity: 0; transform: translateY(6px); } }
-  .next-q { border: 0; background: none; padding: 0; cursor: pointer; font: 400 12.5px var(--sans); color: var(--ink-3); }
-  .next-q:hover { color: var(--ink); }
-  .join { margin-top: 30px; display: grid; gap: 10px; max-width: 460px; }
+    .join { margin-top: 30px; display: grid; gap: 10px; max-width: 460px; }
   .join p { font-size: 15.5px; line-height: 1.5; }
   .weather { left: var(--gut); bottom: 16px; font-size: 12px; }
   }
