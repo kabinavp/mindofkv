@@ -70,7 +70,7 @@ const books = defineCollection({
     title: z.string(),
     author: z.string(),
     order: z.number(), // position on the shelf (1 = top)
-    status: z.enum(['reading', 'read']).default('read'),
+    status: z.enum(['reading', 'read', 'next']).default('read'), // next = in the pipeline
     isbn: z.string().optional(), // optional: pins the exact edition for the cover and Amazon link
     cover: z.string().optional(), // optional local image, e.g. /books/martyr.jpg (overrides everything)
     year: z.number().optional(), // year first published

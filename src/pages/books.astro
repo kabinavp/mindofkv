@@ -19,16 +19,17 @@ const buy = (b: (typeof books)[number]) => {
 };
 const rows = await Promise.all(books.map(async (b) => ({ b, Content: (await render(b)).Content, link: buy(b), cover: await coverFor(b.data) })));
 const reading = rows.filter((r) => r.b.data.status === 'reading');
-const shelf = rows.filter((r) => r.b.data.status !== 'reading');
+const done = rows.filter((r) => r.b.data.status === 'read');
+const next = rows.filter((r) => r.b.data.status === 'next');
 const stars = (n?: number) => (n ? '★'.repeat(n) + '☆'.repeat(5 - n) : '');
 const rel = tag ? 'sponsored noopener' : 'noopener';
 ---
-<Base title="Books" description="What I’m reading and what I’ve read, with a short note on each.">
+<Base title="Books" description="What I’m reading now, what I’ve read, and what’s up next.">
   <div class="page">
     <h1 class="title">Books</h1>
-    <p>What I’m reading now and what’s on the shelf. Fiction mostly, the kind that stays with you for weeks.</p>
+    <p>What I’m reading now, what I’ve read, and what’s up next. Fiction mostly, the kind that stays with you for weeks.</p>
 
-    {[{ label: 'Reading now', list: reading }, { label: 'On the shelf', list: shelf }].filter((g) => g.list.length).map((g) => (
+    {[{ label: 'Reading now', list: reading }, { label: 'Read', list: done }].filter((g) => g.list.length).map((g) => (
       <section>
         <h2 class="sub-h">{g.label}</h2>
         <ul class="books">
@@ -54,6 +55,21 @@ const rel = tag ? 'sponsored noopener' : 'noopener';
         </ul>
       </section>
     ))}
+    {next.length > 0 && (
+      <section>
+        <h2 class="sub-h">Up next</h2>
+        <ul class="next">
+          {next.map(({ b, link, cover }) => (
+            <li id={b.id}>
+              <a href={link.href} target="_blank" rel={rel} title={`${b.data.title} by ${b.data.author}`}>
+                <BookCover title={b.data.title} author={b.data.author} src={cover} />
+                <span class="nt">{b.data.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
     {tag && <p class="meta disclosure">As an Amazon Associate I earn from qualifying purchases. It costs you nothing extra.</p>}
   </div>
 </Base>
@@ -72,6 +88,11 @@ const rel = tag ? 'sponsored noopener' : 'noopener';
   .foot { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; margin-top: 12px !important; }
   .stars { color: #b58a2a; letter-spacing: 1px; }
   .buy { font: 500 12.5px var(--sans); }
+  .next { list-style: none; padding: 0; margin: 8px 0 0; max-width: 680px; display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 28px 22px; }
+  .next a { display: grid; gap: 10px; }
+  .next a :global(.cover) { transition: transform .35s cubic-bezier(.2,.8,.2,1.3); }
+  .next a:hover :global(.cover) { transform: rotate(-1.5deg) translateY(-3px); }
+  .nt { font: italic 400 15px/1.3 var(--serif); color: var(--ink); }
   .disclosure { margin-top: 64px !important; max-width: 600px; }
   @media (max-width: 560px) { .book { grid-template-columns: 84px 1fr; gap: 18px; } }
 </style>
