@@ -6,6 +6,7 @@ seoDescription: "A simple loop to own your growth: learn what the next level nee
 updated: 2026-11-11
 essays: [own-your-career-growth]
 related: [3-is-of-influence]
+theme: growing
 origin: original
 great: "Great people ask what the next level needs, write down the gaps and report progress."
 template:

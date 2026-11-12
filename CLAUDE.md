@@ -48,13 +48,14 @@ old URLs redirect.)
     a **template** (read-only Google Doc, with credit; sources in `templates/`), and its essay.
   - Current models: Inversion (borrowed, Munger), Pre-mortem (borrowed, Gary Klein), 3 I’s of Influence,
     Default High Trust, Momentum over Measurement, Honest Gap Analysis.
-  - Planned grouping: Deciding · Working with people · Getting better.
+  - Grouped by `theme`: Deciding · Working with people · Getting better.
 - **Opinions** (`/opinions`): KV’s own pieces on bigger questions (e.g. value of education in the AI age, Indian
   taxation). Not model summaries. Can be pulled from Substack via `substack:` in the front-matter.
   Hidden from search until the first piece is published.
 - **Books** (`/books`): Reading now · Read · Up next (cover grid). Real covers stored in `public/books/`.
   Text under read books is a factual description until KV sends a gist (`myTake: true` once it’s his).
-- **Projects**, **About**, **Now**: About still needs KV’s own lines.
+- **About**: Karthik Viswanathan (KV), works in product; reads a lot, rides hills, spiritual and philosophical. Only LinkedIn and Substack are listed as socials (others unconfirmed).
+- **Projects**, **Now**: still placeholder content.
 
 ## Design system
 

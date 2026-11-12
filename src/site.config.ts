@@ -41,10 +41,8 @@ export const SITE = {
   },
 
   socials: [
-    { label: 'YouTube', href: 'https://youtube.com/@mindofkv' },
-    { label: 'X', href: 'https://x.com/mindofkv' },
-    { label: 'LinkedIn', href: 'https://linkedin.com/in/mindofkv' },
-    { label: 'GitHub', href: 'https://github.com/mindofkv' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/apkarthik' },
+    { label: 'Substack', href: 'https://mindofkv.substack.com' },
   ],
 
   nav: [

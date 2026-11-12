@@ -6,6 +6,7 @@ seoDescription: "Why hard work alone grows your career slowly, and the three sta
 updated: 2026-11-11
 essays: [circle-of-influence, own-your-career-growth]
 related: [default-high-trust, honest-gap-analysis]
+theme: people
 origin: original
 great: "Great people make sure leaders across teams know their work and seek their input."
 template:

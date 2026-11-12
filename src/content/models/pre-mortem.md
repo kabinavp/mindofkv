@@ -2,10 +2,11 @@
 title: Pre-mortem
 oneliner: Imagine the project has already failed, then write down why. Fix those causes before you start.
 seoTitle: "Pre-mortem: How to Run One Before Your Next Launch"
-seoDescription: "A pre-mortem imagines a project has already failed and asks why. A step-by-step way to run one with your team, with a real payment-gateway launch example."
+seoDescription: "How to run a pre-mortem with your product team: imagine the launch already failed and work out why. A 30-minute agenda, a free template, and a real payment-gateway launch example."
 updated: 2026-11-11
 essays: [invert-to-win]
 related: [inversion]
+theme: deciding
 origin: borrowed
 credit: Gary Klein
 great: "Great teams run the post-mortem before launch."

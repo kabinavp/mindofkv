@@ -6,6 +6,7 @@ seoDescription: "Misaligned teams usually have a trust deficit. How starting fro
 updated: 2026-11-11
 essays: [building-trust]
 related: [3-is-of-influence]
+theme: people
 origin: original
 great: "Great leaders extend trust first, and keep it by being predictable."
 template:

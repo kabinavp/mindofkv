@@ -1,17 +1,49 @@
 ---
 import Base from '../layouts/Base.astro';
+import Mascot from '../components/Mascot.astro';
 import { SITE } from '../site.config';
+
+const jsonld = {
+  '@type': 'ProfilePage',
+  url: `${SITE.url}/about`,
+  mainEntity: { '@id': `${SITE.url}/#kv`, name: 'Karthik Viswanathan', alternateName: 'KV', jobTitle: 'Product leader', sameAs: SITE.socials.map((s) => s.href) },
+};
 ---
-<Base title="About" description="Who I am and why this site exists.">
+<Base title="About" description="Karthik Viswanathan (KV): product leader, reader, cyclist. Why Mind of KV exists and what you'll find here." jsonld={jsonld}>
   <div class="page">
-    <h1 class="title">About</h1>
+    <div class="head">
+      <Mascot height={64} />
+      <h1 class="title">About</h1>
+    </div>
+
+    <p class="lead">I’m Karthik Viswanathan, KV for short. I work in product: deciding what gets built, and building the teams that build it.</p>
+
     <div class="prose">
-      <p><strong>Replace this with your story.</strong> A good about page answers three questions: who are you, what do you make, and why should a stranger care?</p>
-      <p>Here’s a starting draft. I spend my days writing software and the rest of my time following whatever has caught my curiosity: a book, a climb, a side project, an idea I can’t shake. When I’m not at a keyboard I’m usually on a bike, riding hills and thinking.</p>
-      <h2>Why “Mind of KV”</h2>
-      <p>Because it’s deliberately broad. I don’t want to be the “X person.” This is wherever my curiosity goes next, held together by one habit: I write down what I find.</p>
+      <p>I’ve shipped things that had to work on day one, like a payment gateway for financial institutions at Groww, and I’ve led teams through the messy parts of growing fast. The lessons I keep coming back to are on this site as <a href="/models">models</a>.</p>
+
+      <h2>What I believe about the work</h2>
+      <ul>
+        <li>Ask how it could fail before you ask how it wins.</li>
+        <li>Trust people first, then keep that trust by being predictable.</li>
+        <li>A small team’s edge is momentum, not measurement.</li>
+        <li>Your growth is your job, not your manager’s.</li>
+      </ul>
+
+      <h2>Outside work</h2>
+      <p>I read a lot, from Dostoevsky and Kafka to Kaveh Akbar. I ride, mostly hills. And I’m drawn to the spiritual and philosophical questions, which is why <a href="/books#the-book-of-mirdad"><em>The Book of Mirdad</em></a> sits on my shelf next to <em>The Metamorphosis</em>.</p>
+
+      <h2>Why this site</h2>
+      <p>Mind of KV is where I think in public: the models I use, the books I read, and opinions on questions bigger than work. Every Sunday I send one idea, one question, one book and one line worth keeping. That’s <a href="/weekly">Stay Curious</a>.</p>
+
       <h2>Say hello</h2>
-      <p>Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>, reply to any newsletter, or find me on {SITE.socials.map((s, i) => <>{i > 0 && (i === SITE.socials.length - 1 ? ' or ' : ', ')}<a href={s.href}>{s.label}</a></>)}.</p>
+      <p>Email <span class="ink">{SITE.email}</span>, reply to any Sunday letter, or find me on <a href="https://www.linkedin.com/in/apkarthik" target="_blank" rel="me noopener">LinkedIn</a>.</p>
     </div>
   </div>
 </Base>
+<style>
+  .head { display: flex; align-items: flex-end; gap: 14px; }
+  .head .title { margin: 0; }
+  .lead { font: 400 clamp(1.3rem, 2vw, 1.5rem)/1.35 var(--display); letter-spacing: -0.015em; color: var(--ink); max-width: 30em; margin-top: 24px !important; }
+  .prose { margin-top: 28px; }
+  .prose ul { padding-left: 1.1em; }
+</style>

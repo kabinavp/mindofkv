@@ -2,10 +2,11 @@
 title: Momentum over Measurement
 oneliner: For small teams, a simple weekly rhythm of shipping beats heavyweight goal-setting.
 seoTitle: "OKRs for Small Teams? Why Momentum Beats Measurement"
-seoDescription: "Why OKRs often slow small teams down, and the lightweight weekly rhythm that works better: plan Monday, execute all week, review Friday."
+seoDescription: "Why OKRs often slow small product teams down, and the lightweight weekly rhythm that works better: plan Monday, ship all week, review Friday. With a free weekly rhythm template."
 updated: 2026-11-11
 essays: [okr-or-no-okr]
 related: [inversion]
+theme: growing
 origin: original
 great: "Great small teams plan on Monday, ship all week and review on Friday."
 template:

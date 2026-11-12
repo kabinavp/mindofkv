@@ -4,14 +4,22 @@ import ModelIcon from '../../components/ModelIcon.astro';
 import { getModels } from '../../lib/content';
 import { SITE } from '../../site.config';
 const models = await getModels();
+const THEMES = [
+  { key: 'deciding', title: 'Deciding' },
+  { key: 'people', title: 'Working with people' },
+  { key: 'growing', title: 'Getting better' },
+] as const;
 const jsonld = { '@type': 'CollectionPage', name: 'Mental Models Library', url: `${SITE.url}/models`, hasPart: models.map((m) => ({ '@type': 'Article', headline: m.data.title, url: `${SITE.url}/models/${m.id}` })) };
 ---
 <Base title="Mental Models for Product, Leadership and Life" description="A growing library of practical mental models: inversion, pre-mortems, circle of influence and more, each explained with questions to ask and real examples." image="/og/models.png" jsonld={jsonld}>
   <div class="page">
     <h1 class="title">Models</h1>
-    <p>Everything I write starts from a model: a thinking tool I keep coming back to. Each one explains the idea, the questions it makes you ask, and the essay where I’ve put it to work.</p>
+    <p>Thinking tools for deciding what to build, working with people, and growing at work. Each one comes with the questions it makes you ask, a template, and the essay where I put it to work.</p>
+    {THEMES.map((th) => (
+    <section class="theme">
+    <h2 class="sub-h">{th.title}</h2>
     <ol class="grid">
-      {models.map((m, i) => (
+      {models.map((m, i) => ({ m, i })).filter(({ m }) => m.data.theme === th.key).map(({ m, i }) => (
         <li>
           <a href={`/models/${m.id}`} class="card">
             <span class="top"><ModelIcon id={m.id} /><span class="n">{m.data.origin === 'borrowed' ? `Borrowed · ${m.data.credit}` : 'Original'} · No. {String(i + 1).padStart(2, '0')}</span></span>
@@ -21,10 +29,13 @@ const jsonld = { '@type': 'CollectionPage', name: 'Mental Models Library', url: 
         </li>
       ))}
     </ol>
+    </section>
+    ))}
   </div>
 </Base>
 <style>
-  .grid { list-style: none; margin: 48px 0 0; padding: 0; max-width: 920px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  .theme:first-of-type .sub-h { margin-top: 48px; }
+  .grid { list-style: none; margin: 0; padding: 0; max-width: 920px; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
   .grid > li { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 6px; transition: border-color .25s, box-shadow .25s; }
   .grid > li:hover { border-color: #cfcfca; box-shadow: 0 10px 24px -16px rgba(40, 40, 20, .35); }
   .card { flex: 1; display: flex; flex-direction: column; gap: 6px; padding: 20px 20px 14px; }
