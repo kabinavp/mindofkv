@@ -5,7 +5,11 @@ seoTitle: "Default High Trust: How to Fix Trust Deficits in Teams"
 seoDescription: "Misaligned teams usually have a trust deficit. How starting from high trust, consistent contact and a shared way of working fixes it."
 updated: 2026-11-11
 essays: [building-trust]
-related: [circle-of-influence]
+related: [3-is-of-influence]
+origin: original
+great: "Great leaders extend trust first, and keep it by being predictable."
+template:
+  title: Team trust code
 order: 4
 ---
 In fast-growing companies, teams complain about misalignment and poor output. Underneath, the problem is usually a **trust deficit**, and a trust deficit breeds anxiety, politics and slow work.

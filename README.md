@@ -66,7 +66,8 @@ One paragraph review goes here.
 ```
 To earn from Amazon links, put your Associates tracking ID in `SITE.amazon.tag` (`src/site.config.ts`). The required disclosure line appears automatically once a tag is set.
 
-**Model:** `src/content/models/<id>.md` → `/models/<id>`. Front-matter: `title`, `oneliner`, `essays` (Substack slugs), `books`, `videos`, `related` (other model ids), `order`. Essays listed here automatically show the model at the end of the post.
+**Model:** `src/content/models/<id>.md` → `/models/<id>`. Also set `origin` (original / borrowed), `credit` (for borrowed), `great` (the good-vs-great line) and `template` (`title`, plus `url` once the read-only Google Doc exists). Each model's card is drawn in `src/lib/cards.ts`; a 1080×1080 PNG is built at `/cards/<id>.png`. Template sources live in `templates/`.
+ Front-matter: `title`, `oneliner`, `essays` (Substack slugs), `books`, `videos`, `related` (other model ids), `order`. Essays listed here automatically show the model at the end of the post.
 
 **Weekly (Stay Curious):** each Sunday issue is a file in `src/content/weekly/` (copy `newsletter/TEMPLATE.md`). It appears in the archive at `/weekly/NNN`; paste the same text into Buttondown to send it.
 

@@ -95,6 +95,11 @@ const models = defineCollection({
     videos: z.array(z.string()).default([]), // video ids
     related: z.array(z.string()).default([]), // other model ids
     order: z.number().default(0),
+    origin: z.enum(['original', 'borrowed']).default('original'),
+    credit: z.string().optional(), // for borrowed models: who the idea comes from
+    creditUrl: z.string().url().optional(),
+    great: z.string().optional(), // the one "good vs great" line
+    template: z.object({ title: z.string(), url: z.string().url().optional() }).optional(), // url = read-only Google Doc
   }),
 });
 

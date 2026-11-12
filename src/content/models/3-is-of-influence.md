@@ -1,14 +1,18 @@
 ---
-title: Circle of Influence
+title: 3 I’s of Influence
 oneliner: Growth depends on how many people beyond your manager know your work and trust your judgment.
-seoTitle: "Circle of Influence at Work: 3 Stages to Grow Your Career"
-seoDescription: "Why hard work alone grows your career slowly, and how to widen your circle of influence at work in three stages: Information, Insight, Interact."
+seoTitle: "3 I’s of Influence: How to Grow Your Influence at Work"
+seoDescription: "Why hard work alone grows your career slowly, and the three stages of influence at work: Information, Insight and Interact. With a free influence map template."
 updated: 2026-11-11
 essays: [circle-of-influence, own-your-career-growth]
 related: [default-high-trust, honest-gap-analysis]
+origin: original
+great: "Great people make sure leaders across teams know their work and seek their input."
+template:
+  title: Influence map
 order: 3
 ---
-Hard work alone often grows a career more slowly than it deserves. A common reason is a small circle of influence: only your direct manager really knows what you do. Expanding it builds what I call organisational capital.
+Hard work alone often grows a career more slowly than it deserves. A common reason is that too few people see it: only your direct manager really knows what you do. Widening that circle builds what I call organisational capital.
 
 It grows in three stages:
 

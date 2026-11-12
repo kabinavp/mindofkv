@@ -15,7 +15,7 @@ const { id, size = 40 } = Astro.props;
       <path d="m12.5 16 2.3 2.3 4.7-4.6" stroke="#c8582b" />
       <path d="M13 22h6" opacity=".45" />
     </>)}
-    {id === 'circle-of-influence' && (<>
+    {id === '3-is-of-influence' && (<>
       <circle cx="16" cy="16" r="11" opacity=".35" /><circle cx="16" cy="16" r="7" opacity=".7" /><circle cx="16" cy="16" r="3" />
       <circle cx="16" cy="16" r="1" fill="#c8582b" stroke="#c8582b" />
       <path d="M24.5 8.5 27 6" stroke="#c8582b" />
@@ -38,7 +38,7 @@ const { id, size = 40 } = Astro.props;
       <rect x="5" y="7" width="22" height="17" rx="2" /><path d="M5 11.5h22" /><circle cx="8" cy="9.3" r=".5" fill="#2f2c27" />
       <path d="M17.5 13.5 14 18.5h3.5l-1.5 4 4.5-6h-3.5l1.5-3z" fill="#c8582b" stroke="#c8582b" stroke-width="1" />
     </>)}
-    {!['prototype-before-you-spec', 'inversion', 'pre-mortem', 'circle-of-influence', 'default-high-trust', 'momentum-over-measurement', 'honest-gap-analysis'].includes(id) && (<>
+    {!['prototype-before-you-spec', 'inversion', 'pre-mortem', '3-is-of-influence', 'default-high-trust', 'momentum-over-measurement', 'honest-gap-analysis'].includes(id) && (<>
       <path d="M16 6a7 7 0 0 0-4 12.7V22h8v-3.3A7 7 0 0 0 16 6Z" /><path d="M13 26h6" /><path d="M16 22v-5" stroke="#c8582b" />
     </>)}
   </svg>

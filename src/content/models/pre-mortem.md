@@ -6,6 +6,11 @@ seoDescription: "A pre-mortem imagines a project has already failed and asks why
 updated: 2026-11-11
 essays: [invert-to-win]
 related: [inversion]
+origin: borrowed
+credit: Gary Klein
+great: "Great teams run the post-mortem before launch."
+template:
+  title: Pre-mortem kit
 order: 2
 ---
 A post-mortem explains a failure after it happens. A pre-mortem does it in advance. Before launch, the team assumes it’s six months later and the project went badly, and each person writes down what went wrong.

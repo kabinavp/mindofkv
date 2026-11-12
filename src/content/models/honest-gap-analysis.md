@@ -5,7 +5,11 @@ seoTitle: "Honest Gap Analysis: How to Own Your Career Growth"
 seoDescription: "A simple loop to own your growth: learn what the next level needs, write an honest gap analysis, validate it with your manager, and track progress."
 updated: 2026-11-11
 essays: [own-your-career-growth]
-related: [circle-of-influence]
+related: [3-is-of-influence]
+origin: original
+great: "Great people ask what the next level needs, write down the gaps and report progress."
+template:
+  title: Gap analysis worksheet
 order: 6
 ---
 When appraisals disappoint, it’s tempting to blame the manager or the organisation. A better move is to ask: **what would it take to get to the next level?** Then write down the answer, share the notes, and report progress against them.

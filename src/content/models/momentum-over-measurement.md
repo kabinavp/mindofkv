@@ -6,6 +6,10 @@ seoDescription: "Why OKRs often slow small teams down, and the lightweight weekl
 updated: 2026-11-11
 essays: [okr-or-no-okr]
 related: [inversion]
+origin: original
+great: "Great small teams plan on Monday, ship all week and review on Friday."
+template:
+  title: Weekly rhythm board
 order: 5
 ---
 OKRs promise direction and measurable outcomes. For small teams they often bring complexity instead, taking time away from the one advantage a small team has: speed.

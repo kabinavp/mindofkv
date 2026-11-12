@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ModelIcon from '../../components/ModelIcon.astro';
+import { cardSvg } from '../../lib/cards';
 import { getModels, getBooks, getVideos, getArticles, fmtDate, essayHomes } from '../../lib/content';
 import { getPosts } from '../../lib/substack';
 
@@ -11,7 +12,8 @@ export async function getStaticPaths() {
 }
 const { entry, n, all } = Astro.props;
 const { Content } = await render(entry);
-const { title, oneliner, essays, books, videos, related } = entry.data;
+const { title, oneliner, essays, books, videos, related, origin, credit, great, template } = entry.data;
+const card = cardSvg(entry.id, n, title);
 const [posts, local, allBooks, allVideos, homes] = await Promise.all([getPosts(), getArticles(), getBooks(), getVideos(), essayHomes()]);
 const ownEssays = essays.filter((slug) => homes.get(slug) === entry.id).map((slug) => posts.find((p) => p.slug === slug)).filter(Boolean) as Awaited<ReturnType<typeof getPosts>>;
 const elsewhere = essays.filter((slug) => homes.get(slug) && homes.get(slug) !== entry.id).map((slug) => ({ post: posts.find((p) => p.slug === slug), model: all.find((m) => m.id === homes.get(slug)) })).filter((x) => x.post && x.model);
@@ -21,16 +23,25 @@ const relatedRows = all.filter((m) => related.includes(m.id));
 import { SITE } from '../../site.config';
 const url = `${SITE.url}/models/${entry.id}`;
 const jsonld = [
-  { '@type': 'Article', '@id': `${url}#article`, headline: entry.data.seoTitle ?? title, description: entry.data.seoDescription ?? oneliner, url, image: `${SITE.url}/og/models/${entry.id}.png`, author: { '@id': `${SITE.url}/#kv` }, publisher: { '@id': `${SITE.url}/#kv` }, dateModified: (entry.data.updated ?? new Date()).toISOString(), about: { '@type': 'DefinedTerm', name: title, description: oneliner, inDefinedTermSet: `${SITE.url}/models` }, hasPart: ownEssays.map((p) => ({ '@type': 'BlogPosting', headline: p.title, description: p.subtitle, datePublished: p.date.toISOString(), url: `${url}#${p.slug}`, author: { '@id': `${SITE.url}/#kv` } })) },
+  { '@type': 'Article', '@id': `${url}#article`, headline: entry.data.seoTitle ?? title, description: entry.data.seoDescription ?? oneliner, url, image: `${SITE.url}/og/models/${entry.id}.png`, author: { '@id': `${SITE.url}/#kv` }, publisher: { '@id': `${SITE.url}/#kv` }, dateModified: (entry.data.updated ?? new Date()).toISOString(), ...(credit ? { citation: credit } : {}), about: { '@type': 'DefinedTerm', name: title, description: oneliner, inDefinedTermSet: `${SITE.url}/models` }, hasPart: ownEssays.map((p) => ({ '@type': 'BlogPosting', headline: p.title, description: p.subtitle, datePublished: p.date.toISOString(), url: `${url}#${p.slug}`, author: { '@id': `${SITE.url}/#kv` } })) },
   { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Models', item: `${SITE.url}/models` }, { '@type': 'ListItem', position: 2, name: title, item: url }] },
 ];
 ---
 <Base title={entry.data.seoTitle ?? title} description={entry.data.seoDescription ?? oneliner} type="article" image={`/og/models/${entry.id}.png`} jsonld={jsonld} modified={entry.data.updated}>
   <article class="page">
-    <p class="meta"><a href="/models" class="u">Models</a> · No. {String(n).padStart(2, '0')}</p>
+    <p class="meta"><a href="/models" class="u">Models</a> · No. {String(n).padStart(2, '0')} · <span class:list={['origin', origin]}>{origin === 'borrowed' ? `Borrowed from ${credit}` : 'Original'}</span></p>
     <div class="head"><ModelIcon id={entry.id} size={48} /><h1 class="title">{title}</h1></div>
     <p class="dek">{oneliner}</p>
+    {card && <figure class="card"><Fragment set:html={card} /><figcaption class="meta"><a href={`/cards/${entry.id}.png`} class="u">Download this card</a> for LinkedIn (1080 × 1080)</figcaption></figure>}
     <div class="prose" style="margin-top:32px"><Content /></div>
+    {great && <p class="great"><span>Good vs great</span>{great}</p>}
+    {template && (
+      <div class="tpl">
+        <span class="doc" aria-hidden="true"></span>
+        <div><b>{template.title}</b><span class="meta">{template.url ? 'A read-only Google Doc. Make a copy to use it.' : 'Template coming soon.'}</span></div>
+        {template.url && <a href={template.url} class="go" target="_blank" rel="noopener">Open the template ↗</a>}
+      </div>
+    )}
 
     {ownEssays.map((p) => (
       <section class="essay" id={p.slug}>
@@ -70,6 +81,17 @@ const jsonld = [
 <style>
   .head { display: flex; align-items: center; gap: 14px; margin-top: 14px; } .head .title { margin: 0; }
   .head + .dek { margin-top: 14px !important; }
+  .origin { color: var(--ink-2); } .origin.borrowed { color: var(--ink-2); }
+  .card { margin: 32px 0 0; max-width: 460px; }
+  .card :global(svg) { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 8px; }
+  .card figcaption { margin-top: 8px; }
+  .great { max-width: 600px; margin-top: 40px !important; padding: 18px 20px; border-left: 2px solid var(--accent); background: #fffaf6; font: 400 1.25rem/1.35 var(--display); letter-spacing: -0.015em; color: var(--ink); }
+  .great span { display: block; font: 700 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .tpl { max-width: 600px; margin-top: 16px; display: flex; gap: 14px; align-items: center; padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px; flex-wrap: wrap; }
+  .tpl b { display: block; color: var(--ink); font-weight: 700; }
+  .doc { flex: none; width: 28px; height: 36px; border: 1.5px solid var(--ink); border-radius: 3px; background: linear-gradient(var(--ink-3), var(--ink-3)) 5px 10px / 14px 1.5px no-repeat, linear-gradient(var(--ink-3), var(--ink-3)) 5px 16px / 14px 1.5px no-repeat, linear-gradient(var(--ink-3), var(--ink-3)) 5px 22px / 10px 1.5px no-repeat; }
+  .go { margin-left: auto; font: 700 13.5px var(--sans); color: var(--ink); }
+  .go:hover { color: var(--accent); }
   .dek { font-size: 19px; line-height: 1.5; color: var(--ink-2); max-width: 600px; }
   .essay { max-width: 600px; margin-top: 72px; padding-top: 32px; border-top: 1px solid var(--line); scroll-margin-top: 24px; }
   .ek { font: 500 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }

@@ -6,6 +6,11 @@ seoDescription: "Inversion is a mental model that flips the question from “how
 updated: 2026-11-11
 essays: [invert-to-win]
 related: [pre-mortem, momentum-over-measurement]
+origin: borrowed
+credit: Charlie Munger
+great: "Great PMs ask how a launch could fail, and remove those causes first."
+template:
+  title: Inversion checklist
 order: 1
 ---
 Most planning asks “how do we make this win?” Inversion flips the question: **how could this flop?** It borrows from Charlie Munger, who said all he wanted to know was where he was going to die, so he’d never go there.

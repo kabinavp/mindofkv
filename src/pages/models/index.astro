@@ -14,7 +14,7 @@ const jsonld = { '@type': 'CollectionPage', name: 'Mental Models Library', url: 
       {models.map((m, i) => (
         <li>
           <a href={`/models/${m.id}`} class="card">
-            <span class="top"><ModelIcon id={m.id} /><span class="n">No. {String(i + 1).padStart(2, '0')}</span></span>
+            <span class="top"><ModelIcon id={m.id} /><span class="n">{m.data.origin === 'borrowed' ? `Borrowed · ${m.data.credit}` : 'Original'} · No. {String(i + 1).padStart(2, '0')}</span></span>
             <span class="t">{m.data.title}</span>
             <span class="o">{m.data.oneliner}</span>
           </a>
