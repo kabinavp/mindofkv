@@ -1,8 +1,18 @@
-/* Clean white page, soft grey ink, a serif voice and a quiet sans for UI. */
+/* Clean white page. Sentient (display serif) for big headings; Satoshi for everything else. Fonts: Fontshare (ITF Free Font License). */
+@font-face { font-family: 'Sentient'; src: url('/fonts/sentient-300.woff2') format('woff2'); font-weight: 300; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Sentient'; src: url('/fonts/sentient-300-italic.woff2') format('woff2'); font-weight: 300; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Sentient'; src: url('/fonts/sentient-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Sentient'; src: url('/fonts/sentient-400-italic.woff2') format('woff2'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Sentient'; src: url('/fonts/sentient-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-400-italic.woff2') format('woff2'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+
 :root {
   --paper: #ffffff;
   --ink: #2e2d2a;
-  --ink-2: #5d5c56;
+  --ink-2: #55544e;
   --ink-3: #96958d;
   --line: #e2e2de;
   --accent: #c8582b;
@@ -12,8 +22,9 @@
   --building: #c08a1e;
   --idea: #7d72c4;
 
-  --serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
-  --sans: 'Geist', 'Helvetica Neue', Arial, sans-serif;
+  --display: 'Sentient', 'Iowan Old Style', Georgia, serif;
+  --sans: 'Satoshi', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --serif: var(--display); /* legacy alias */
   --cell: 40px;
   --gut: clamp(20px, 6vw, 80px);
   --col: clamp(20px, 21.5vw, 420px);
@@ -26,9 +37,10 @@ html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0; color: var(--ink-2);
   background: var(--paper);
-  font: 400 17.5px/1.72 var(--serif);
+  font: 400 17px/1.7 var(--sans);
+  letter-spacing: -0.003em;
   -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-  font-optical-sizing: auto;
+  font-optical-sizing: auto; text-rendering: optimizeLegibility;
 }
 img, iframe, svg { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
@@ -39,9 +51,9 @@ p { margin: 0; }
 /* Inner page frame */
 .page { padding: clamp(110px, 17vh, 160px) var(--gut) 120px var(--col); }
 .measure { max-width: 600px; }
-.title { font: italic 400 clamp(1.9rem, 2.6vw, 2.2rem)/1.15 var(--serif); color: var(--ink-2); letter-spacing: -0.01em; margin: 0 0 14px; }
+.title { font: 400 clamp(2.2rem, 3.4vw, 2.75rem)/1.08 var(--display); color: var(--ink); letter-spacing: -0.028em; margin: 0 0 16px; text-wrap: balance; }
 .title + p { max-width: 560px; }
-.sub-h { font: italic 400 1.25rem/1.3 var(--serif); color: var(--ink-2); margin: 64px 0 14px; }
+.sub-h { font: 700 1.05rem/1.3 var(--sans); color: var(--ink); letter-spacing: -0.01em; margin: 64px 0 16px; }
 .meta { font: 400 12.5px/1.4 var(--sans); color: var(--ink-3); letter-spacing: 0; }
 .ink { color: var(--ink); }
 .u { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; transition: text-decoration-color .2s; }
@@ -53,13 +65,13 @@ p { margin: 0; }
 .chip.live::before { background: var(--live); } .chip.building::before { background: var(--building); } .chip.idea::before { background: var(--idea); }
 
 /* Long-form prose */
-.prose { max-width: 600px; color: #47463f; }
+.prose { max-width: 620px; color: #3f3e39; font-size: 17.5px; line-height: 1.72; }
 .prose > * + * { margin-top: 1.05em; }
-.prose h2 { font: italic 400 1.45rem/1.3 var(--serif); color: var(--ink); margin-top: 2em; }
-.prose h3 { font: 500 1.1rem/1.35 var(--serif); color: var(--ink); margin-top: 1.7em; }
-.prose strong { font-weight: 500; color: var(--ink); }
+.prose h2 { font: 700 1.3rem/1.3 var(--sans); color: var(--ink); letter-spacing: -0.015em; margin-top: 2em; }
+.prose h3 { font: 700 1.08rem/1.35 var(--sans); color: var(--ink); margin-top: 1.7em; }
+.prose strong { font-weight: 700; color: var(--ink); }
 .prose a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--ink-3); text-underline-offset: 3px; }
-.prose blockquote { margin: 1.6em 0; padding-left: 18px; border-left: 1px solid var(--ink-3); font-style: italic; font-size: 1.15em; color: var(--ink); }
+.prose blockquote { margin: 1.6em 0; padding-left: 18px; border-left: 2px solid var(--accent); font: italic 300 1.35em/1.4 var(--display); color: var(--ink); }
 .prose ul, .prose ol { padding-left: 1.1em; } .prose li + li { margin-top: .3em; } .prose li::marker { color: var(--ink-3); }
 .prose code { font: 0.84em ui-monospace, monospace; background: rgba(0,0,0,.045); padding: 2px 5px; border-radius: 3px; }
 .prose pre { padding: 16px 18px; border-radius: 4px; overflow-x: auto; font-size: 14px; line-height: 1.6; }

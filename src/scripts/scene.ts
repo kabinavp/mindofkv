@@ -420,7 +420,7 @@ export class Hill {
     const life = s.until - this.t;
     g.save();
     g.globalAlpha = clamp(Math.min(life, 3.4 - life) * 3, 0, 1) * this.appear[a];
-    g.font = 'italic 14px Newsreader, Georgia, serif';
+    g.font = '500 13.5px Satoshi, system-ui, sans-serif';
     g.fillStyle = '#6b6a63'; g.textAlign = 'center';
     g.fillText(`“${s.text}”`, clamp(x, 70, this.W - 70), y);
     g.restore();
