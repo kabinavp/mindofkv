@@ -19,10 +19,9 @@ export const SITE = {
     // Your real subscriber count. When set, signups read “Join 340+ curious readers”. Leave null to hide.
     subscribers: null as number | null,
     pitch: 'A short email every Sunday: one idea, one question, one book, and one line worth keeping.',
-    // The email list lives on Buttondown so every email is sent from mindofkv.com.
-    // Buttondown's "RSS-to-email" watches https://mindofkv.com/rss.xml and emails each new post automatically.
-    action: 'https://buttondown.com/api/emails/embed-subscribe/mindofkv',
-    emailField: 'email',
+    // The email list lives on Kit (kit.com, free up to 10,000 subscribers). Form ID 10179714.
+    action: 'https://app.kit.com/forms/10179714/subscriptions',
+    emailField: 'email_address',
   },
 
   // The hill on the homepage. Set lat/lon to your favourite spot to get live wind

@@ -1,20 +1,66 @@
 ---
+// Signup form for Stay Curious, posting to Kit. With JavaScript it confirms inline;
+// without it, it falls back to a normal form post to Kit.
 import { SITE } from '../site.config';
 interface Props { id?: string; }
 const { id = 'sub' } = Astro.props;
 const n = SITE.newsletter;
+const preview = process.env.ARTIFACT === '1'; // the shareable preview can't post to other sites
 ---
-<form action={n.action} method="post" target="_blank" class="sub">
-  <label for={id} class="sr">Email address</label>
-  <input id={id} type="email" name={n.emailField} placeholder="your@email.com" required autocomplete="email" />
-  <button type="submit">Join →</button>
+<form action={preview ? undefined : n.action} method="post" target="_blank" class="sub" data-sub data-preview={preview ? '1' : undefined}>
+  <div class="row">
+    <label for={id} class="sr">Email address</label>
+    <input id={id} type="email" name={n.emailField} placeholder="your@email.com" required autocomplete="email" />
+    <button type="submit">Join →</button>
+  </div>
+  <p class="msg" role="status" aria-live="polite"></p>
 </form>
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-sub]').forEach((form) => {
+    if (form.dataset.ready) return;
+    form.dataset.ready = '1';
+    const msg = form.querySelector<HTMLElement>('.msg')!;
+    const btn = form.querySelector<HTMLButtonElement>('button')!;
+    const say = (text: string, tone = '') => { msg.textContent = text; msg.dataset.tone = tone; };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (form.dataset.preview) { say('Signups work on mindofkv.com. This is a preview.', 'ok'); return; }
+      btn.disabled = true; btn.textContent = 'Joining…'; say('');
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+        const data = await res.json().catch(() => ({}));
+        if (data.status === 'success') {
+          form.classList.add('done');
+          say('Welcome to the Curious Club. Check your inbox to confirm your email.', 'ok');
+        } else if (data.status === 'quarantined' && data.url) {
+          // Kit’s spam check: a one-click “I’m human” page.
+          say('One quick check to confirm you’re human. It opened in a new tab.', 'ok');
+          window.open(data.url, '_blank', 'noopener');
+        } else {
+          const err = data.errors?.messages?.[0] ?? data.error ?? 'That didn’t work. Check the email address and try again.';
+          say(err, 'err');
+        }
+      } catch {
+        form.submit(); // network trouble: fall back to Kit’s own page
+      } finally {
+        btn.disabled = false; btn.textContent = 'Join →';
+      }
+    });
+  });
+</script>
 <style>
-  .sub { display: flex; align-items: baseline; gap: 14px; max-width: 420px; border-bottom: 1px solid var(--ink-3); padding-bottom: 6px; transition: border-color .2s; }
-  .sub:focus-within { border-color: var(--ink); }
+  .sub { width: 100%; max-width: 420px; }
+  .row { display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid var(--ink-3); padding-bottom: 6px; transition: border-color .2s; }
+  .sub:focus-within .row { border-color: var(--ink); }
   input { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; padding: 4px 0; font: 400 16px var(--sans); color: var(--ink); }
   input::placeholder { color: var(--ink-3); }
-  button { border: 0; background: none; padding: 0; cursor: pointer; font: 700 13.5px var(--sans); color: var(--ink); }
-  button:hover { color: var(--ink-2); }
+  button { border: 0; background: none; padding: 0; cursor: pointer; font: 700 13.5px var(--sans); color: var(--ink); white-space: nowrap; }
+  button:hover { color: var(--accent); }
+  button:disabled { color: var(--ink-3); cursor: default; }
+  .msg { font: 400 13px/1.4 var(--sans); margin-top: 8px !important; min-height: 0; }
+  .msg:empty { display: none; }
+  .msg[data-tone='ok'] { color: var(--live); }
+  .msg[data-tone='err'] { color: #b23b2a; }
+  .done .row { opacity: .5; pointer-events: none; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 </style>
