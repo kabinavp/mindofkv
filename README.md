@@ -94,6 +94,13 @@ The signup form posts to `SITE.newsletter.action`. Create a list on Buttondown, 
 
 ## Deploy
 
-Push to GitHub, then import the repo on **Vercel**, **Netlify** or **Cloudflare Pages** (build: `npm run build`, output: `dist`). Point `mindofkv.com` at it in your DNS settings.
+The site is published by GitHub Actions to GitHub Pages (`.github/workflows/deploy.yml`):
+every push to `main` goes live in about two minutes, and a daily run at 01:17 UTC rebuilds the site
+so new Substack posts appear without a manual deploy.
 
-Free extras: `/rss.xml`, `/sitemap-index.xml` and Open Graph tags.
+One-time setup (already done once for mindofkv.com):
+1. Repo → Settings → Pages → Build and deployment → Source: **GitHub Actions**.
+2. Same page → Custom domain: `mindofkv.com` → Save, then tick **Enforce HTTPS** once the certificate is issued.
+3. At the domain registrar, point the domain at GitHub Pages:
+   - `A` records for `@`: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - `CNAME` record for `www`: `kabinavp.github.io`
