@@ -53,7 +53,7 @@ old URLs redirect.)
   taxation). Not model summaries. Can be pulled from Substack via `substack:` in the front-matter.
   Hidden from search until the first piece is published.
 - **Books** (`/books`): Reading now · Read · Up next (cover grid). Real covers stored in `public/books/`.
-  Text under read books is a factual description until KV sends his gist (`myTake: true` once it’s his).
+  Text under read books is a factual description until KV sends a gist (`myTake: true` once it’s his).
 - **Projects**, **About**, **Now**: About still needs KV’s own lines.
 
 ## Design system
