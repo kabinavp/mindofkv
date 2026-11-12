@@ -51,6 +51,7 @@ export const SITE = {
   nav: [
     { label: 'Weekly', href: '/weekly' },
     { label: 'Models', href: '/models' },
+    { label: 'Opinions', href: '/opinions' },
     { label: 'Books', href: '/books' },
     { label: 'Projects', href: '/projects' },
     { label: 'About', href: '/about' },

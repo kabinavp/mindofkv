@@ -70,6 +70,8 @@ To earn from Amazon links, put your Associates tracking ID in `SITE.amazon.tag` 
 
 **Weekly (Stay Curious):** each Sunday issue is a file in `src/content/weekly/` (copy `newsletter/TEMPLATE.md`). It appears in the archive at `/weekly/NNN`; paste the same text into Buttondown to send it.
 
+**Opinion:** `src/content/opinions/<id>.md` → listed on `/opinions`. Front-matter: `stance` (one sentence), `topic`, `since`, `strength` (strong / leaning / exploring), optional `model`, `order`. The body is a short why.
+
 **Product:** `src/content/products/my-app.md` with `title`, `tagline`, `status` (live/projects/idea/retired), `started`, `url`, `stack`, `metric` and `order`.
 
 > All current content is placeholder content. Replace or delete it.
