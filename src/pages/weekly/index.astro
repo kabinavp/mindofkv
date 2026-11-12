@@ -1,21 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Subscribe from '../../components/Subscribe.astro';
 import Mascot from '../../components/Mascot.astro';
-import { fmtDate } from '../../lib/content';
 import { SITE } from '../../site.config';
 
 const n = SITE.newsletter;
-const issues = (await getCollection('weekly', (e) => import.meta.env.DEV || !e.data.draft)).sort((a, b) => b.data.number - a.data.number);
-const today = new Date();
-const nextSunday = new Date(today); nextSunday.setDate(today.getDate() + ((7 - today.getDay()) % 7 || 7));
-const parts = [
-  { k: 'One idea', d: 'A mental model or insight, with a real example of it at work.' },
-  { k: 'One question', d: 'Something I’m wondering about. Reply with your answer; the best ones make the next issue.' },
-  { k: 'One book', d: 'A book from my shelf and the single reason it’s worth your time.' },
-  { k: 'One line worth keeping', d: 'A quote or sentence I couldn’t stop thinking about.' },
-];
 const jsonld = { '@type': 'CollectionPage', name: `${n.name}: the weekly newsletter`, url: `${SITE.url}/weekly`, description: n.pitch };
 ---
 <Base title={`${n.name}: a 5-minute read every Sunday`} description="Stay Curious is a free weekly newsletter. Every Sunday: one mental model, one question, one book and one line worth keeping. Five minutes to read." image="/og/weekly.png" jsonld={jsonld} signup={false}>
@@ -34,32 +23,6 @@ const jsonld = { '@type': 'CollectionPage', name: `${n.name}: the weekly newslet
       <p class="meta">Free. Sent from mindofkv.com. Unsubscribe in one click.</p>
     </div>
 
-    <h2 class="sub-h">Every issue, the same four parts</h2>
-    <ol class="parts">{parts.map((p) => <li><span class="k">{p.k}</span><span class="d">{p.d}</span></li>)}</ol>
-
-    <h2 class="sub-h">Archive</h2>
-    {issues.length > 0 ? (
-      <ul class="archive">
-        {issues.map((i) => (
-          <li><a href={`/weekly/${String(i.data.number).padStart(3, '0')}`}><span class="no">No. {i.data.number}</span><span class="t">{i.data.subject}</span><span class="meta">{fmtDate(i.data.date)}</span></a></li>
-        ))}
-      </ul>
-    ) : (
-      <p class="empty">The first issue goes out on <span class="ink">Sunday, {nextSunday.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}</span>. Every issue will be archived here.</p>
-    )}
-
-    <h2 class="sub-h">What an issue looks like</h2>
-    <article class="issue" aria-label="Example issue">
-      <header>
-        <p class="from"><b>{n.name}</b> <span>· Mind of KV · Sunday · 5 min</span></p>
-        <p class="subj">Solve for failure first</p>
-      </header>
-      <section><p class="lbl">One idea</p><p><b>Inversion.</b> Instead of asking how a launch could win, ask how it could flop, then remove those causes. Before we shipped a payment gateway, a pre-mortem caught the problems that would have hurt most. <a href="/models/inversion" class="u">Read the model →</a></p></section>
-      <section><p class="lbl">One question</p><p><i>Why does the ride home always feel shorter?</i> Hit reply and tell me your theory.</p></section>
-      <section><p class="lbl">One book</p><p><i>White Nights</i> by Fyodor Dostoevsky. Four nights, two lonely people, and a hundred pages you can read in one sitting. <a href="/books#white-nights" class="u">On my shelf →</a></p></section>
-      <section><p class="lbl">One line worth keeping</p><blockquote>“All I want to know is where I’m going to die, so I’ll never go there.” <span>— Charlie Munger</span></blockquote></section>
-      <footer>Stay curious,<br />KV</footer>
-    </article>
   </div>
 </Base>
 <style>
@@ -68,24 +31,4 @@ const jsonld = { '@type': 'CollectionPage', name: `${n.name}: the weekly newslet
   .lede { font-size: 19px; line-height: 1.6; color: var(--ink-2); max-width: 600px; margin-top: 18px !important; }
   .join { max-width: 440px; display: grid; gap: 10px; margin-top: 28px; }
   .club { font: italic 400 1.2rem var(--serif); }
-  .parts { margin: 0; padding: 0; list-style: none; max-width: 600px; display: grid; gap: 14px; counter-reset: p; }
-  .parts li { display: grid; grid-template-columns: 34px 1fr; counter-increment: p; }
-  .parts li::before { content: counter(p, decimal-leading-zero); font: 400 12px/2.1 var(--sans); color: var(--ink-3); grid-row: span 2; }
-  .k { font: italic 400 1.2rem var(--serif); color: var(--ink); }
-  .d { color: var(--ink-2); line-height: 1.5; }
-  .archive { list-style: none; margin: 0; padding: 0; max-width: 600px; border-top: 1px solid var(--line); }
-  .archive a { display: grid; grid-template-columns: 70px 1fr auto; gap: 12px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--line); }
-  .no { font: 400 12px var(--sans); color: var(--accent); }
-  .archive .t { font: italic 400 1.15rem var(--serif); color: var(--ink); }
-  .archive a:hover .t { color: var(--ink-2); }
-  .empty { max-width: 600px; color: var(--ink-2); }
-  .issue { max-width: 560px; margin-top: 8px; background: #fff; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 14px 30px -18px rgba(40,40,20,.25); padding: 26px 28px; display: grid; gap: 22px; font-size: 16.5px; }
-  .issue header { border-bottom: 1px solid var(--line); padding-bottom: 16px; }
-  .from { font: 400 13px var(--sans); color: var(--ink-3); } .from b { color: var(--ink); font-weight: 500; }
-  .subj { font: italic 400 1.35rem/1.3 var(--serif); color: var(--ink); margin-top: 6px !important; }
-  .lbl { font: 500 11px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px !important; }
-  .issue b { font-weight: 500; color: var(--ink); }
-  .issue blockquote { margin: 0; font-style: italic; color: var(--ink); } .issue blockquote span { font-style: normal; color: var(--ink-3); font-size: 14px; }
-  .issue footer { font-style: italic; color: var(--ink-2); }
-  @media (max-width: 560px) { .issue { padding: 20px 18px; } .archive a { grid-template-columns: 1fr auto; } .no { grid-column: 1 / -1; } }
 </style>

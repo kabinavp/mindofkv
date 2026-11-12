@@ -49,8 +49,8 @@ export const SITE = {
   ],
 
   nav: [
-    { label: 'Models', href: '/models' },
     { label: 'Weekly', href: '/weekly' },
+    { label: 'Models', href: '/models' },
     { label: 'Books', href: '/books' },
     { label: 'Projects', href: '/projects' },
     { label: 'About', href: '/about' },
