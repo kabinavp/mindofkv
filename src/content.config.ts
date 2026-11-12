@@ -111,16 +111,17 @@ const weekly = defineCollection({
   }),
 });
 
-// Opinions: short, clear stands on things. One file each: src/content/opinions/<id>.md
+// Opinions: KV's own pieces on bigger questions (education, taxation, AI…). One file each: src/content/opinions/<slug>.md
+// Write the piece here in Markdown, or write it on Substack and set `substack:` to the post's slug to pull it in.
 const opinions = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/opinions' }),
   schema: z.object({
-    stance: z.string(), // the opinion in one sentence
-    topic: z.string(), // e.g. Product, Leadership, Career, Teams
-    since: z.coerce.date(), // when I started holding it
-    strength: z.enum(['strong', 'leaning', 'exploring']).default('strong'),
-    model: z.string().optional(), // related model id
-    order: z.number().default(0),
+    title: z.string().optional(), // optional when `substack` is set (taken from the post)
+    description: z.string().optional(), // one-line summary for the list and search
+    topic: z.string(), // e.g. Education, Taxation, Technology, Society
+    date: z.coerce.date().optional(),
+    status: z.enum(['published', 'in-the-works']).default('published'),
+    substack: z.string().optional(), // slug of a Substack post, e.g. "value-of-education-in-the-ai-age"
   }),
 });
 

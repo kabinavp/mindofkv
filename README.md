@@ -70,7 +70,11 @@ To earn from Amazon links, put your Associates tracking ID in `SITE.amazon.tag` 
 
 **Weekly (Stay Curious):** each Sunday issue is a file in `src/content/weekly/` (copy `newsletter/TEMPLATE.md`). It appears in the archive at `/weekly/NNN`; paste the same text into Buttondown to send it.
 
-**Opinion:** `src/content/opinions/<id>.md` → listed on `/opinions`. Front-matter: `stance` (one sentence), `topic`, `since`, `strength` (strong / leaning / exploring), optional `model`, `order`. The body is a short why.
+**Opinion:** `src/content/opinions/<slug>.md` → `/opinions/<slug>`. Your own pieces on bigger questions.
+- Written on Substack: the file only needs `topic:` and `substack: <post-slug>`; the title, date and text come from the post.
+- Written here: give it `title`, `description`, `topic`, `date`, and write the piece below the front-matter.
+- Planning one: `status: in-the-works` lists the title under "In the works".
+- `/opinions` is hidden from search until the first piece is published; then remove it from `src/seo.config.mjs`.
 
 **Product:** `src/content/products/my-app.md` with `title`, `tagline`, `status` (live/projects/idea/retired), `started`, `url`, `stack`, `metric` and `order`.
 
