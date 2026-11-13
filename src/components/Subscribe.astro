@@ -1,5 +1,5 @@
 ---
-// Signup form for Stay Curious, posting to Kit. With JavaScript it confirms inline;
+// Signup form for Low Gear, posting to Kit. With JavaScript it confirms inline;
 // without it, it falls back to a normal form post to Kit.
 import { SITE } from '../site.config';
 interface Props { id?: string; }
@@ -31,7 +31,7 @@ const preview = process.env.ARTIFACT === '1'; // the shareable preview can't pos
         const data = await res.json().catch(() => ({}));
         if (data.status === 'success') {
           form.classList.add('done');
-          say('Welcome to the Curious Club. Check your inbox to confirm your email.', 'ok');
+          say('You’re in. Check your inbox to confirm your email.', 'ok');
         } else if (data.status === 'quarantined' && data.url) {
           // Kit’s spam check: a one-click “I’m human” page.
           say('One quick check to confirm you’re human. It opened in a new tab.', 'ok');

@@ -95,7 +95,7 @@ const models = defineCollection({
     videos: z.array(z.string()).default([]), // video ids
     related: z.array(z.string()).default([]), // other model ids
     order: z.number().default(0),
-    theme: z.enum(['deciding', 'people', 'growing']).default('deciding'), // Deciding · Working with people · Getting better
+    theme: z.enum(['deciding', 'people', 'growing', 'world']).default('deciding'), // Deciding · Working with people · Getting better · Seeing the world
     origin: z.enum(['original', 'borrowed']).default('original'),
     credit: z.string().optional(), // for borrowed models: who the idea comes from
     creditUrl: z.string().url().optional(),
@@ -104,7 +104,7 @@ const models = defineCollection({
   }),
 });
 
-// Weekly issues ("Stay Curious"), published every Sunday. One file per issue: src/content/weekly/001.md
+// Weekly issues ("Low Gear"), published every Sunday. One file per issue: src/content/weekly/001.md
 const weekly = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/weekly' }),
   schema: z.object({

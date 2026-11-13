@@ -36,7 +36,7 @@ Read `CLAUDE.md` first: it holds the direction, rules, design system and plumbin
 4. Six template Google Doc links (view-only) → add as `template.url` in each model file.
 5. Book gists for the 4 read books (set `myTake: true` when added); cover for *The Mind of Napoleon*.
 6. Current role + 2–3 career highlights for About (LinkedIn couldn't be read automatically).
-7. First Stay Curious issue date (15 or 22 Nov); bullets for the education opinion piece.
+7. First Low Gear issue date (15 or 22 Nov); bullets for the education opinion piece.
 8. Other social accounts to list (only LinkedIn and Substack are on the site).
 
 **Next to build**

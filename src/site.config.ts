@@ -4,9 +4,9 @@ export const SITE = {
   author: 'KV',
   email: 'hello@mindofkv.com',
   url: 'https://mindofkv.com',
-  tagline: 'Notes from a curious mind.',
+  tagline: 'Ways of thinking, from the work of building things with people.',
   description:
-    'Essays, videos, books and experiments from KV, following curiosity wherever it goes.',
+    'Models, essays and books from KV on how good decisions get made, at work and beyond.',
 
   // Essays are drafted on Substack and published here (each gets a page on mindofkv.com).
   substack: {
@@ -14,11 +14,14 @@ export const SITE = {
   },
 
   newsletter: {
-    name: 'Stay Curious',
-    club: 'Join the Curious Club',
-    // Your real subscriber count. When set, signups read “Join 340+ curious readers”. Leave null to hide.
+    name: 'Low Gear',
+    // One-line promise shown under the name.
+    promise: 'One way to think through a hard call, every Sunday. Five minutes.',
+    // Call to action next to every signup form.
+    cta: 'Get Low Gear every Sunday',
+    // Your real subscriber count. When set, signups read “Join 340+ readers”. Leave null to hide.
     subscribers: null as number | null,
-    pitch: 'A short email every Sunday: one idea, one question, one book, and one line worth keeping.',
+    pitch: 'One idea, one question, one book and one line worth keeping. Five minutes, every Sunday.',
     // The email list lives on Kit (kit.com, free up to 10,000 subscribers). Form ID 10179714.
     action: 'https://app.kit.com/forms/10179714/subscriptions',
     emailField: 'email_address',

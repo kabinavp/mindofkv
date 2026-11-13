@@ -7,7 +7,7 @@ import { SITE } from '../../site.config';
 const n = SITE.newsletter;
 const jsonld = { '@type': 'CollectionPage', name: `${n.name}: the weekly newsletter`, url: `${SITE.url}/weekly`, description: n.pitch };
 ---
-<Base title={`${n.name}: a 5-minute read every Sunday`} description="Stay Curious is a free weekly newsletter. Every Sunday: one mental model, one question, one book and one line worth keeping. Five minutes to read." image="/og/weekly.png" jsonld={jsonld} signup={false}>
+<Base title={`${n.name}: a 5-minute read every Sunday`} description="Low Gear is a free weekly newsletter on how good decisions get made. Every Sunday: one idea, one question, one book and one line worth keeping. Five minutes to read." image="/og/weekly.png" jsonld={jsonld} signup={false}>
   <div class="page">
     <div class="head">
       <Mascot height={64} />
@@ -16,9 +16,9 @@ const jsonld = { '@type': 'CollectionPage', name: `${n.name}: the weekly newslet
         <h1 class="title">{n.name}</h1>
       </div>
     </div>
-    <p class="lede">The best thing I found this week, in your inbox every Sunday morning. One idea, one question, one book and one line worth keeping. It takes five minutes to read and gives you something to think about all week.</p>
+    <p class="lede">Low gear is what you shift into for the steepest part of a climb. This is the same for hard calls at work: one idea you can use on Monday, one question to sit with, one book and one line worth keeping. Five minutes, every Sunday.</p>
     <div class="join">
-      <p class="ink club">{n.club}{n.subscribers ? ` and ${n.subscribers}+ curious readers` : ''}.</p>
+      <p class="ink club">{n.cta}{n.subscribers ? `, with ${n.subscribers}+ readers` : ''}.</p>
       <Subscribe id="weekly-email" />
       <p class="meta">Free. Sent from mindofkv.com. Unsubscribe in one click.</p>
     </div>

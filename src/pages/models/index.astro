@@ -8,6 +8,7 @@ const THEMES = [
   { key: 'deciding', title: 'Deciding' },
   { key: 'people', title: 'Working with people' },
   { key: 'growing', title: 'Getting better' },
+  { key: 'world', title: 'Seeing the world' },
 ] as const;
 const jsonld = { '@type': 'CollectionPage', name: 'Mental Models Library', url: `${SITE.url}/models`, hasPart: models.map((m) => ({ '@type': 'Article', headline: m.data.title, url: `${SITE.url}/models/${m.id}` })) };
 ---
@@ -15,7 +16,7 @@ const jsonld = { '@type': 'CollectionPage', name: 'Mental Models Library', url: 
   <div class="page">
     <h1 class="title">Models</h1>
     <p>Thinking tools for deciding what to build, working with people, and growing at work. Each one comes with the questions it makes you ask, a template, and the essay where I put it to work.</p>
-    {THEMES.map((th) => (
+    {THEMES.filter((th) => models.some((m) => m.data.theme === th.key)).map((th) => (
     <section class="theme">
     <h2 class="sub-h">{th.title}</h2>
     <ol class="grid">

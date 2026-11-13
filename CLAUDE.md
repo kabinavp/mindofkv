@@ -3,11 +3,15 @@
 Personal site of KV at **mindofkv.com** (Astro, static, deployed to GitHub Pages from `main`).
 Read this before building anything. It records the direction KV has set and the decisions already made.
 
-## Positioning: a product lens without the product label
+## Positioning: narrow lens, wide topics
 
-The site stays **wide and curious**, but its centre of gravity is **product management**. Never say it outright
-(except on the About page). Every piece should read as useful to anyone who makes things with others
-(founders, engineers, designers, team leads), while product managers recognise it as written for them.
+**Tagline:** *Ways of thinking, from the work of building things with people.*
+
+The site is a **lens niche, not a topic niche** (unlike product-only writers). The lens is fixed: **how good
+decisions get made, especially when building something with other people.** Product work is the *source* of the
+ideas, not the boundary. Never say “product management” outright (except on the About page). Every piece should
+read as useful to anyone who makes things with others (founders, engineers, designers, team leads), while product
+people recognise it as written for them. Who exactly we write for, and how we reach them: **`AUDIENCE.md`**.
 
 - **Universal principle, product story.** Headlines state a general idea; the proof is a real product example
   (e.g. *Invert to Win*: “ask how it could fail”, proven with the Groww payment-gateway launch).
@@ -17,11 +21,16 @@ The site stays **wide and curious**, but its centre of gravity is **product mana
 - **Product thinking applied to everything.** Wide topics (education, taxation, books, cycling) are seen through a
   product lens: who is the user, where does the experience break, what would a better design be.
 - **Explicit in one place only:** the About page states KV’s role plainly.
-- **Mix:** ~70% the craft of building (decisions, users, teams, shipping), ~20% growing at work, ~10% the wide world.
-- **Test for every piece:** would a founder, an engineer and a designer each get something from it? Is there a real
-  decision, user or team in the example?
+- **Three rings:** ~60% core (deciding and building with people), ~25% getting better, ~15% the wide world seen
+  through the same lens. A wide piece must still end in a reusable way of thinking.
+- **Test for every piece:** (1) does it end in a reusable way of thinking? (2) is it from KV’s own experience or
+  conviction? (3) would someone outside product still use it? Is there a real decision, user or team in it?
+  Can the reader say what they’ll do differently on Monday?
 - **Not a “builder” site.** Don’t over-index on the word builder; let the work show it.
-- **Curiosity is the brand.** The newsletter is *Stay Curious*; signups say “Join the Curious Club”.
+- **The format is the signature:** real experience turned into a named model (2–4 words), with a card and a template.
+- **Newsletter: *Low Gear*** (the gear for the steepest climbs). Promise: “One way to think through a hard call,
+  every Sunday. Five minutes.” Signups say “Get Low Gear every Sunday”. Sign-off: “Keep climbing, KV”.
+  Never call it a slow read; 600 words max. (Replaced *Stay Curious* / “Curious Club” in Nov 2026.)
 
 ## Hard rules
 
@@ -36,7 +45,7 @@ The site stays **wide and curious**, but its centre of gravity is **product mana
 Weekly · Models · Opinions · Books · Projects · About. (Writing and Videos were removed from the menu;
 old URLs redirect.)
 
-- **Weekly** (`/weekly`): *Stay Curious*, every Sunday, a 5-minute read: one idea, one question, one book,
+- **Weekly** (`/weekly`): *Low Gear*, every Sunday, a 5-minute read (≤600 words): one idea, one question, one book,
   one line worth keeping. Page ends at the signup. Issues go in `src/content/weekly/NNN.md` (template:
   `newsletter/TEMPLATE.md`).
 - **Models** (`/models`): the heart of the site. Essays live **inside** their model page (one home model per essay,
@@ -48,7 +57,8 @@ old URLs redirect.)
     a **template** (read-only Google Doc, with credit; sources in `templates/`), and its essay.
   - Current models: Inversion (borrowed, Munger), Pre-mortem (borrowed, Gary Klein), 3 I’s of Influence,
     Default High Trust, Momentum over Measurement, Honest Gap Analysis.
-  - Grouped by `theme`: Deciding · Working with people · Getting better.
+  - Grouped by `theme`: Deciding · Working with people · Getting better · Seeing the world (`world`, for models from
+    wide-ring topics; a theme with no models is hidden).
 - **Opinions** (`/opinions`): KV’s own pieces on bigger questions (e.g. value of education in the AI age, Indian
   taxation). Not model summaries. Can be pulled from Substack via `substack:` in the front-matter.
   Hidden from search until the first piece is published.
@@ -64,7 +74,7 @@ old URLs redirect.)
 - **Sentient** (upright) for big headings; **Satoshi** for everything else. Self-hosted in `public/fonts/`
   (Fontshare, ITF Free Font License). Italics only for the logo’s orange *of*, book titles and quotes.
 - **Mascot:** the small figure in the orange top leaning on the “M” of “Mind *of* KV”.
-- Homepage: hill scene with KV cycling (canvas, `src/scripts/scene.ts`), intro, free-time stamps, Curious Club signup.
+- Homepage: hill scene with KV cycling (canvas, `src/scripts/scene.ts`), intro, free-time stamps, Low Gear signup.
 
 ## Plumbing
 

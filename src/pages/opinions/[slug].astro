@@ -25,7 +25,7 @@ const jsonld = [
     {o.description && <p class="dek">{o.description}</p>}
     <div class="prose" style="margin-top:32px">{Content ? <Content /> : <Fragment set:html={o.post!.html} />}</div>
     <div class="end">
-      <p><span class="ink">{SITE.newsletter.club}.</span> Get the next one in your inbox, plus one new idea every Sunday.</p>
+      <p><span class="ink">{SITE.newsletter.cta}.</span> New opinions land there first, with one idea every Sunday.</p>
       <Subscribe id="op-email" />
     </div>
   </article>
