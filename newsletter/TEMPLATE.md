@@ -1,13 +1,16 @@
 ---
 # Save each issue as src/content/weekly/NNN.md (e.g. 001.md). It appears in the archive at /weekly/001.
 # Paste the same content into Kit to send it on Sunday morning.
-# Hard limit: 600 words (a 5-minute read). Cut until every line earns its place.
+# About 400 words, 600 max (a 5-minute read). No preamble. Cut until every line earns its place.
+# Follow EDITORIAL.md: every quote as “Name on topic:”, every borrowed idea credited.
 number: 1
 date: 2026-11-15
-subject: "The idea in five words"
+subject: "<Title: the issue's strongest line, 2–4 words>"
 model: inversion        # optional: the model featured in "One idea"
 book: white-nights      # optional: the book featured in "One book"
 ---
+
+*Low Gear No. <NNN> · <DD Month YYYY>*
 
 ## One idea
 
@@ -26,9 +29,12 @@ book: white-nights      # optional: the book featured in "One book"
 
 ## One line worth keeping
 
-> "<Quote>" — <Who said it>
+<Name> on <topic>:
+> “<Verified quote>”
 
 Keep climbing,
 KV
+
+P.S. <Optional: one small delight, e.g. a climb, a craftsman, a map.>
 
 *Know someone facing a hard call this week? Forward this to them.*

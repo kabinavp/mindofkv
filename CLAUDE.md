@@ -39,6 +39,9 @@ and Lenny's Newsletter: researched, correctly attributed, cross-referenced, SEO-
 a new learning. Each piece raises the bar. Never publish below the best before it. Drafts go to the Low Gear Desk
 (https://claude.ai/artifact/5AS6ibq9vFPNfX9UkMEezy) for KV's approval. Nothing is posted without it.
 
+**Weekly rhythm (India time, Asia/Kolkata):** Thursday 10:47 a scheduled run revises items KV sent back and
+drafts next week into the desk; KV approves by Saturday; LinkedIn Mon/Wed/Fri ~9:00; Low Gear every Sunday.
+
 ## Hard rules
 
 - **Never invent KV’s opinions, reviews, experiences or numbers.** Opinions and book takes are KV’s own words;

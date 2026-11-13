@@ -14,8 +14,63 @@ KV is the author: the ideas and experiences are his, and nothing goes out withou
 - **Lenny's Newsletter:** practical, product-grounded writing, with frameworks, real examples and templates
   readers can use straight away.
 
-*Status:* a close study of both is pending. This session's tools couldn't read the sites yet.
-Once read, record their specific craft patterns here and tighten the rules below.
+Also studied: **Paul Graham** (how to judge usefulness) and **Morgan Housel** (story-first openings).
+
+### What we take from them (studied 13 Nov 2026)
+
+**Farnam Street** (*Inversion*, *Second-Order Thinking*, *First Principles*, *The Map Is Not the Territory*, *Mental Models*):
+- **Trace the idea's family tree.** *Inversion* opens with Munger's quote, then traces it to the mathematician Jacobi
+  (“man muss immer umkehren”), then quotes Munger on Jacobi. Credit the earliest source, not the most famous.
+- **Titles are the model plus a promise:** “Second-Order Thinking: What Smart People Use to Outperform”. The meta
+  description defines the model in one sentence.
+- **Name the contrast:** first-level versus second-level, additive versus subtractive. At least one H2 is a sticky
+  claim (“Avoiding stupidity is easier than seeking brilliance”).
+- **One everyday analogy and one famous real story.** Lego for first principles. For map and territory, Bezos
+  calls the customer-service line during a meeting, waits over ten minutes, and shows the wait-time data was wrong.
+- **Quote books by name and author** (Howard Marks, *The Most Important Thing*; Jane Jacobs, *The Death and Life of
+  Great American Cities*). End with **Key Takeaways** and **Sources** (with page numbers where possible).
+- **Questions you can carry around:** “And then what?”, or think across 10 minutes, 10 months, 10 years.
+- **A section on limits.** *Map and Territory* spends half its length on where maps fail.
+- **A dense web of links.** Inline links to related ideas (iatrogenics, the work required to have an opinion), a
+  hub page grouping about 100 models by discipline, and a "Read next" at the end.
+
+**Farnam Street's Brain Food newsletter** (issues 704–706, Oct–Nov 2026), the model for Low Gear:
+- **About 400 words.** Read in under five minutes, with no preamble beyond one fixed welcome line.
+- **Numbered and dated** (“No. 706 – November 8, 2026”). The issue title comes from its strongest line (“Honesty over Flattery”).
+- **The same sections every week, each one short:** *Tiny Thoughts* (3–4 original one-line ideas),
+  *Insights* (three quotes, each introduced as “Bob Knight on preparation:”), one piece of FS's own work,
+  *Etcetera* (2–3 links).
+- **Every quote carries its speaker and topic.** Nothing goes unattributed.
+- **Ends with a sign-off and a P.S.** linking to one small delight (a craftsman's video, a panda).
+- **Sharp one-liners** that read as conclusions, not advice: “If you commit to nothing, everything looks worth doing.”
+
+**Lenny's Newsletter** (*How to make people care about your startup*, *How to figure out your next career*):
+- **Open on a tension:** “It's never been easier to start a company. It's also never been harder to get someone to care.”
+- **Turn the idea into named types,** each tied to a human feeling (“I identify with you, I trust you, I'd follow you”).
+- **Every type gets the same sections:** goal, how to do it, named real examples with links, common mistakes,
+  how you'll know it's working, prompts to start. Readers can scan and compare.
+- **A self-diagnosis line:** “You're a Problem founder if…”.
+- **Credit contributors** with a short bio that says why they're worth listening to.
+
+**Paul Graham** (*How to Write Usefully*):
+- **Useful writing is true, important, new to many readers, and stated as strongly as it can be without becoming false.**
+  These multiply: if one is zero, the piece is worthless.
+- **Write loose, then tight.** Never knowingly publish a sentence you aren't sure is correct. End with notes and
+  thanks to the people who read drafts.
+
+**Morgan Housel** (*A few things I'm pretty sure about*):
+- **Start with a small personal story** (a back injury from skiing) and turn it into a universal line (“maybe his back hurts”).
+- **Follow it with a book quote and a hard fact,** in short, plain sentences.
+
+### How this shapes our rules
+- **Model essays:** follow Farnam Street's depth (family tree of the idea, a contrast, a story, limits, sources) and
+  Lenny's practicality (the same sections every time, “you need this if”, signs it's working, prompts).
+- **Low Gear:** follow Brain Food's crispness. Numbered and dated, titled after its strongest line, the same four
+  sections every Sunday, each a few lines long. Quotes take the form “Name on topic:”. No preamble, about 400 words,
+  600 at most. End with “Keep climbing, KV” and an optional P.S. linking to one small delight.
+  One-liners in KV's voice come only from KV.
+- **Posts:** follow Housel's opening (a small real story from KV, then the universal line) and
+  Paul Graham's test (true, important, new, strong).
 
 ## The six tests every piece must pass
 
@@ -51,7 +106,7 @@ Once read, record their specific craft patterns here and tighten the rules below
 |---|---|---|
 | Model essay | 1,200–2,500 words | All of the shape above; template; sources |
 | Opinion | 1,000–2,500 words | A clear position, the strongest counter-argument, sources |
-| Low Gear issue | 600 words max (5 minutes) | One idea with its source credited, a Monday action, a question, KV's book line, a verified quote |
+| Low Gear issue | About 400 words, 600 max (5 minutes) | One idea with its source credited, a Monday action, a question, KV's book line, a verified quote |
 | LinkedIn post | 1,300 characters max | Hook in the first two lines (LinkedIn cuts off at about 210 characters); one real example; the originator credited; share image from `/share/<id>.png`; link in the first comment |
 | Substack Note | 1–3 sentences | One sharp idea, credited |
 
