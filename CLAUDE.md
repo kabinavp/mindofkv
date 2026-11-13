@@ -32,6 +32,13 @@ people recognise it as written for them. Who exactly we write for, and how we re
   every Sunday. Five minutes.” Signups say “Get Low Gear every Sunday”. Sign-off: “Keep climbing, KV”.
   Never call it a slow read; 600 words max. (Replaced *Stay Curious* / “Curious Club” in Nov 2026.)
 
+## Editorial standard (non-negotiable)
+
+Claude acts as **editor-in-chief**. Every piece follows **`EDITORIAL.md`**, benchmarked on Farnam Street (fs.blog)
+and Lenny's Newsletter: researched, correctly attributed, cross-referenced, SEO-ready, and leaving the reader with
+a new learning. Each piece raises the bar. Never publish below the best before it. Drafts go to the Low Gear Desk
+(https://claude.ai/artifact/5AS6ibq9vFPNfX9UkMEezy) for KV's approval. Nothing is posted without it.
+
 ## Hard rules
 
 - **Never invent KV’s opinions, reviews, experiences or numbers.** Opinions and book takes are KV’s own words;
@@ -82,6 +89,8 @@ old URLs redirect.)
 - **Email:** hello@mindofkv.com forwards to KV via ImprovMX.
 - **Substack:** essays are drafted on mindofkv.substack.com and mirrored onto model pages at build time
   (snapshot in `src/data/substack.json`, refresh with `npm run snapshot`). New pieces: publish here first.
+- **Share images:** portrait 1080×1350 PNGs at `/share/<id>.png`, defined in `src/lib/share.ts` (headline,
+  model diagram, KV's name and mascot on every image). Add one entry per post.
 - **SEO:** sections with placeholder content are noindexed via `src/seo.config.mjs`. Every page has
   structured data and an auto-generated share image (`/og/...`).
 - **Deploy:** `.github/workflows/deploy.yml` builds on every push to `main` and daily at 01:17 UTC.

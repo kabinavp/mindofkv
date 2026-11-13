@@ -50,7 +50,7 @@ ${t(60, 188, 's', 'How do we make this win?', 'font-size="19"')}
 ${t(290, 254, 'a', 'flip it')}
 <rect x="36" y="286" width="468" height="62" rx="8" fill="${C.stamp}" stroke="${C.stampEdge}"/>
 ${t(60, 325, 'd', 'How could this fail?')}
-${t(36, 392, 's', '✕ The launch flops')}${t(210, 392, 's', '✕ Users bounce')}${t(368, 392, 's', '✕ It gets misused')}
+<path d="M36 381 l9 9 M45 381 l-9 9" stroke="${C.accent}" stroke-width="2" stroke-linecap="round"/>${t(52, 392, 's', 'The launch flops')}<path d="M200 381 l9 9 M209 381 l-9 9" stroke="${C.accent}" stroke-width="2" stroke-linecap="round"/>${t(216, 392, 's', 'Users bounce')}<path d="M352 381 l9 9 M361 381 l-9 9" stroke="${C.accent}" stroke-width="2" stroke-linecap="round"/>${t(368, 392, 's', 'It gets misused')}
 ${t(36, 430, 's', 'Remove these causes first.')}`,
   },
   'pre-mortem': {
@@ -115,6 +115,8 @@ ${t(438, 214, 's', 'Ask')}${t(438, 250, 's', 'Write')}${t(438, 286, 's', 'Valida
 };
 
 export const hasCard = (id: string) => id in bodies;
+/** The diagram alone (no frame), drawn in the card's 540-wide coordinates. Reused by share images. */
+export const cardBody = (id: string) => bodies[id]?.body ?? '';
 export function cardSvg(id: string, n: number, title: string) {
   const b = bodies[id];
   return b ? frame(n, title, b.line, b.body, b.titleSize) : '';
