@@ -87,6 +87,37 @@ const launchArt = `
 <text x="112" y="266" text-anchor="middle" font-family="${SERIF}" font-size="26" letter-spacing="-0.6" fill="${C.ink}">5 min</text>
 <text x="112" y="286" text-anchor="middle" font-family="${SANS}" font-size="10.5" font-weight="700" letter-spacing="1.4" fill="${C.ink2}">SUNDAYS</text>`;
 
+// A small drawn cross, used where the fonts have no ✕ glyph.
+const cross = (x: number, y: number, s = 10) =>
+  `<path d="M${x} ${y} l${s} ${s} M${x + s} ${y} l${-s} ${s}" stroke="${C.accent}" stroke-width="2.2" stroke-linecap="round"/>`;
+const txt = (x: number, y: number, size: number, text: string, opts = '') =>
+  `<text x="${x}" y="${y}" font-family="${SANS}" font-size="${size}" ${opts}>${esc(text)}</text>`;
+
+// KV's AI prototyping experiment (essay, Jan 2025): prototypes are now fast; production still needs engineering.
+const prototypeArt = `
+<rect x="40" y="160" width="210" height="250" rx="8" fill="#faf8f3" stroke="${C.line}"/>
+<rect x="290" y="160" width="210" height="250" rx="8" fill="${C.stamp}" stroke="${C.stampEdge}"/>
+${txt(60, 194, 12, 'PROTOTYPE', `font-weight="700" letter-spacing="1.6" fill="${C.ink3}"`)}
+<text x="60" y="230" font-family="${SERIF}" font-size="24" letter-spacing="-0.5" fill="${C.ink}">Anyone, fast</text>
+${txt(60, 270, 14, 'Signup web app', `fill="${C.ink2}"`)}${txt(60, 296, 14, 'The same idea on iOS', `fill="${C.ink2}"`)}${txt(60, 322, 14, 'A notetaker linked', `fill="${C.ink2}"`)}${txt(60, 340, 14, 'to the calendar', `fill="${C.ink2}"`)}
+${txt(60, 388, 13, 'Built by KV with AI tools', `font-weight="700" fill="${C.accent}"`)}
+${txt(310, 194, 12, 'PRODUCTION', `font-weight="700" letter-spacing="1.6" fill="${C.ink2}"`)}
+<text x="310" y="230" font-family="${SERIF}" font-size="21" letter-spacing="-0.5" fill="${C.ink}">Still engineering</text>
+${txt(310, 270, 14, 'Security', `fill="${C.ink}"`)}${txt(310, 296, 14, 'Scale', `fill="${C.ink}"`)}${txt(310, 322, 14, 'Technical depth', `fill="${C.ink}"`)}
+${txt(310, 388, 13, 'Design and UX set you apart', `font-weight="700" fill="${C.ink}"`)}
+<path d="M254 285 L286 285" stroke="${C.accent}" stroke-width="2"/><path d="M279 279 L287 285 L279 291" stroke="${C.accent}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+// Inversion turned on yourself (from KV's "Invert to Win": "What habits could make me an ineffective PM?").
+const invertSelfArt = `
+<rect x="40" y="160" width="460" height="70" rx="8" fill="${C.stamp}" stroke="${C.stampEdge}"/>
+<text x="64" y="203" font-family="${SERIF}" font-size="22" letter-spacing="-0.5" fill="${C.ink}">What habits would make me worse?</text>
+${cross(52, 268)}${txt(76, 279, 17, 'Hero syndrome', `fill="${C.ink}"`)}
+<line x1="40" y1="300" x2="500" y2="300" stroke="${C.line}"/>
+${cross(52, 320)}${txt(76, 331, 17, 'Shipping more than learning', `fill="${C.ink}"`)}
+<line x1="40" y1="352" x2="500" y2="352" stroke="${C.line}"/>
+${cross(52, 372)}${txt(76, 383, 17, 'Not listening to users', `fill="${C.ink}"`)}
+${txt(40, 430, 14, 'Remove these before adding anything new.', `font-weight="700" fill="${C.accent}"`)}`;
+
 // One entry per post in the content plan. Keep ids stable: the desk links to /share/<id>.png.
 export const SHARES: Share[] = [
   { id: 'inversion', kicker: 'Deciding', label: 'Inversion', model: 'inversion', artTop: 150, artBottom: 432,
@@ -103,4 +134,8 @@ export const SHARES: Share[] = [
     headline: ['Plan Monday.', 'Ship all week.', '{Review Friday.}'] },
   { id: 'low-gear-launch', kicker: 'New every Sunday', label: 'mindofkv.com/weekly', art: launchArt, artTop: 222, artBottom: 500,
     headline: ['One way to think', 'through a {hard call},', 'every Sunday.'] },
+  { id: 'ai-prototyping', kicker: 'Getting better', label: 'Hands-on', art: prototypeArt, artTop: 160, artBottom: 410,
+    headline: ['Build the first', 'prototype {yourself}.'] },
+  { id: 'invert-yourself', kicker: 'Deciding', label: 'Inversion, turned inward', art: invertSelfArt, artTop: 160, artBottom: 432,
+    headline: ['Invert your own job.', 'What would make you', '{worse} at it?'] },
 ];
